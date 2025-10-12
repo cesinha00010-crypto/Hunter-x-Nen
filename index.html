@@ -228,55 +228,86 @@
             transform: translateY(4px);
         }
  /* ====================================================================== 
-           3. MENU DE ABAS (TAB MANAGER)
-           ====================================================================== */
-        .tab-manager {
-            padding: 0;
-            border: none;
-            box-shadow: none;
-            background: transparent;
-        }
-        .tab-bar {
-            display: flex;
-            flex-wrap: wrap;
-            border-bottom: 2px solid var(--color-border-light);
-            gap: 5px;
-        }
-        .tab-bar button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 8px 8px 0 0;
-            cursor: pointer;
-            font-weight: 600;
-            background-color: var(--color-card-light);
-            color: var(--color-tab-inactive);
-            border-bottom: 2px solid transparent;
-            margin-bottom: -2px; 
-            transition: all 0.3s;
-        }
-        .tab-bar button.active {
-            background-color: var(--color-card-light);
-            color: var(--color-tab-active);
-            border-bottom: 3px solid var(--color-tab-active);
-            font-weight: 700;
-            transform: translateY(-2px);
-        }
-        .tab-bar button:not(.active):hover {
-            color: var(--color-secondary);
-        }
-        
-        .tab-actions {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: var(--color-card-light);
-            border-radius: 0 0 12px 12px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        body.dark-mode .tab-actions {
-            background-color: var(--color-card-dark);
-        }
+   /* Adicione esta regra de layout para garantir que as abas ocupem o topo no desktop */
+@media (min-width: 1024px) {
+    .ficha-container {
+        grid-template-areas:
+            "tabs tabs" /* Nova Linha */
+            "identificacao roll"
+            "atributos roll"
+            /* ... o resto das áreas ... */
+    }
+    .tab-manager { grid-area: tabs; }
+}
+
+/* ----------------------------------------------------------------------
+   ESTILOS ESPECÍFICOS PARA O MENU DE ABAS
+   ---------------------------------------------------------------------- */
+.tab-manager {
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    background: transparent;
+}
+.tab-bar {
+    display: flex;
+    flex-wrap: wrap;
+    border-bottom: 2px solid var(--color-border-light);
+    gap: 5px;
+}
+.tab-bar button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 8px 8px 0 0;
+    cursor: pointer;
+    font-weight: 600;
+    background-color: var(--color-card-light);
+    color: var(--color-tab-inactive, #555); /* Use fallback para --color-tab-inactive */
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px; 
+    transition: all 0.3s;
+}
+.tab-bar button.active {
+    background-color: var(--color-card-light);
+    color: var(--color-tab-active, var(--color-primary));
+    border-bottom: 3px solid var(--color-tab-active, var(--color-primary));
+    font-weight: 700;
+    transform: translateY(-2px);
+}
+.tab-bar button:not(.active):hover {
+    color: var(--color-secondary);
+}
+
+.tab-actions {
+    margin-top: 10px;
+    padding: 10px;
+    /* Card style deve ser aplicado aqui (via classe .card no HTML) */
+    border-radius: 0 0 12px 12px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+body.dark-mode .tab-actions {
+    background-color: var(--color-card-dark);
+}
+/* Estilo para Botões de Ação (Aproveitando o estilo dos botões de rolagem) */
+.btn-action { /* Inclui todos os botões no painel de abas */
+    /* Estilos já devem vir do .roll-button, mas garantindo */
+    font-size: 0.9em;
+    padding: 8px 12px;
+}
+
+/* Ajustes Dark Mode para Abas */
+body.dark-mode .tab-bar button {
+    background-color: var(--color-card-dark);
+    border-bottom: 2px solid var(--color-border-dark);
+    color: var(--color-text-light);
+}
+body.dark-mode .tab-bar button.active {
+    background-color: var(--color-card-dark);
+    color: var(--color-primary);
+    border-bottom: 3px solid var(--color-primary);
+}
         /* ====================================================================== 
            3. ATRIBUTOS E PERÍCIAS
            ====================================================================== */
@@ -440,14 +471,14 @@
 
     <main class="ficha-container"> 
         <section class="tab-manager">
-            <div id="tab-bar" class="tab-bar">
-                </div>
-            <div class="tab-actions card">
-                <button id="add-new-character" class="btn-add btn-action">+ Novo Personagem</button>
-                <button id="save-name-btn" class="btn-save-name btn-action">Salvar Nome</button>
-                <button id="delete-character-btn" class="btn-delete btn-action">Excluir Personagem Ativo</button>
-            </div>
-        </section>
+    <div id="tab-bar" class="tab-bar">
+        </div>
+    <div class="tab-actions card">
+        <button id="add-new-character" class="btn-add btn-action">+ Novo Personagem</button>
+        <button id="save-name-btn" class="btn-save-name btn-action">Salvar Nome</button>
+        <button id="delete-character-btn" class="btn-delete btn-action">Excluir Personagem Ativo</button>
+    </div>
+</section>
         <div id="dice-roll-area" class="card roll-area">
             <div class="roll-header">
                 <h2>Resultados da Rolagem</h2>
@@ -708,37 +739,70 @@
 
     </main>
 
-    <script>
+   <script>
         document.addEventListener('DOMContentLoaded', () => {
             const ROLL_BONUS_TRAINED = 5;
             const AUTOSAVE_INTERVAL = 3000; 
             const MAX_HISTORY_ITEMS = 3; 
+            const STORAGE_KEY = 'hunterXNenFichas';
             const ATTR_NEN_MAP = {
-                'intensificacao': 'vigor',
-                'emissao': 'forca',
-                'transmutacao': 'destreza',
-                'manipulacao': 'carisma',
-                'materializacao': 'intelecto',
-                'especializacao': 'livre'
+                'intensificacao': 'vigor', 'emissao': 'forca', 'transmutacao': 'destreza',
+                'manipulacao': 'carisma', 'materializacao': 'intelecto', 'especializacao': 'livre'
             };
+            
+            let characters = []; 
+            let activeCharacterIndex = 0; 
 
-            // --- FUNÇÕES DE AUTO-SAVE E CARREGAMENTO ---
+            // --- FUNÇÕES GERAIS DE ARMAZENAMENTO E GERENCIAMENTO ---
 
-            function saveFicha() {
-                const ficha = {};
+            function saveAllCharacters() {
+                // 1. Captura os dados da ficha ativa antes de salvar
+                characters[activeCharacterIndex] = captureFichaData();
+                
+                // 2. Salva o array completo no localStorage
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(characters));
+            }
+
+            function loadAllCharacters() {
+                const savedData = localStorage.getItem(STORAGE_KEY);
+                if (savedData) {
+                    characters = JSON.parse(savedData);
+                }
+
+                // Se não houver dados ou o array estiver vazio, cria uma ficha padrão.
+                if (!characters || characters.length === 0) {
+                    characters = [createDefaultFicha('Personagem 1')];
+                }
+                
+                // Garante que o índice ativo seja válido
+                activeCharacterIndex = Math.min(activeCharacterIndex, characters.length - 1);
+                activeCharacterIndex = Math.max(0, activeCharacterIndex); 
+
+                renderTabs();
+                loadFichaData(characters[activeCharacterIndex]);
+            }
+
+            function captureFichaData() {
+                const data = {
+                    id: characters[activeCharacterIndex].id,
+                    name: document.getElementById('nome').value || `Personagem ${activeCharacterIndex + 1}`,
+                    data: {},
+                    hatsus: [],
+                    weapons: [],
+                    inventory: [],
+                    rollHistory: []
+                };
+
+                // Captura campos simples
                 document.querySelectorAll('input, textarea, select, .trained-checkbox').forEach(element => {
                     const id = element.id || element.name;
                     if (id) {
-                        if (element.type === 'checkbox') {
-                            ficha[id] = element.checked;
-                        } else {
-                            ficha[id] = element.value;
-                        }
+                        data.data[id] = element.type === 'checkbox' ? element.checked : element.value;
                     }
                 });
 
                 // Captura Hatsus
-                ficha['hatsus'] = Array.from(document.querySelectorAll('.hatsu-item')).map(item => ({
+                data.hatsus = Array.from(document.querySelectorAll('.hatsu-item')).map(item => ({
                     nome: item.querySelector('.hatsu-name').value,
                     tipo: item.querySelector('.hatsu-type').value,
                     categoria: item.querySelector('.hatsu-category').value,
@@ -751,92 +815,166 @@
                 }));
                 
                 // Captura Armas
-                ficha['weapons'] = Array.from(document.querySelectorAll('#weapons-table tbody tr')).map(row => {
+                data.weapons = Array.from(document.querySelectorAll('#weapons-table tbody tr')).map(row => {
                     const inputs = row.querySelectorAll('input');
                     return { nome: inputs[0].value, tipo: inputs[1].value, ataque: inputs[2].value, dano: inputs[3].value, critico: inputs[4].value, peso: inputs[5].value };
                 });
 
                 // Captura Inventário
-                ficha['inventory'] = Array.from(document.querySelectorAll('#inventory-table tbody tr')).map(row => {
+                data.inventory = Array.from(document.querySelectorAll('#inventory-table tbody tr')).map(row => {
                     const inputs = row.querySelectorAll('input');
                     return { item: inputs[0].value, detalhes: inputs[1].value, peso: inputs[2].value, quantidade: inputs[3].value };
                 });
 
-                // Salva o histórico de rolagens
+                // Captura Histórico de Rolagem
                 const historyLog = document.getElementById('roll-history');
-                ficha['rollHistory'] = Array.from(historyLog.children).map(div => div.outerHTML);
+                data.rollHistory = Array.from(historyLog.children).map(div => div.outerHTML);
 
-                localStorage.setItem('hunterXNenFicha', JSON.stringify(ficha));
-                updateInventoryWeight(); 
+                return data;
             }
 
-            function loadFicha() {
-                const savedFicha = localStorage.getItem('hunterXNenFicha');
-                if (savedFicha) {
-                    const ficha = JSON.parse(savedFicha);
-                    
-                    for (const id in ficha) {
-                        const element = document.getElementById(id);
-                        if (element) {
-                            if (element.type === 'checkbox') {
-                                element.checked = ficha[id];
-                            } else {
-                                element.value = ficha[id];
-                            }
+            function loadFichaData(ficha) {
+                // 1. Carrega dados simples
+                for (const id in ficha.data) {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        if (element.type === 'checkbox') {
+                            element.checked = ficha.data[id];
+                        } else {
+                            element.value = ficha.data[id];
                         }
                     }
-                    
-                    // Recriações: Hatsus
-                    document.getElementById('hatsu-list').innerHTML = ''; 
-                    (ficha.hatsus || []).forEach(hatsu => addHatsuItem(hatsu));
-                    if ((ficha.hatsus || []).length === 0) addHatsuItem();
-                    
-                    // Recriações: Armas
-                    document.querySelector('#weapons-table tbody').innerHTML = '';
-                    (ficha.weapons || []).forEach(weapon => addWeaponRow(weapon));
-                    if ((ficha.weapons || []).length === 0) addWeaponRow();
-
-                    // Recriações: Inventário
-                    document.querySelector('#inventory-table tbody').innerHTML = '';
-                    (ficha.inventory || []).forEach(item => addInventoryRow(item));
-                    if ((ficha.inventory || []).length === 0) addInventoryRow();
-
-
-                    // Carrega o Histórico
-                    const historyLog = document.getElementById('roll-history');
-                    historyLog.innerHTML = '';
-                    if (ficha.rollHistory && ficha.rollHistory.length > 0) {
-                        ficha.rollHistory.forEach(html => {
-                            const tempDiv = document.createElement('div');
-                            tempDiv.innerHTML = html;
-                            historyLog.appendChild(tempDiv.firstChild);
-                        });
-                    } else {
-                         historyLog.innerHTML = '<div>Aguardando a primeira rolagem...</div>';
-                    }
-
-                    updateNenBaseAttr();
-                    updateAuraBonus();
-                    updateInventoryWeight();
-                } else {
-                    addHatsuItem(); 
-                    addWeaponRow();
-                    addInventoryRow();
-                    document.getElementById('roll-history').innerHTML = '<div>Aguardando a primeira rolagem...</div>';
-                    updateInventoryWeight();
                 }
+                
+                // 2. Recria Hatsus
+                document.getElementById('hatsu-list').innerHTML = ''; 
+                (ficha.hatsus || []).forEach(hatsu => addHatsuItem(hatsu));
+                if ((ficha.hatsus || []).length === 0) addHatsuItem();
+                
+                // 3. Recria Armas
+                document.querySelector('#weapons-table tbody').innerHTML = '';
+                (ficha.weapons || []).forEach(weapon => addWeaponRow(weapon));
+                if ((ficha.weapons || []).length === 0) addWeaponRow();
+
+                // 4. Recria Inventário
+                document.querySelector('#inventory-table tbody').innerHTML = '';
+                (ficha.inventory || []).forEach(item => addInventoryRow(item));
+                if ((ficha.inventory || []).length === 0) addInventoryRow();
+
+                // 5. Carrega Histórico
+                const historyLog = document.getElementById('roll-history');
+                historyLog.innerHTML = '';
+                if (ficha.rollHistory && ficha.rollHistory.length > 0) {
+                    ficha.rollHistory.forEach(html => {
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = html;
+                        historyLog.appendChild(tempDiv.firstChild);
+                    });
+                } else {
+                     historyLog.innerHTML = '<div>Aguardando a primeira rolagem...</div>';
+                }
+
+                // 6. Atualiza exibições
+                updateNenBaseAttr();
+                updateAuraBonus();
+                updateInventoryWeight();
             }
 
-            // Ativar auto-save
-            document.querySelectorAll('input, textarea, select, .trained-checkbox').forEach(element => {
-                element.addEventListener('change', saveFicha);
-                element.addEventListener('keyup', saveFicha);
-            });
-            setInterval(saveFicha, AUTOSAVE_INTERVAL);
+            function createDefaultFicha(name) {
+                return {
+                    id: Date.now(),
+                    name: name,
+                    data: {
+                        'nome': name, 'nivel': '1', 'origem': '', 'classe': '', 'rep-hunter': '0', 'rep-phantom': '0',
+                        'rep-zoldyck': '0', 'rep-mafia': '0', 'rep-chimera': '0', 'rep-governo': '0',
+                        'forca': '1', 'vigor': '1', 'destreza': '1', 'intelecto': '1', 'carisma': '1',
+                        'pv-max': '10', 'pv-atual': '10', 'pa-max': '10', 'pa-atual': '10', 'defesa': '10', 'velocidade': '10',
+                        'res-perfurante': '0', 'res-impacto': '0', 'res-cortante': '0', 'res-elemental': '0', 'res-psiquica': '0',
+                        'nen-type': 'none', 'nen-base-attr': 'Nenhum', 'nen-aura-bonus': '0',
+                        'ten-level': 'amador', 'ren-level': 'amador', 'zetsu-level': 'amador',
+                        'inventory-limit': '10'
+                    },
+                    hatsus: [],
+                    weapons: [],
+                    inventory: [],
+                    rollHistory: []
+                };
+            }
+            
+            // --- GERENCIAMENTO DE ABAS (TABS) ---
 
-            // --- LÓGICA DE ROLAGEM (D20 MODIFICADO) ---
+            function switchCharacter(index) {
+                if (index === activeCharacterIndex) return;
+
+                // 1. Salva o personagem atual
+                saveAllCharacters(); 
+                
+                // 2. Troca o índice ativo
+                activeCharacterIndex = index;
+                
+                // 3. Carrega e exibe o novo personagem
+                loadFichaData(characters[activeCharacterIndex]);
+                
+                // 4. Renderiza as abas novamente para atualizar o destaque
+                renderTabs();
+            }
+
+            function renderTabs() {
+                const tabBar = document.getElementById('tab-bar');
+                tabBar.innerHTML = ''; // Limpa botões existentes
+                
+                characters.forEach((char, index) => {
+                    const button = document.createElement('button');
+                    button.textContent = char.name;
+                    button.setAttribute('data-index', index);
+                    
+                    if (index === activeCharacterIndex) {
+                        button.classList.add('active');
+                    }
+                    
+                    button.addEventListener('click', () => switchCharacter(index));
+                    tabBar.appendChild(button);
+                });
+            }
+
+            document.getElementById('add-new-character').addEventListener('click', () => {
+                const newChar = createDefaultFicha(`Personagem ${characters.length + 1}`);
+                characters.push(newChar);
+                switchCharacter(characters.length - 1);
+            });
+
+            document.getElementById('save-name-btn').addEventListener('click', () => {
+                const newName = document.getElementById('nome').value.trim();
+                if (newName) {
+                    characters[activeCharacterIndex].name = newName;
+                    saveAllCharacters(); 
+                    renderTabs(); // Atualiza o nome na aba
+                }
+            });
+
+            document.getElementById('delete-character-btn').addEventListener('click', () => {
+                if (characters.length > 1) {
+                    if (confirm(`Tem certeza que deseja EXCLUIR a ficha de "${characters[activeCharacterIndex].name}"? Esta ação não pode ser desfeita.`)) {
+                        characters.splice(activeCharacterIndex, 1); // Remove o personagem
+                        
+                        // Define o novo índice ativo (o anterior ou o primeiro)
+                        activeCharacterIndex = Math.max(0, activeCharacterIndex - 1);
+                        
+                        // Salva e carrega o novo personagem ativo
+                        saveAllCharacters();
+                        loadFichaData(characters[activeCharacterIndex]);
+                        renderTabs();
+                    }
+                } else {
+                    alert('Você deve ter pelo menos uma ficha. Renomeie a ficha existente, se desejar.');
+                }
+            });
+
+
+            // --- LÓGICA DE ROLAGEM (INTEGRAÇÃO COM MÚLTIPLAS FICHAS) ---
 
             function rollDice(attrValue, isTrained) {
+                // (Mantido inalterado)
                 let diceRolls = [];
                 let numRolls = Math.max(1, attrValue);
 
@@ -887,7 +1025,7 @@
                     rollHistory.removeChild(rollHistory.lastElementChild);
                 }
                 
-                saveFicha();
+                saveAllCharacters(); // Salva após rolagem
             }
 
             document.querySelectorAll('.roll-button').forEach(button => {
@@ -944,17 +1082,17 @@
                 document.getElementById('nen-aura-bonus').value = bonus;
             }
             
-            document.getElementById('nen-type').addEventListener('change', () => { updateNenBaseAttr(); updateAuraBonus(); saveFicha(); });
+            document.getElementById('nen-type').addEventListener('change', () => { updateNenBaseAttr(); updateAuraBonus(); saveAllCharacters(); });
             document.querySelectorAll('.attr-value').forEach(input => {
-                input.addEventListener('change', () => { updateAuraBonus(); saveFicha(); });
-                input.addEventListener('keyup', () => { updateAuraBonus(); saveFicha(); });
+                input.addEventListener('change', () => { updateAuraBonus(); saveAllCharacters(); });
+                input.addEventListener('keyup', () => { updateAuraBonus(); saveAllCharacters(); });
             });
 
 
             // HATSUS
             document.getElementById('add-hatsu-btn').addEventListener('click', () => {
                 addHatsuItem();
-                saveFicha();
+                saveAllCharacters();
             });
             
             function addHatsuItem(data = {}) {
@@ -979,11 +1117,11 @@
                 
                 newItem.querySelector('.btn-delete-hatsu').addEventListener('click', (e) => {
                     e.target.closest('.hatsu-item').remove();
-                    saveFicha();
+                    saveAllCharacters();
                 });
                 newItem.querySelectorAll('input, textarea, select').forEach(el => {
-                    el.addEventListener('change', saveFicha);
-                    el.addEventListener('keyup', saveFicha);
+                    el.addEventListener('change', saveAllCharacters);
+                    el.addEventListener('keyup', saveAllCharacters);
                 });
             }
             
@@ -991,7 +1129,7 @@
 
             document.getElementById('add-weapon-btn').addEventListener('click', () => {
                 addWeaponRow();
-                saveFicha();
+                saveAllCharacters();
             });
 
             function addWeaponRow(data = {}) {
@@ -1007,8 +1145,8 @@
                 `;
                 
                 newRow.querySelectorAll('input').forEach(el => {
-                    el.addEventListener('change', saveFicha);
-                    el.addEventListener('keyup', saveFicha);
+                    el.addEventListener('change', saveAllCharacters);
+                    el.addEventListener('keyup', saveAllCharacters);
                     if (el.classList.contains('inventory-weight-input')) {
                         el.addEventListener('input', updateInventoryWeight);
                     }
@@ -1017,7 +1155,7 @@
             
             document.getElementById('add-inventory-btn').addEventListener('click', () => {
                 addInventoryRow();
-                saveFicha();
+                saveAllCharacters();
             });
 
             function addInventoryRow(data = {}) {
@@ -1031,8 +1169,8 @@
                 `;
 
                 newRow.querySelectorAll('input').forEach(el => {
-                    el.addEventListener('change', saveFicha);
-                    el.addEventListener('keyup', saveFicha);
+                    el.addEventListener('change', saveAllCharacters);
+                    el.addEventListener('keyup', saveAllCharacters);
                     if (el.classList.contains('inventory-weight-input') || el.classList.contains('inventory-quantity')) {
                         el.addEventListener('input', updateInventoryWeight);
                     }
@@ -1042,12 +1180,10 @@
             function updateInventoryWeight() {
                 let totalWeight = 0;
                 
-                // Soma peso das armas
                 document.querySelectorAll('#weapons-table .inventory-weight-input').forEach(input => {
                     totalWeight += parseFloat(input.value) || 0;
                 });
                 
-                // Soma peso dos itens do inventário
                 document.querySelectorAll('#inventory-table tbody tr').forEach(row => {
                     const weightInput = row.querySelector('.item-weight');
                     const quantityInput = row.querySelector('.inventory-quantity');
@@ -1067,10 +1203,13 @@
                 } else {
                      weightDisplay.classList.remove('weight-exceeded');
                 }
+                
+                saveAllCharacters(); // Salva a atualização de peso
             }
             document.getElementById('inventory-limit').addEventListener('input', updateInventoryWeight);
+            
+            // --- TEMA DARK/LIGHT ---
 
-            // TEMA DARK/LIGHT
             document.getElementById('toggle-theme').addEventListener('click', () => {
                 document.body.classList.toggle('dark-mode');
                 if (document.body.classList.contains('dark-mode')) {
@@ -1087,9 +1226,17 @@
                 }
             }
 
-            // INICIALIZAÇÃO
+            // Ativar auto-save (Aplica o evento de saveAllCharacters a todos os campos)
+            document.querySelectorAll('input, textarea, select, .trained-checkbox').forEach(element => {
+                element.addEventListener('change', saveAllCharacters);
+                element.addEventListener('keyup', saveAllCharacters);
+            });
+            setInterval(saveAllCharacters, AUTOSAVE_INTERVAL);
+
+
+            // --- INICIALIZAÇÃO ---
             loadTheme();
-            loadFicha();
+            loadAllCharacters();
         });
     </script>
     </body>
