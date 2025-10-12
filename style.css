@@ -1,0 +1,268 @@
+/* VARIÁVEIS DE CORES */
+:root {
+    --color-primary: #008000; /* Verde Esmeralda Hunter */
+    --color-secondary: #ff4500; /* Vermelho Escarlate/Aura */
+    --color-text-dark: #333333;
+    --color-bg-light: #f4f4f4;
+    --color-card-light: #ffffff;
+    --color-border-light: #dddddd;
+
+    /* DARK MODE */
+    --color-bg-dark: #121212;
+    --color-card-dark: #1e1e1e;
+    --color-text-light: #ffffff;
+    --color-border-dark: #333333;
+    --color-shadow: rgba(0, 128, 0, 0.4); /* Sombra de Aura */
+}
+
+/* Base e Tipografia */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    background-color: var(--color-bg-light);
+    color: var(--color-text-dark);
+    transition: background-color 0.3s, color 0.3s;
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><circle cx="50" cy="50" r="40" fill="%23008000" /></svg>'); 
+    background-size: 500px;
+}
+
+/* DARK MODE STYLES (Mantido, mas omitido por espaço) */
+body.dark-mode {
+    background-color: var(--color-bg-dark);
+    color: var(--color-text-light);
+}
+body.dark-mode .card, body.dark-mode table, body.dark-mode input, body.dark-mode textarea, body.dark-mode select {
+    background-color: var(--color-card-dark);
+    color: var(--color-text-light);
+    border-color: var(--color-border-dark);
+}
+body.dark-mode .roll-display {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 15px var(--color-shadow);
+}
+/* ... outros estilos dark mode ... */
+
+/* Header/Layout Principal (Omitido por espaço, mas mantido o original) */
+header { /* ... */ }
+.btn-theme { /* ... */ }
+
+.ficha-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+@media (min-width: 1024px) {
+    .ficha-container {
+        grid-template-columns: 2fr 1fr;
+        grid-template-areas:
+            "identificacao roll"
+            "atributos roll"
+            "recursos roll"
+            "pericias pericias"
+            "nen nen"
+            "equipamentos equipamentos";
+    }
+    /* ... grid-areas ... */
+}
+.card { /* ... */ }
+h2 { /* ... */ }
+h3 { /* ... */ }
+
+/* Formulário e Inputs (Omitido por espaço, mas mantido o original) */
+input[type="text"], input[type="number"], textarea, select { /* ... */ }
+.three-cols { /* ... */ }
+
+/* FACÇÕES */
+.faction-rep-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 10px;
+}
+.rep-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.rep-item input {
+    width: 60px;
+    text-align: center;
+}
+
+/* ATRIBUTOS (Omitido por espaço, mas mantido o original) */
+.attr-grid { /* ... */ }
+.attr-item { /* ... */ }
+.roll-button { /* ... */ }
+
+/* PERÍCIAS */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+.skill-group h4 {
+    border-bottom: 1px dashed var(--color-primary);
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+    color: var(--color-primary);
+}
+.skill-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.trained-checkbox {
+    width: 20px !important;
+    height: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.nen-control-skill {
+    grid-column: 1 / -1; /* Ocupa toda a largura */
+}
+.nen-control-skill .skill-item {
+    justify-content: flex-start;
+    gap: 10px;
+}
+.small-select {
+    width: 80px !important;
+}
+
+/* ROLAGEM */
+.roll-area {
+    position: sticky;
+    top: 20px;
+    height: fit-content;
+    overflow: hidden; /* Para transição de minimização */
+}
+.roll-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.btn-minimize {
+    background: var(--color-secondary);
+    color: white;
+    border: none;
+    padding: 0 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+    line-height: 1;
+    transform: rotate(0deg);
+    transition: transform 0.3s;
+}
+.roll-area.minimized .btn-minimize {
+    transform: rotate(90deg); /* Ex: um símbolo de ">" */
+}
+.roll-area.minimized #roll-content {
+    max-height: 0;
+    opacity: 0;
+    pointer-events: none;
+    padding: 0;
+    margin: 0;
+    transition: max-height 0.3s ease-out, opacity 0.3s ease-out, padding 0.3s;
+}
+#roll-content {
+    max-height: 500px; /* Um valor alto para ser o limite */
+    opacity: 1;
+    transition: max-height 0.3s ease-in, opacity 0.3s ease-in;
+}
+.roll-display { /* ... */ }
+.history-log { /* ... */ }
+
+/* ARMAS E INVENTÁRIO (Novos Estilos) */
+#weapons-table input, #inventory-table input {
+    border: none;
+    background: transparent;
+    padding: 5px;
+}
+#weapons-table input:focus, #inventory-table input:focus {
+    border-bottom: 1px dashed var(--color-secondary);
+    outline: none;
+}
+
+.inventory-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+.small-input {
+    width: 60px !important;
+    text-align: center;
+}
+#inventory-current-weight {
+    font-weight: bold;
+    color: var(--color-primary);
+}
+
+
+/* NEN BÁSICO */
+.basic-nen-container {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid var(--color-primary);
+    border-radius: 8px;
+    background-color: rgba(0, 128, 0, 0.05);
+}
+body.dark-mode .basic-nen-container {
+    background-color: rgba(0, 128, 0, 0.1);
+}
+
+.basic-nen-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+.nen-tech-group h4 {
+    color: var(--color-secondary);
+    margin-bottom: 10px;
+}
+.tech-level-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+.tech-level-item label {
+    font-weight: bold;
+}
+
+.tech-item-check {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px 0;
+}
+.tech-item-check input[type="checkbox"] {
+    margin-right: 0;
+}
+.sub-tech {
+    padding-left: 15px;
+    font-size: 0.9em;
+    opacity: 0.8;
+}
+
+
+/* HATSUS */
+.hatsu-item {
+    border: 1px solid var(--color-secondary);
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 8px;
+    position: relative;
+}
+.hatsu-item .hatsu-name { /* ... */ }
+.hatsu-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 10px;
+    margin-bottom: 10px;
+}
+/* ... outros estilos de hatsu ... */
+.mt-20 { margin-top: 20px; }

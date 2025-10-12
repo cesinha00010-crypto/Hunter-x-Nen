@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hunter x Nen System - Ficha de Personagem</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⚡%3C/text%3E%3C/svg%3E">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ====================================================================== 
+           1. VARIÁVEIS, FONTES E BASE
+           ====================================================================== */
+        :root {
+            --color-primary: #008000; /* Verde Esmeralda Hunter */
+            --color-secondary: #ff4500; /* Vermelho Escarlate/Aura */
+            --color-text-dark: #222222;
+            --color-bg-light: #e6e6e6; /* Cinza claro suave */
+            --color-card-light: #ffffff;
+            --color-border-light: #cccccc;
+            --color-shadow-light: rgba(0, 0, 0, 0.2);
+            
+            /* DARK MODE */
+            --color-bg-dark: #0f0f0f; /* Quase preto */
+            --color-card-dark: #1f1f1f; /* Cinza escuro para cards */
+            --color-text-light: #e0e0e0;
+            --color-border-dark: #333333;
+            --color-shadow-nen: rgba(0, 128, 0, 0.4); /* Sombra de Aura */
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.6;
+            background-color: var(--color-bg-light);
+            color: var(--color-text-dark);
+            transition: background-color 0.4s, color 0.4s;
+            padding-bottom: 50px;
+        }
+
+        /* DARK MODE STYLES */
+        body.dark-mode {
+            background-color: var(--color-bg-dark);
+            color: var(--color-text-light);
+            background-image: radial-gradient(circle at center, #1a1a1a 1px, transparent 0);
+            background-size: 50px 50px; /* Textura sutil de ruído/grade */
+        }
+        body.dark-mode .card, 
+        body.dark-mode input:not(.trained-checkbox):not(.btn-theme), 
+        body.dark-mode textarea, 
+        body.dark-mode select,
+        body.dark-mode table {
+            background-color: var(--color-card-dark);
+            color: var(--color-text-light);
+            border-color: var(--color-border-dark);
+            box-shadow: 0 0 15px var(--color-shadow-nen), 0 4px 8px rgba(0, 0, 0, 0.5); /* Aura Verde */
+        }
+        body.dark-mode .roll-display {
+            border-color: var(--color-primary);
+            background-color: rgba(0, 128, 0, 0.15);
+            box-shadow: 0 0 10px var(--color-shadow-nen);
+        }
+        body.dark-mode .history-log > div {
+            background-color: rgba(255, 69, 0, 0.1); /* Aura Secundária sutil */
+            border-left-color: var(--color-secondary);
+        }
+        body.dark-mode .attr-grid-item {
+            border-bottom-color: var(--color-border-dark);
+        }
+
+        /* ====================================================================== 
+           2. HEADER E LAYOUT GERAL
+           ====================================================================== */
+        header {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 25px 40px;
+            text-align: center;
+            border-bottom: 8px solid var(--color-secondary);
+            position: relative;
+        }
+        header .logo {
+            font-family: 'Oswald', sans-serif;
+            font-size: 3em;
+            font-weight: 700;
+            letter-spacing: 5px;
+            margin-bottom: 5px;
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.6);
+        }
+        .btn-theme {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: var(--color-secondary);
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            font-family: 'Montserrat', sans-serif;
+            transition: background 0.2s, transform 0.1s;
+        }
+        .btn-theme:hover { background-color: #e53900; transform: scale(1.05); }
+
+        /* Layout Principal */
+        .ficha-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+        @media (min-width: 1024px) {
+            .ficha-container {
+                grid-template-columns: 3fr 1fr;
+                grid-template-areas:
+                    "identificacao roll"
+                    "atributos roll"
+                    "recursos recursos"
+                    "pericias pericias"
+                    "nen nen"
+                    "armas armas"
+                    "inventario inventario";
+            }
+            .identification-section { grid-area: identificacao; }
+            .attributes-section { grid-area: atributos; }
+            .resources-section { grid-area: recursos; }
+            .skills-section { grid-area: pericias; }
+            .nen-section { grid-area: nen; }
+            .weapons-section { grid-area: armas; }
+            .inventory-section { grid-area: inventario; }
+        }
+
+        /* Cards - Efeito de Placa/Metal */
+        .card {
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px var(--color-shadow-light); /* Sombra mais profunda */
+            border: 2px solid var(--color-border-light);
+            transition: box-shadow 0.3s, border-color 0.3s;
+        }
+
+        /* Títulos H2 - Estilizado como Placa */
+        h2 {
+            font-family: 'Oswald', sans-serif;
+            color: var(--color-primary);
+            font-size: 1.8em;
+            text-transform: uppercase;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            
+            /* Linha dupla estilizada */
+            border-bottom: 4px double var(--color-secondary);
+        }
+        h3 {
+            font-family: 'Oswald', sans-serif;
+            margin-top: 25px;
+            margin-bottom: 12px;
+            color: var(--color-secondary);
+            font-size: 1.2em;
+        }
+
+        /* Inputs Comuns */
+        input:not(.trained-checkbox):not(.btn-theme), textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--color-border-light);
+            border-radius: 8px; /* Mais arredondado */
+            background-color: var(--color-bg-light);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--color-primary);
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 128, 0, 0.6); /* Glow Verde */
+        }
+        .three-cols {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+        }
+        
+        /* Botões de Rolagem - Tátil */
+        .roll-button, .btn-add {
+            background-color: var(--color-secondary);
+            background-image: linear-gradient(180deg, var(--color-secondary) 0%, #cc3700 100%);
+            color: white;
+            border: 1px solid #a82e00;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.15s;
+            box-shadow: 0 4px 0 #a82e00; /* Efeito 3D */
+        }
+        .roll-button:hover, .btn-add:hover {
+            background-image: linear-gradient(180deg, #e53900 0%, var(--color-secondary) 100%);
+            box-shadow: 0 2px 0 #a82e00;
+            transform: translateY(2px);
+        }
+        .roll-button:active, .btn-add:active {
+            box-shadow: none;
+            transform: translateY(4px);
+        }
+        
+        /* Botão Verde */
+        .btn-add {
+            background-color: var(--color-primary);
+            background-image: linear-gradient(180deg, var(--color-primary) 0%, #006600 100%);
+            border: 1px solid #005000;
+            box-shadow: 0 4px 0 #005000;
+        }
+        .btn-add:hover {
+            background-image: linear-gradient(180deg, #009900 0%, var(--color-primary) 100%);
+            box-shadow: 0 2px 0 #005000;
+        }
+        .btn-add:active {
+            box-shadow: none;
+            transform: translateY(4px);
+        }
+
+        /* ====================================================================== 
+           3. ATRIBUTOS E PERÍCIAS
+           ====================================================================== */
+        .attr-grid-item {
+            display: grid;
+            grid-template-columns: 1fr 70px 90px;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            background-color: rgba(0, 128, 0, 0.05); /* Leve destaque */
+            border-bottom: 1px solid var(--color-border-light);
+        }
+        .attr-grid-item label {
+            font-weight: 700;
+            color: var(--color-primary);
+            font-family: 'Oswald', sans-serif;
+        }
+        .attr-value {
+            text-align: center;
+            padding: 8px !important;
+        }
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px dotted var(--color-border-light);
+        }
+        .skill-item label { flex-grow: 1; font-size: 0.95em; }
+        .trained-checkbox {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--color-secondary); /* Cor do checkbox */
+        }
+        
+        /* ====================================================================== 
+           4. ROLAGEM (RESPONSIVIDADE FIX/STATIC)
+           ====================================================================== */
+        .roll-area {
+            position: static; /* Padrão para mobile */
+            width: 100%;
+            z-index: 1000;
+        }
+        @media (min-width: 1024px) {
+            .roll-area {
+                position: fixed; /* Fixo para desktop */
+                top: 110px;      /* Abaixo do header */
+                right: 20px;
+                width: 300px;
+                max-height: calc(100vh - 130px); /* Altura máxima da viewport */
+                overflow-y: auto; /* Permite rolagem interna se necessário */
+            }
+        }
+        
+        .roll-display {
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 4px solid var(--color-secondary);
+            border-radius: 12px;
+            font-weight: 700;
+            background-color: rgba(255, 69, 0, 0.1);
+            font-family: 'Oswald', sans-serif;
+        }
+        .roll-d20 { font-size: 1.4em; }
+        .roll-result-final {
+            color: var(--color-primary);
+            font-size: 2.5em;
+            display: inline-block;
+            margin-left: 10px;
+            text-shadow: 1px 1px 3px rgba(0, 128, 0, 0.8);
+        }
+
+        .history-log {
+            border-top: 2px solid var(--color-border-light);
+            padding-top: 15px;
+            font-size: 0.9em;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .history-log > div {
+            padding: 8px;
+            border-left: 5px solid var(--color-primary);
+            background-color: rgba(0, 128, 0, 0.05);
+            border-radius: 4px;
+            font-family: monospace; /* Fonte para logs de sistema */
+        }
+
+        /* ====================================================================== 
+           5. TABELAS (ARMAS / INVENTÁRIO)
+           ====================================================================== */
+        table {
+            border-collapse: separate; /* Permite border-radius */
+            border-spacing: 0;
+            margin-top: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        table thead tr {
+            background-color: var(--color-primary);
+            color: white;
+            font-family: 'Oswald', sans-serif;
+        }
+        table th, table td {
+            padding: 10px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border-light);
+        }
+        body.dark-mode table th, body.dark-mode table td {
+            border-bottom: 1px solid var(--color-border-dark);
+        }
+        table tbody tr:last-child td { border-bottom: none; }
+
+        table input {
+            border: none !important;
+            background: transparent !important;
+            padding: 0 !important;
+            box-shadow: none !important;
+        }
+        table input:focus {
+            background: rgba(255, 255, 255, 0.1) !important;
+        }
+        body.dark-mode table input:focus {
+            background: rgba(255, 255, 255, 0.05) !important;
+        }
+        
+        .inventory-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 10px;
+            border-radius: 6px;
+            background-color: rgba(255, 69, 0, 0.05);
+            border: 1px dashed var(--color-secondary);
+        }
+        .weight-exceeded {
+            color: #cc0000 !important; /* Vermelho forte */
+            font-size: 1.1em;
+            animation: flash-red 1s infinite alternate;
+        }
+        @keyframes flash-red {
+            from { opacity: 1; }
+            to { opacity: 0.7; }
+        }
+        
+        /* Utilitários */
+        .mt-10 { margin-top: 10px; }
+    </style>
+    </head>
+<body>
+    <header>
+        <div class="logo">HUNTER x NEN SYSTEM</div>
+        <p>"Domine o Nen. Supere seus limites. Crie fichas, canalize sua aura e veja o destino se revelar nos dados."</p>
+        <button id="toggle-theme" class="btn-theme">Modo Escuro/Claro</button>
+    </header>
+
+    <main class="ficha-container">
+        <div id="dice-roll-area" class="card roll-area">
+            <div class="roll-header">
+                <h2>Resultados da Rolagem</h2>
+            </div>
+            <div id="roll-content">
+                <div id="roll-display" class="roll-display">
+                    <span class="roll-d20">1d20</span> = <span class="roll-result-final">--</span>
+                </div>
+                <div id="roll-history" class="history-log">
+                    <div>Aguardando a primeira rolagem...</div>
+                </div>
+            </div>
+        </div>
+
+        <section class="card identification-section">
+            <h2>1. <span style="font-size: 1.2em;">👤</span> Identificação</h2>
+            <div class="field-group">
+                <input type="text" id="nome" placeholder="Nome do Personagem" style="width: 100%;">
+            </div>
+            <div class="field-group three-cols">
+                <input type="text" id="nivel" placeholder="Nível">
+                <input type="text" id="origem" placeholder="Origem">
+                <input type="text" id="classe" placeholder="Classe">
+            </div>
+
+            <h3>Reputação com Facções (-5 a +5)</h3>
+            <div class="three-cols">
+                <div class="rep-item"><label for="rep-hunter">Assoc. Hunter:</label><input type="number" id="rep-hunter" min="-5" max="5" value="0"></div>
+                <div class="rep-item"><label for="rep-phantom">Trupe Fantasma:</label><input type="number" id="rep-phantom" min="-5" max="5" value="0"></div>
+                <div class="rep-item"><label for="rep-zoldyck">Família Zoldyck:</label><input type="number" id="rep-zoldyck" min="-5" max="5" value="0"></div>
+                <div class="rep-item"><label for="rep-mafia">Máfia:</label><input type="number" id="rep-mafia" min="-5" max="5" value="0"></div>
+                <div class="rep-item"><label for="rep-chimera">Formigas Quimera:</label><input type="number" id="rep-chimera" min="-5" max="5" value="0"></div>
+                <div class="rep-item"><label for="rep-governo">Governo Mundial:</label><input type="number" id="rep-governo" min="-5" max="5" value="0"></div>
+            </div>
+        </section>
+
+        <section class="card attributes-section">
+            <h2>2. <span style="font-size: 1.2em;">💪</span> Atributos Principais</h2>
+            <div class="attr-list">
+                <div class="attr-grid-item">
+                    <label for="forca">Força (FOR)</label>
+                    <input type="number" id="forca" class="attr-value" value="1" min="0">
+                    <button class="roll-button" data-attr="forca" data-pericia="none">Rolar</button>
+                </div>
+                <div class="attr-grid-item">
+                    <label for="vigor">Vigor (VIG)</label>
+                    <input type="number" id="vigor" class="attr-value" value="1" min="0">
+                    <button class="roll-button" data-attr="vigor" data-pericia="none">Rolar</button>
+                </div>
+                <div class="attr-grid-item">
+                    <label for="destreza">Destreza (DEX)</label>
+                    <input type="number" id="destreza" class="attr-value" value="1" min="0">
+                    <button class="roll-button" data-attr="destreza" data-pericia="none">Rolar</button>
+                </div>
+                <div class="attr-grid-item">
+                    <label for="intelecto">Intelecto (INT)</label>
+                    <input type="number" id="intelecto" class="attr-value" value="1" min="0">
+                    <button class="roll-button" data-attr="intelecto" data-pericia="none">Rolar</button>
+                </div>
+                <div class="attr-grid-item">
+                    <label for="carisma">Carisma (CAR)</label>
+                    <input type="number" id="carisma" class="attr-value" value="1" min="0">
+                    <button class="roll-button" data-attr="carisma" data-pericia="none">Rolar</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="card resources-section">
+            <h2>3. <span style="font-size: 1.2em;">❤️</span> Recursos & Defesas</h2>
+            <div class="field-group three-cols">
+                <div class="resource-item">
+                    <label for="pv-max">PV Máx</label>
+                    <input type="number" id="pv-max" value="10">
+                    <label for="pv-atual">PV Atual</label>
+                    <input type="number" id="pv-atual" value="10">
+                </div>
+                <div class="resource-item">
+                    <label for="pa-max">PA Máx (Aura)</label>
+                    <input type="number" id="pa-max" value="10">
+                    <label for="pa-atual">PA Atual</label>
+                    <input type="number" id="pa-atual" value="10">
+                </div>
+                <div class="resource-item">
+                    <label for="defesa">Defesa Base</label>
+                    <input type="number" id="defesa" value="10">
+                    <label for="velocidade">Velocidade</label>
+                    <input type="number" id="velocidade" value="10">
+                </div>
+            </div>
+
+            <h3>Resistências</h3>
+            <div class="field-group three-cols">
+                <input type="number" id="res-perfurante" placeholder="Perfurante" value="0">
+                <input type="number" id="res-impacto" placeholder="Impacto" value="0">
+                <input type="number" id="res-cortante" placeholder="Cortante" value="0">
+                <input type="number" id="res-elemental" placeholder="Elemental" value="0">
+                <input type="number" id="res-psiquica" placeholder="Psíquica" value="0">
+            </div>
+        </section>
+
+        <section class="card skills-section">
+            <h2>4. <span style="font-size: 1.2em;">🎯</span> Perícias (Treinado: +5 no Teste)</h2>
+            <div class="skills-grid three-cols">
+                <div class="skill-group">
+                    <h4>FOR</h4>
+                    <div class="skill-item"><label for="pericia-atletismo">Atletismo</label><input type="checkbox" id="pericia-atletismo" class="trained-checkbox"><button class="roll-button" data-attr="forca" data-pericia="atletismo">Rolar</button></div>
+                    <div class="skill-item"><label for="pericia-duelo">Duelo</label><input type="checkbox" id="pericia-duelo" class="trained-checkbox"><button class="roll-button" data-attr="forca" data-pericia="duelo">Rolar</button></div>
+                </div>
+
+                <div class="skill-group">
+                    <h4>VIG</h4>
+                    <div class="skill-item"><label for="pericia-robustez">Robustez</label><input type="checkbox" id="pericia-robustez" class="trained-checkbox"><button class="roll-button" data-attr="vigor" data-pericia="robustez">Rolar</button></div>
+                    <div class="skill-item"><label for="pericia-resistencia">Resistência</label><input type="checkbox" id="pericia-resistencia" class="trained-checkbox"><button class="roll-button" data-attr="vigor" data-pericia="resistencia">Rolar</button></div>
+                </div>
+
+                <div class="skill-group">
+                    <h4>DEX</h4>
+                    <div class="skill-item"><label for="pericia-furtividade">Furtividade</label><input type="checkbox" id="pericia-furtividade" class="trained-checkbox"><button class="roll-button" data-attr="destreza" data-pericia="furtividade">Rolar</button></div>
+                    <div class="skill-item"><label for="pericia-acrobacia">Acrobacia</label><input type="checkbox" id="pericia-acrobacia" class="trained-checkbox"><button class="roll-button" data-attr="destreza" data-pericia="acrobacia">Rolar</button></div>
+                    <div class="skill-item"><label for="pericia-reflexos">Reflexos</label><input type="checkbox" id="pericia-reflexos" class="trained-checkbox"><button class="roll-button" data-attr="destreza" data-pericia="reflexos">Rolar</button></div>
+                </div>
+                
+                <div class="skill-group">
+                    <h4>INT</h4>
+                    <div class="skill-item"><label for="pericia-caca">Caça</label><input type="checkbox" id="pericia-caca" class="trained-checkbox"><button class="roll-button" data-attr="intelecto" data-pericia="caca">Rolar</button></div>
+                    <div class="skill-item"><label for="pericia-investigacao">Investigação</label><input type="checkbox" id="pericia-investigacao" class="trained-checkbox"><button class="roll-button" data-attr="intelecto" data-pericia="investigacao">Rolar</button></div>
+                    <div class="skill-item"><label for="pericia-medicina">Medicina</label><input type="checkbox" id="pericia-medicina" class="trained-checkbox"><button class="roll-button" data-attr="intelecto" data-pericia="medicina">Rolar</button></div>
+                </div>
+
+                <div class="skill-group">
+                    <h4>CAR</h4>
+                    <div class="skill-item"><label for="pericia-persuasao">Persuasão</label><input type="checkbox" id="pericia-persuasao" class="trained-checkbox"><button class="roll-button" data-attr="carisma" data-pericia="persuasao">Rolar</button></div>
+                    <div class="skill-item"><label for="pericia-intimidacao">Intimidação</label><input type="checkbox" id="pericia-intimidacao" class="trained-checkbox"><button class="roll-button" data-attr="carisma" data-pericia="intimidacao">Rolar</button></div>
+                    <div class="skill-item"><label for="pericia-vontade">Vontade</label><input type="checkbox" id="pericia-vontade" class="trained-checkbox"><button class="roll-button" data-attr="carisma" data-pericia="vontade">Rolar</button></div>
+                </div>
+
+                <div class="skill-group nen-control-skill" style="grid-column: 1 / -1; padding-top: 10px; border-top: 2px solid var(--color-border-light);">
+                    <h4>Teste de Controle de Nen</h4>
+                    <div class="skill-item">
+                        <label for="nen-control-attr">Atributo Base:</label>
+                        <select id="nen-control-attr" style="width: 80px;">
+                            <option value="forca">FOR</option>
+                            <option value="vigor">VIG</option>
+                            <option value="destreza">DEX</option>
+                            <option value="intelecto">INT</option>
+                            <option value="carisma">CAR</option>
+                        </select>
+                        <label for="pericia-controle-nen" style="margin-left: 15px;">Treinado?</label>
+                        <input type="checkbox" id="pericia-controle-nen" class="trained-checkbox" style="margin-right: 15px;">
+                        <button id="roll-control-nen" class="roll-button" data-attr-select="nen-control-attr" data-pericia-checkbox="pericia-controle-nen">Rolar Teste</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="card nen-section">
+            <h2>5. <span style="font-size: 1.2em;">⚡</span> Habilidades e Nen</h2>
+            <div class="field-group three-cols">
+                <div>
+                    <label for="nen-type">Tipo de Nen (Hatsu Principal)</label>
+                    <select id="nen-type">
+                        <option value="none">Selecione</option>
+                        <option value="intensificacao">Intensificação (VIG)</option>
+                        <option value="emissao">Emissão (FOR)</option>
+                        <option value="transmutacao">Transmutação (DEX)</option>
+                        <option value="manipulacao">Manipulação (CAR)</option>
+                        <option value="materializacao">Materialização (INT)</option>
+                        <option value="especializacao">Especialização</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Atributo Base do Nen</label>
+                    <input type="text" id="nen-base-attr" value="Nenhum" readonly>
+                </div>
+                <div>
+                    <label>Bônus de Aura (%)</label>
+                    <input type="number" id="nen-aura-bonus" value="0" readonly>
+                </div>
+            </div>
+
+            <div class="basic-nen-container">
+                <h3>Técnicas Básicas (Controle de Aura)</h3>
+                <div class="three-cols">
+                    <div class="nen-tech-group">
+                        <h4>Níveis de Controle</h4>
+                        <div class="attr-grid-item" style="grid-template-columns: 1fr 1fr 10px; background-color: transparent; border-bottom: none;">
+                            <label>Ten</label><select class="nen-level-select" id="ten-level"><option value="amador">Amador</option><option value="intermediario">Intermediário</option><option value="avancado">Avançado</option><option value="mestre">Mestre</option></select>
+                        </div>
+                        <div class="attr-grid-item" style="grid-template-columns: 1fr 1fr 10px; background-color: transparent; border-bottom: none;">
+                            <label>Ren</label><select class="nen-level-select" id="ren-level"><option value="amador">Amador</option><option value="intermediario">Intermediário</option><option value="avancado">Avançado</option><option value="mestre">Mestre</option></select>
+                        </div>
+                        <div class="attr-grid-item" style="grid-template-columns: 1fr 1fr 10px; background-color: transparent; border-bottom: none;">
+                            <label>Zetsu</label><select class="nen-level-select" id="zetsu-level"><option value="amador">Amador</option><option value="intermediario">Intermediário</option><option value="avancado">Avançado</option><option value="mestre">Mestre</option></select>
+                        </div>
+                    </div>
+                    
+                    <div class="nen-tech-group" style="grid-column: span 2;">
+                        <h4>Técnicas Avançadas</h4>
+                        <div class="three-cols">
+                            <div class="tech-item-check"><label for="tech-gyo">Gyô</label><input type="checkbox" id="tech-gyo"></div>
+                            <div class="tech-item-check"><label for="tech-in">In</label><input type="checkbox" id="tech-in"></div>
+                            <div class="tech-item-check"><label for="tech-en">En</label><input type="checkbox" id="tech-en"></div>
+                            <div class="tech-item-check"><label for="tech-ken">Ken</label><input type="checkbox" id="tech-ken"></div>
+                            <div class="tech-item-check"><label for="tech-shu">Shu</label><input type="checkbox" id="tech-shu"></div>
+                            <div class="tech-item-check"><label for="tech-ko">Kô</label><input type="checkbox" id="tech-ko"></div>
+                            <div class="tech-item-check"><label for="tech-ryu">Ryû</label><input type="checkbox" id="tech-ryu"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="mt-20">Hatsus (Técnicas Personalizadas)</h3>
+            <div id="hatsu-list">
+                </div>
+            <button id="add-hatsu-btn" class="btn-add mt-10">+ Adicionar Hatsu</button>
+        </section>
+
+        <section class="card weapons-section">
+            <h2>6. <span style="font-size: 1.2em;">⚔️</span> Armas</h2>
+            <table id="weapons-table">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Nome</th>
+                        <th style="width: 15%;">Tipo</th>
+                        <th style="width: 15%;">Ataque (Mod)</th>
+                        <th style="width: 15%;">Dano</th>
+                        <th style="width: 15%;">Crítico</th>
+                        <th style="width: 15%;">Peso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+            <button id="add-weapon-btn" class="btn-add mt-10">+ Adicionar Arma</button>
+        </section>
+
+        <section class="card inventory-section">
+            <h2>7. <span style="font-size: 1.2em;">🎒</span> Inventário e Carga</h2>
+            <div class="inventory-controls">
+                <label for="inventory-limit">Limite de Carga:</label><input type="number" id="inventory-limit" value="10" class="small-input" min="0">
+                <span id="inventory-current-weight">Carga Atual: 0</span>
+            </div>
+            
+            <table id="inventory-table">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">Item</th>
+                        <th style="width: 50%;">Detalhes</th>
+                        <th style="width: 15%;">Peso</th>
+                        <th style="width: 15%;">Qtd.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+            <button id="add-inventory-btn" class="btn-add mt-10">+ Adicionar Item</button>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ROLL_BONUS_TRAINED = 5;
+            const AUTOSAVE_INTERVAL = 3000; 
+            const MAX_HISTORY_ITEMS = 3; 
+            const ATTR_NEN_MAP = {
+                'intensificacao': 'vigor',
+                'emissao': 'forca',
+                'transmutacao': 'destreza',
+                'manipulacao': 'carisma',
+                'materializacao': 'intelecto',
+                'especializacao': 'livre'
+            };
+
+            // --- FUNÇÕES DE AUTO-SAVE E CARREGAMENTO ---
+
+            function saveFicha() {
+                const ficha = {};
+                document.querySelectorAll('input, textarea, select, .trained-checkbox').forEach(element => {
+                    const id = element.id || element.name;
+                    if (id) {
+                        if (element.type === 'checkbox') {
+                            ficha[id] = element.checked;
+                        } else {
+                            ficha[id] = element.value;
+                        }
+                    }
+                });
+
+                // Captura Hatsus
+                ficha['hatsus'] = Array.from(document.querySelectorAll('.hatsu-item')).map(item => ({
+                    nome: item.querySelector('.hatsu-name').value,
+                    tipo: item.querySelector('.hatsu-type').value,
+                    categoria: item.querySelector('.hatsu-category').value,
+                    custo: item.querySelector('.hatsu-cost').value,
+                    duracao: item.querySelector('.hatsu-duration').value,
+                    execucao: item.querySelector('.hatsu-execution').value,
+                    alvo: item.querySelector('.hatsu-target').value,
+                    alcance: item.querySelector('.hatsu-range').value,
+                    descricao: item.querySelector('textarea').value
+                }));
+                
+                // Captura Armas
+                ficha['weapons'] = Array.from(document.querySelectorAll('#weapons-table tbody tr')).map(row => {
+                    const inputs = row.querySelectorAll('input');
+                    return { nome: inputs[0].value, tipo: inputs[1].value, ataque: inputs[2].value, dano: inputs[3].value, critico: inputs[4].value, peso: inputs[5].value };
+                });
+
+                // Captura Inventário
+                ficha['inventory'] = Array.from(document.querySelectorAll('#inventory-table tbody tr')).map(row => {
+                    const inputs = row.querySelectorAll('input');
+                    return { item: inputs[0].value, detalhes: inputs[1].value, peso: inputs[2].value, quantidade: inputs[3].value };
+                });
+
+                // Salva o histórico de rolagens
+                const historyLog = document.getElementById('roll-history');
+                ficha['rollHistory'] = Array.from(historyLog.children).map(div => div.outerHTML);
+
+                localStorage.setItem('hunterXNenFicha', JSON.stringify(ficha));
+                updateInventoryWeight(); 
+            }
+
+            function loadFicha() {
+                const savedFicha = localStorage.getItem('hunterXNenFicha');
+                if (savedFicha) {
+                    const ficha = JSON.parse(savedFicha);
+                    
+                    for (const id in ficha) {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            if (element.type === 'checkbox') {
+                                element.checked = ficha[id];
+                            } else {
+                                element.value = ficha[id];
+                            }
+                        }
+                    }
+                    
+                    // Recriações: Hatsus
+                    document.getElementById('hatsu-list').innerHTML = ''; 
+                    (ficha.hatsus || []).forEach(hatsu => addHatsuItem(hatsu));
+                    if ((ficha.hatsus || []).length === 0) addHatsuItem();
+                    
+                    // Recriações: Armas
+                    document.querySelector('#weapons-table tbody').innerHTML = '';
+                    (ficha.weapons || []).forEach(weapon => addWeaponRow(weapon));
+                    if ((ficha.weapons || []).length === 0) addWeaponRow();
+
+                    // Recriações: Inventário
+                    document.querySelector('#inventory-table tbody').innerHTML = '';
+                    (ficha.inventory || []).forEach(item => addInventoryRow(item));
+                    if ((ficha.inventory || []).length === 0) addInventoryRow();
+
+
+                    // Carrega o Histórico
+                    const historyLog = document.getElementById('roll-history');
+                    historyLog.innerHTML = '';
+                    if (ficha.rollHistory && ficha.rollHistory.length > 0) {
+                        ficha.rollHistory.forEach(html => {
+                            const tempDiv = document.createElement('div');
+                            tempDiv.innerHTML = html;
+                            historyLog.appendChild(tempDiv.firstChild);
+                        });
+                    } else {
+                         historyLog.innerHTML = '<div>Aguardando a primeira rolagem...</div>';
+                    }
+
+                    updateNenBaseAttr();
+                    updateAuraBonus();
+                    updateInventoryWeight();
+                } else {
+                    addHatsuItem(); 
+                    addWeaponRow();
+                    addInventoryRow();
+                    document.getElementById('roll-history').innerHTML = '<div>Aguardando a primeira rolagem...</div>';
+                    updateInventoryWeight();
+                }
+            }
+
+            // Ativar auto-save
+            document.querySelectorAll('input, textarea, select, .trained-checkbox').forEach(element => {
+                element.addEventListener('change', saveFicha);
+                element.addEventListener('keyup', saveFicha);
+            });
+            setInterval(saveFicha, AUTOSAVE_INTERVAL);
+
+            // --- LÓGICA DE ROLAGEM (D20 MODIFICADO) ---
+
+            function rollDice(attrValue, isTrained) {
+                let diceRolls = [];
+                let numRolls = Math.max(1, attrValue);
+
+                if (attrValue === 0) {
+                    numRolls = 1;
+                    const roll = Math.floor(Math.random() * 20) + 1;
+                    const finalResult = roll - 5;
+                    diceRolls.push(roll);
+                    return { rolls: diceRolls, total: finalResult, bonus: -5, isZeroAttr: true };
+                } else {
+                    for (let i = 0; i < numRolls; i++) {
+                        diceRolls.push(Math.floor(Math.random() * 20) + 1);
+                    }
+                    const highestRoll = Math.max(...diceRolls);
+                    const bonus = isTrained ? ROLL_BONUS_TRAINED : 0;
+                    const finalResult = highestRoll + bonus;
+
+                    return { rolls: diceRolls, total: finalResult, highest: highestRoll, bonus: bonus, isZeroAttr: false };
+                }
+            }
+
+            function displayRollResult(result, attrKey, skillKey) {
+                const rollDisplay = document.getElementById('roll-display');
+                const rollHistory = document.getElementById('roll-history');
+                const rollDetails = result.rolls.join(', ');
+                
+                const skillLabel = skillKey === 'none' ? '' : ` (${skillKey.charAt(0).toUpperCase() + skillKey.slice(1)})`;
+                const bonusText = result.isZeroAttr ? ` - 5` : result.bonus > 0 ? ` + ${result.bonus} (Treinado)` : '';
+                const highestText = result.isZeroAttr ? `ROLAGEM: ${rollDetails}` : `ROLAGENS: ${rollDetails} | MAIOR: ${result.highest}`;
+                
+                const rollText = `${attrKey.toUpperCase()}${skillLabel}: ${highestText}${bonusText} = <span class="roll-result-final">${result.total}</span>`;
+
+                rollDisplay.innerHTML = rollText;
+                rollDisplay.classList.add('rolled');
+                setTimeout(() => rollDisplay.classList.remove('rolled'), 500); 
+
+                const historyItem = document.createElement('div');
+                const timestamp = new Date().toLocaleTimeString();
+                historyItem.innerHTML = `[${timestamp}] ${rollText}`;
+                
+                if (rollHistory.firstElementChild && rollHistory.firstElementChild.textContent.includes('Aguardando')) {
+                    rollHistory.innerHTML = '';
+                }
+
+                rollHistory.prepend(historyItem);
+
+                while (rollHistory.children.length > MAX_HISTORY_ITEMS) {
+                    rollHistory.removeChild(rollHistory.lastElementChild);
+                }
+                
+                saveFicha();
+            }
+
+            document.querySelectorAll('.roll-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const attrKey = e.target.getAttribute('data-attr');
+                    const skillKey = e.target.getAttribute('data-pericia');
+                    const attrSelectId = e.target.getAttribute('data-attr-select');
+                    const periciaCheckboxId = e.target.getAttribute('data-pericia-checkbox');
+                    
+                    let finalAttrKey = attrKey;
+                    let finalSkillKey = skillKey;
+                    let attrValue, isTrained;
+
+                    if (attrSelectId && periciaCheckboxId) {
+                        finalAttrKey = document.getElementById(attrSelectId).value;
+                        attrValue = parseInt(document.getElementById(finalAttrKey).value) || 0;
+                        isTrained = document.getElementById(periciaCheckboxId).checked;
+                        finalSkillKey = 'Controle Nen'; 
+                    } else {
+                        attrValue = parseInt(document.getElementById(attrKey).value) || 0;
+                        isTrained = finalSkillKey !== 'none' ? document.getElementById(`pericia-${finalSkillKey}`).checked : false;
+                    }
+
+                    const result = rollDice(attrValue, isTrained);
+                    displayRollResult(result, finalAttrKey, finalSkillKey);
+                });
+            });
+
+            // --- LÓGICA DE NEN/HATSUS ---
+
+            function updateNenBaseAttr() {
+                const nenType = document.getElementById('nen-type').value;
+                const attrKey = ATTR_NEN_MAP[nenType];
+
+                if (attrKey && attrKey !== 'livre') {
+                    document.getElementById('nen-base-attr').value = attrKey.toUpperCase();
+                } else if (attrKey === 'livre') {
+                    document.getElementById('nen-base-attr').value = 'Livre (Especialização)';
+                } else {
+                    document.getElementById('nen-base-attr').value = 'Nenhum';
+                }
+            }
+
+            function updateAuraBonus() {
+                const nenType = document.getElementById('nen-type').value;
+                const attrKey = ATTR_NEN_MAP[nenType];
+                let bonus = 0;
+
+                if (attrKey && attrKey !== 'livre') {
+                    const attrValue = parseInt(document.getElementById(attrKey).value) || 0;
+                    bonus = attrValue * 5; 
+                }
+                
+                document.getElementById('nen-aura-bonus').value = bonus;
+            }
+            
+            document.getElementById('nen-type').addEventListener('change', () => { updateNenBaseAttr(); updateAuraBonus(); saveFicha(); });
+            document.querySelectorAll('.attr-value').forEach(input => {
+                input.addEventListener('change', () => { updateAuraBonus(); saveFicha(); });
+                input.addEventListener('keyup', () => { updateAuraBonus(); saveFicha(); });
+            });
+
+
+            // HATSUS
+            document.getElementById('add-hatsu-btn').addEventListener('click', () => {
+                addHatsuItem();
+                saveFicha();
+            });
+            
+            function addHatsuItem(data = {}) {
+                const hatsuList = document.getElementById('hatsu-list');
+                const newItem = document.createElement('div');
+                newItem.classList.add('hatsu-item');
+                newItem.innerHTML = `
+                    <input type="text" placeholder="Nome do Hatsu" class="hatsu-name" value="${data.nome || ''}">
+                    <div class="hatsu-details-grid">
+                        <input type="text" placeholder="Tipo de Nen" class="hatsu-type" value="${data.tipo || ''}">
+                        <input type="text" placeholder="Categoria" class="hatsu-category" value="${data.categoria || ''}">
+                        <input type="text" placeholder="Custo (PA)" class="hatsu-cost" value="${data.custo || ''}">
+                        <input type="text" placeholder="Duração" class="hatsu-duration" value="${data.duracao || ''}">
+                        <input type="text" placeholder="Execução" class="hatsu-execution" value="${data.execucao || ''}">
+                        <input type="text" placeholder="Alvo" class="hatsu-target" value="${data.alvo || ''}">
+                        <input type="text" placeholder="Alcance" class="hatsu-range" value="${data.alcance || ''}">
+                    </div>
+                    <textarea placeholder="Descrição e Efeitos do Hatsu">${data.descricao || ''}</textarea>
+                    <button class="btn-delete-hatsu roll-button" style="background-color: #cc0000; border-color: #990000; box-shadow: 0 4px 0 #990000;">Excluir Hatsu</button>
+                `;
+                hatsuList.appendChild(newItem);
+                
+                newItem.querySelector('.btn-delete-hatsu').addEventListener('click', (e) => {
+                    e.target.closest('.hatsu-item').remove();
+                    saveFicha();
+                });
+                newItem.querySelectorAll('input, textarea, select').forEach(el => {
+                    el.addEventListener('change', saveFicha);
+                    el.addEventListener('keyup', saveFicha);
+                });
+            }
+            
+            // --- LÓGICA DE ARMAS E INVENTÁRIO ---
+
+            document.getElementById('add-weapon-btn').addEventListener('click', () => {
+                addWeaponRow();
+                saveFicha();
+            });
+
+            function addWeaponRow(data = {}) {
+                const tableBody = document.querySelector('#weapons-table tbody');
+                const newRow = tableBody.insertRow();
+                newRow.innerHTML = `
+                    <td><input type="text" value="${data.nome || ''}" placeholder="Nome"></td>
+                    <td><input type="text" value="${data.tipo || ''}" placeholder="Tipo"></td>
+                    <td><input type="text" value="${data.ataque || ''}" placeholder="FOR/DEX +X"></td>
+                    <td><input type="text" value="${data.dano || ''}" placeholder="1d8+FOR"></td>
+                    <td><input type="text" value="${data.critico || ''}" placeholder="19-20/x2"></td>
+                    <td><input type="number" value="${data.peso || ''}" class="inventory-weight-input weapon-weight" min="0"></td>
+                `;
+                
+                newRow.querySelectorAll('input').forEach(el => {
+                    el.addEventListener('change', saveFicha);
+                    el.addEventListener('keyup', saveFicha);
+                    if (el.classList.contains('inventory-weight-input')) {
+                        el.addEventListener('input', updateInventoryWeight);
+                    }
+                });
+            }
+            
+            document.getElementById('add-inventory-btn').addEventListener('click', () => {
+                addInventoryRow();
+                saveFicha();
+            });
+
+            function addInventoryRow(data = {}) {
+                const tableBody = document.querySelector('#inventory-table tbody');
+                const newRow = tableBody.insertRow();
+                newRow.innerHTML = `
+                    <td><input type="text" value="${data.item || ''}" placeholder="Item"></td>
+                    <td><input type="text" value="${data.detalhes || ''}" placeholder="Detalhes do item"></td>
+                    <td><input type="number" value="${data.peso || ''}" class="inventory-weight-input item-weight" min="0"></td>
+                    <td><input type="number" value="${data.quantidade || '1'}" class="inventory-quantity" min="1"></td>
+                `;
+
+                newRow.querySelectorAll('input').forEach(el => {
+                    el.addEventListener('change', saveFicha);
+                    el.addEventListener('keyup', saveFicha);
+                    if (el.classList.contains('inventory-weight-input') || el.classList.contains('inventory-quantity')) {
+                        el.addEventListener('input', updateInventoryWeight);
+                    }
+                });
+            }
+
+            function updateInventoryWeight() {
+                let totalWeight = 0;
+                
+                // Soma peso das armas
+                document.querySelectorAll('#weapons-table .inventory-weight-input').forEach(input => {
+                    totalWeight += parseFloat(input.value) || 0;
+                });
+                
+                // Soma peso dos itens do inventário
+                document.querySelectorAll('#inventory-table tbody tr').forEach(row => {
+                    const weightInput = row.querySelector('.item-weight');
+                    const quantityInput = row.querySelector('.inventory-quantity');
+                    
+                    const weight = parseFloat(weightInput.value) || 0;
+                    const quantity = parseInt(quantityInput.value) || 0;
+                    
+                    totalWeight += (weight * quantity);
+                });
+
+                const weightDisplay = document.getElementById('inventory-current-weight');
+                weightDisplay.textContent = `Carga Atual: ${totalWeight.toFixed(1)}`;
+                
+                const limit = parseInt(document.getElementById('inventory-limit').value) || 0;
+                if (totalWeight > limit && limit > 0) {
+                     weightDisplay.classList.add('weight-exceeded');
+                } else {
+                     weightDisplay.classList.remove('weight-exceeded');
+                }
+            }
+            document.getElementById('inventory-limit').addEventListener('input', updateInventoryWeight);
+
+            // TEMA DARK/LIGHT
+            document.getElementById('toggle-theme').addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                if (document.body.classList.contains('dark-mode')) {
+                    localStorage.setItem('theme', 'dark');
+                } else {
+                    localStorage.setItem('theme', 'light');
+                }
+            });
+
+            function loadTheme() {
+                const savedTheme = localStorage.getItem('theme') || 'dark';
+                if (savedTheme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                }
+            }
+
+            // INICIALIZAÇÃO
+            loadTheme();
+            loadFicha();
+        });
+    </script>
+    </body>
+</html>
