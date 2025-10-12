@@ -126,6 +126,7 @@
                     "armas armas"
                     "inventario inventario";
             }
+             .tab-manager { grid-area: tabs; }
             .identification-section { grid-area: identificacao; }
             .attributes-section { grid-area: atributos; }
             .resources-section { grid-area: recursos; }
@@ -226,7 +227,56 @@
             box-shadow: none;
             transform: translateY(4px);
         }
-
+ /* ====================================================================== 
+           3. MENU DE ABAS (TAB MANAGER)
+           ====================================================================== */
+        .tab-manager {
+            padding: 0;
+            border: none;
+            box-shadow: none;
+            background: transparent;
+        }
+        .tab-bar {
+            display: flex;
+            flex-wrap: wrap;
+            border-bottom: 2px solid var(--color-border-light);
+            gap: 5px;
+        }
+        .tab-bar button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-weight: 600;
+            background-color: var(--color-card-light);
+            color: var(--color-tab-inactive);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px; 
+            transition: all 0.3s;
+        }
+        .tab-bar button.active {
+            background-color: var(--color-card-light);
+            color: var(--color-tab-active);
+            border-bottom: 3px solid var(--color-tab-active);
+            font-weight: 700;
+            transform: translateY(-2px);
+        }
+        .tab-bar button:not(.active):hover {
+            color: var(--color-secondary);
+        }
+        
+        .tab-actions {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: var(--color-card-light);
+            border-radius: 0 0 12px 12px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        body.dark-mode .tab-actions {
+            background-color: var(--color-card-dark);
+        }
         /* ====================================================================== 
            3. ATRIBUTOS E PERÍCIAS
            ====================================================================== */
@@ -388,7 +438,16 @@
         <button id="toggle-theme" class="btn-theme">Modo Escuro/Claro</button>
     </header>
 
-    <main class="ficha-container">
+    <main class="ficha-container"> 
+        <section class="tab-manager">
+            <div id="tab-bar" class="tab-bar">
+                </div>
+            <div class="tab-actions card">
+                <button id="add-new-character" class="btn-add btn-action">+ Novo Personagem</button>
+                <button id="save-name-btn" class="btn-save-name btn-action">Salvar Nome</button>
+                <button id="delete-character-btn" class="btn-delete btn-action">Excluir Personagem Ativo</button>
+            </div>
+        </section>
         <div id="dice-roll-area" class="card roll-area">
             <div class="roll-header">
                 <h2>Resultados da Rolagem</h2>
