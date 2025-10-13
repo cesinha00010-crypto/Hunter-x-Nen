@@ -675,8 +675,8 @@
                 <div class="resource-item">
                     <label for="defesa">Defesa Base</label>
                     <input type="number" id="defesa" value="10">
-                    <label for="velocidade">Velocidade</label>
-                    <input type="number" id="velocidade" value="10">
+                    <label for="deslocamento">Deslocamento</label>
+                    <input type="number" id="deslocamento" value="10">
                 </div>
             </div>
 
@@ -1104,7 +1104,7 @@ Custo: 2 PA"
                         'nome': name, 'nivel': '1', 'origem': '', 'classe': '', 'rep-hunter': '0', 'rep-phantom': '0',
                         'rep-zoldyck': '0', 'rep-mafia': '0', 'rep-chimera': '0', 'rep-governo': '0',
                         'forca': '1', 'vigor': '1', 'destreza': '1', 'intelecto': '1', 'carisma': '1',
-                        'pv-max': '10', 'pv-atual': '10', 'pa-max': '10', 'pa-atual': '10', 'defesa': '10', 'velocidade': '10',
+                        'pv-max': '10', 'pv-atual': '10', 'pa-max': '10', 'pa-atual': '10', 'defesa': '10', 'deslocamento': '10',
                         'res-perfurante': '0', 'res-impacto': '0', 'res-cortante': '0', 'res-elemental': '0', 'res-nen': '0',
                         'nen-type': 'none', 'nen-base-attr': 'Nenhum', 'nen-aura-bonus': '0',
                         'ten-level': 'amador', 'ren-level': 'amador', 'zetsu-level': 'amador',
@@ -1523,7 +1523,7 @@ Custo: 2 PA"
                 element.addEventListener('keyup', saveAllCharacters);
             });
             // Adiciona listeners para os campos que precisam de save mas não atualizam peso
-            document.querySelectorAll('.attr-value, #pv-max, #pv-atual, #pa-max, #pa-atual, #defesa, #velocidade, [id^="res-"]').forEach(element => {
+            document.querySelectorAll('.attr-value, #pv-max, #pv-atual, #pa-max, #pa-atual, #defesa, #deslocamento, [id^="res-"]').forEach(element => {
                  element.addEventListener('input', saveAllCharacters);
             });
 
