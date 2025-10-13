@@ -1,5 +1,5 @@
 <!DOCTYPE html>
- <html lang="pt-BR">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -477,7 +477,7 @@
 
         .inventory-controls { display: flex; align-items: center; gap: 20px; font-weight: 600; }
         .small-input { width: 60px !important; text-align: center; padding: 8px !important; }
-        #inventory-current-weight { font-weight: 700; color: white; transition: color 0.3s; }
+        #inventory-current-weight { font-weight: 700; color: white transition: color 0.3s; }
         .weight-exceeded { color: #cc0000; animation: pulse 1s infinite alternate; }
         @keyframes pulse { from { opacity: 1; } to { opacity: 0.7; } }
     </style>
@@ -585,8 +585,8 @@
                 <div class="resource-item">
                     <label for="defesa">Defesa Base</label>
                     <input type="number" id="defesa" value="10">
-                    <label for="Deslocamento">Deslocamento</label>
-                    <input type="number" id="deslocamento" value="10">
+                    <label for="velocidade">Velocidade</label>
+                    <input type="number" id="velocidade" value="10">
                 </div>
             </div>
 
@@ -596,7 +596,7 @@
                 <div><label for="res-impacto">Impacto</label><input type="number" id="res-impacto" value="0"></div>
                 <div><label for="res-cortante">Cortante</label><input type="number" id="res-cortante" value="0"></div>
                 <div><label for="res-elemental">Elemental</label><input type="number" id="res-elemental" value="0"></div>
-                <div><label for="res-nen">Nen</label><input type="number" id="res-nen" value="0"></div>
+                <div><label for="res-psiquica">Psíquica</label><input type="number" id="res-psiquica" value="0"></div>
             </div>
         </section>
 
@@ -620,6 +620,8 @@
                     <div class="skill-item"><label for="pericia-furtividade">Furtividade</label><input type="checkbox" id="pericia-furtividade" class="trained-checkbox"><button class="roll-button" data-attr="destreza" data-pericia="furtividade">Rolar</button></div>
                     <div class="skill-item"><label for="pericia-acrobacia">Acrobacia</label><input type="checkbox" id="pericia-acrobacia" class="trained-checkbox"><button class="roll-button" data-attr="destreza" data-pericia="acrobacia">Rolar</button></div>
                     <div class="skill-item"><label for="pericia-reflexos">Reflexos</label><input type="checkbox" id="pericia-reflexos" class="trained-checkbox"><button class="roll-button" data-attr="destreza" data-pericia="reflexos">Rolar</button></div>
+                    <div class="skill-item"><label for="pericia-pontaria">Pontaria</label><input type="checkbox" id="pericia-pontaria" class="trained-checkbox"><button class="roll-button" data-attr="destreza" data-pericia="pontaria">Rolar</button></div>
+                    <div class="skill-item"><label for="pericia-roubo">Roubo</label><input type="checkbox" id="pericia-roubo" class="trained-checkbox"><button class="roll-button" data-attr="destreza" data-pericia="roubo">Rolar</button></div>
                 </div>
                 
                 <div class="skill-group">
@@ -627,6 +629,8 @@
                     <div class="skill-item"><label for="pericia-caca">Caça</label><input type="checkbox" id="pericia-caca" class="trained-checkbox"><button class="roll-button" data-attr="intelecto" data-pericia="caca">Rolar</button></div>
                     <div class="skill-item"><label for="pericia-investigacao">Investigação</label><input type="checkbox" id="pericia-investigacao" class="trained-checkbox"><button class="roll-button" data-attr="intelecto" data-pericia="investigacao">Rolar</button></div>
                     <div class="skill-item"><label for="pericia-medicina">Medicina</label><input type="checkbox" id="pericia-medicina" class="trained-checkbox"><button class="roll-button" data-attr="intelecto" data-pericia="medicina">Rolar</button></div>
+                    <div class="skill-item"><label for="pericia-profissao">Profissão</label><input type="checkbox" id="pericia-profissao" class="trained-checkbox"><button class="roll-button" data-attr="intelecto" data-pericia="profissao">Rolar</button></div>
+                    <div class="skill-item"><label for="pericia-astucia">Astúcia</label><input type="checkbox" id="pericia-astucia" class="trained-checkbox"><button class="roll-button" data-attr="intelecto" data-pericia="astucia">Rolar</button></div>
                 </div>
 
                 <div class="skill-group">
@@ -634,6 +638,8 @@
                     <div class="skill-item"><label for="pericia-persuasao">Persuasão</label><input type="checkbox" id="pericia-persuasao" class="trained-checkbox"><button class="roll-button" data-attr="carisma" data-pericia="persuasao">Rolar</button></div>
                     <div class="skill-item"><label for="pericia-intimidacao">Intimidação</label><input type="checkbox" id="pericia-intimidacao" class="trained-checkbox"><button class="roll-button" data-attr="carisma" data-pericia="intimidacao">Rolar</button></div>
                     <div class="skill-item"><label for="pericia-vontade">Vontade</label><input type="checkbox" id="pericia-vontade" class="trained-checkbox"><button class="roll-button" data-attr="carisma" data-pericia="vontade">Rolar</button></div>
+                    <div class="skill-item"><label for="pericia-intuicao">Intuição</label><input type="checkbox" id="pericia-intuicao" class="trained-checkbox"><button class="roll-button" data-attr="carisma" data-pericia="intuicao">Rolar</button></div>
+                    <div class="skill-item"><label for="pericia-tenacidade">Tenacidade</label><input type="checkbox" id="pericia-tenacidade" class="trained-checkbox"><button class="roll-button" data-attr="carisma" data-pericia="tenacidade">Rolar</button></div>
                 </div>
 
                 <div class="skill-group nen-control-skill" style="grid-column: 1 / -1; padding-top: 10px; border-top: 2px solid var(--color-border-light);">
@@ -929,10 +935,11 @@
                         'rep-zoldyck': '0', 'rep-mafia': '0', 'rep-chimera': '0', 'rep-governo': '0',
                         'forca': '1', 'vigor': '1', 'destreza': '1', 'intelecto': '1', 'carisma': '1',
                         'pv-max': '10', 'pv-atual': '10', 'pa-max': '10', 'pa-atual': '10', 'defesa': '10', 'velocidade': '10',
-                        'res-perfurante': '0', 'res-impacto': '0', 'res-cortante': '0', 'res-elemental': '0', 'res-nen': '0',
+                        'res-perfurante': '0', 'res-impacto': '0', 'res-cortante': '0', 'res-elemental': '0', 'res-psiquica': '0',
                         'nen-type': 'none', 'nen-base-attr': 'Nenhum', 'nen-aura-bonus': '0',
                         'ten-level': 'amador', 'ren-level': 'amador', 'zetsu-level': 'amador',
                         'inventory-limit': '10', 'tech-gyo': false, 'tech-in': false, 'tech-en': false, 'tech-ken': false, 'tech-shu': false, 'tech-ko': false, 'tech-ryu': false
+                        // Adicionar valores padrão para as novas perícias, se necessário, mas o sistema de captura cobre automaticamente
                     },
                     hatsus: [],
                     weapons: [],
