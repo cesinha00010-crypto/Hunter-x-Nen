@@ -480,6 +480,74 @@
         #inventory-current-weight { font-weight: 700; color: white; transition: color 0.3s; }
         .weight-exceeded { color: #cc0000; animation: pulse 1s infinite alternate; }
         @keyframes pulse { from { opacity: 1; } to { opacity: 0.7; } }
+
+        /* ====================================================================== 
+           NOVO: ESTILOS DE TOOLTIP (DESCRIÇÃO AO PASSAR O MOUSE) - CORRIGIDO
+           ====================================================================== */
+        
+        /* 1. Fix para garantir que o tooltip não seja cortado pelo layout de grid/colunas */
+        /* Força a exibição do tooltip fora do container, corrigindo o problema de clipping */
+        .nen-tech-group, .tech-item-check {
+            overflow: visible !important; 
+        }
+        
+        /* 2. Estilos base para o label se comportar como ponto de ancoragem */
+        .nen-tech-group label, 
+        .tech-item-check label {
+            position: relative;
+            cursor: help;
+        }
+
+        /* 3. O Tooltip/Descrição em si (o pseudo-elemento ::after) */
+        [data-tooltip-content]:hover::after {
+            content: attr(data-tooltip-content);
+            position: absolute;
+            bottom: 100%; /* Posiciona acima do elemento */
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            white-space: pre-wrap; 
+            background-color: var(--color-card-dark); 
+            color: var(--color-text-light);
+            border: 2px solid var(--color-secondary); /* Borda mais forte */
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
+            z-index: 9000; /* Z-index MUITO ALTO para garantir que fique por cima de tudo */
+            max-width: 380px;
+            width: max-content;
+            text-align: left;
+            font-size: 0.9em;
+            font-weight: 400;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+        }
+
+        /* 4. Estilo de Fundo do Tooltip no Light Mode */
+        body:not(.dark-mode) [data-tooltip-content]:hover::after {
+            background-color: #333;
+            color: white;
+            border-color: var(--color-secondary);
+        }
+        
+        /* 5. Ajuste de Posição para Ten, Ren, Zetsu (que estão em colunas estreitas) */
+        .nen-tech-group .attr-grid-item label[data-tooltip-content]:hover::after {
+            left: auto; /* Desativa o left: 50% */
+            right: 0;  /* Ancorar à direita do label */
+            transform: translateX(0) translateY(-10px); /* Remove a translação X */
+        }
+        
+        /* 6. Estilo específico dos labels de Ten, Ren, Zetsu (Mantido do código anterior para consistência) */
+        .nen-tech-group .attr-grid-item label {
+            font-family: 'Montserrat', sans-serif; 
+            color: var(--color-text-dark); 
+            font-weight: 600;
+        }
+        body.dark-mode .nen-tech-group .attr-grid-item label {
+            color: var(--color-text-light);
+        }
+
     </style>
     </head>
 <body>
@@ -692,24 +760,86 @@
                     <div class="nen-tech-group">
                         <h4>Níveis de Controle</h4>
                         <div class="attr-grid-item" style="grid-template-columns: 1fr 1fr 10px; background-color: transparent; border-bottom: none;">
-                            <label>Ten</label><select class="nen-level-select" id="ten-level"><option value="amador">Amador</option><option value="intermediario">Intermediário</option><option value="avancado">Avançado</option><option value="mestre">Mestre</option></select>
+                            <label data-tooltip-content=
+"Mecânica:
+Ativação: Reação
+Duração: Instantânea
+Custo: varia conforme o nível
+
+Efeitos por nível:
+1-Amador: 2 PA → +2 de resistência a todos os tipos de dano.
+2-Intermediário: 4 PA → +4 de resistência; pode manter Ten por 1h fora de combate; pode proteger 1 aliado (metade do efeito).
+3-Avançado: 6 PA → +6 de resistência; pode manter Ten por 4h; pode proteger até 2 aliados (efeito dividido por 3).
+4-Mestre: 8 PA/turno → +8 de resistência; pode manter Ten por 12h; pode proteger até 3 aliados (efeito dividido por 4); uma vez por cena, absorve completamente um ataque de até 30 de dano."
+                                for="ten-level">Ten</label>
+                            <select class="nen-level-select" id="ten-level"><option value="amador">Amador</option><option value="intermediario">Intermediário</option><option value="avancado">Avançado</option><option value="mestre">Mestre</option></select>
                         </div>
                         <div class="attr-grid-item" style="grid-template-columns: 1fr 1fr 10px; background-color: transparent; border-bottom: none;">
-                            <label>Ren</label><select class="nen-level-select" id="ren-level"><option value="amador">Amador</option><option value="intermediario">Intermediário</option><option value="avancado">Avançado</option><option value="mestre">Mestre</option></select>
+                            <label data-tooltip-content=
+"Mecânica:
+Ativação: Ação de movimento
+Duração: Instantânea
+Custo: varia conforme o nível
+
+Efeitos por nível (Ren):
+1-Amador: 3 PA por ataque → +3 de dano físico.
+2-Intermediário: 6 PA → +6 de dano físico; inimigos com INT inferior a 3 precisam passar em Vontade DT 13 para atacá-lo.
+3-Avançado: 9 PA → +9 de dano físico; Vontade DT 15 para atacá-lo; pode gastar +4 PA para +2 de dano extra.
+4-Mestre: 10 PA → +12 de dano físico; Vontade DT 18 para atacá-lo; pode gastar +5 PA para +3 de dano extra; uma vez por cena, pode ativar Explosão de Ren, dobrando o dano por 2 rodadas."
+                                for="ren-level">Ren</label>
+                            <select class="nen-level-select" id="ren-level"><option value="amador">Amador</option><option value="intermediario">Intermediário</option><option value="avancado">Avançado</option><option value="mestre">Mestre</option></select>
                         </div>
                         <div class="attr-grid-item" style="grid-template-columns: 1fr 1fr 10px; background-color: transparent; border-bottom: none;">
-                            <label>Zetsu</label><select class="nen-level-select" id="zetsu-level"><option value="amador">Amador</option><option value="intermediario">Intermediário</option><option value="avancado">Avançado</option><option value="mestre">Mestre</option></select>
+                            <label data-tooltip-content=
+"Mecânica:
+Ativação: Ação de movimento
+Duração: Até ser cancelado (ação livre) ou até atacar
+Custo: Nenhum (economiza aura)
+
+Efeitos por nível:
+1-Amador: +2 em Furtividade; recupera +1 PA/turno; -2 de defesa enquanto ativo.
+2-Intermediário: +3 em Furtividade; +2 PA/turno; -4 de defesa; detecta usuários de Nen em 10m.
+3-Avançado: +5 em Furtividade; +3 PA/turno; -5 de defesa; detecta Nen em 20m e identifica o tipo de Nen.
+4-Mestre: +7 em Furtividade; +4 PA/turno; -7 de defesa; detecta Nen em 50m, identifica tipo e potência, e o primeiro ataque após cancelar Zetsu recebe +5 no teste e +4d6 de dano."
+                                for="zetsu-level">Zetsu</label>
+                            <select class="nen-level-select" id="zetsu-level"><option value="amador">Amador</option><option value="intermediario">Intermediário</option><option value="avancado">Avançado</option><option value="mestre">Mestre</option></select>
                         </div>
                     </div>
                     
                     <div class="nen-tech-group" style="grid-column: span 2;">
                         <h4>Técnicas Avançadas</h4>
                         <div class="three-cols">
-                            <div class="tech-item-check"><label for="tech-gyo">Gyô</label><input type="checkbox" id="tech-gyo"></div>
-                            <div class="tech-item-check"><label for="tech-in">In</label><input type="checkbox" id="tech-in"></div>
-                            <div class="tech-item-check"><label for="tech-en">En</label><input type="checkbox" id="tech-en"></div>
-                            <div class="tech-item-check"><label for="tech-ken">Ken</label><input type="checkbox" id="tech-ken"></div>
-                            <div class="tech-item-check"><label for="tech-shu">Shu</label><input type="checkbox" id="tech-shu"></div>
+                            <div class="tech-item-check">
+                                <label data-tooltip-content=
+"Gyo
+Ativação: Ação de movimento/Reação
+
+Tipos e efeitos:
+-Gyo de Percepção: +2 em Caça; vê ataques com In, Custo: 3 PA/10 min ou rodada. Ação de movimento
+-Gyo de Ataque: +2 no acerto corporal, Custo: 2 PA por ataque. Ação de movimento
+-Gyo de Defesa: +3 de resistência a dano, Custo: 2 PA por ataque recebido; no turno seguinte sofre -2 de defesa. Ação: Reação"
+                                    for="tech-gyo">Gyô</label><input type="checkbox" id="tech-gyo">
+                            </div>
+                            <div class="tech-item-check">
+                                <label data-tooltip-content="Todos seus ataques e habilidades, vão acertar seu oponente desprevenido
+Custo: 5 PA"
+                                    for="tech-in">In</label><input type="checkbox" id="tech-in">
+                            </div>
+                            <div class="tech-item-check">
+                                <label data-tooltip-content="Assim que você estender o seu En, você não é mais pego desprevenido e tem +3 de defesa 
+Custo: 6 PA"
+                                    for="tech-en">En</label><input type="checkbox" id="tech-en">
+                            </div>
+                            <div class="tech-item-check">
+                                <label data-tooltip-content="Você envolve todo seu corpo com o Ren, você ganha +2 de defesa 
+Custo: 2 PA"
+                                    for="tech-ken">Ken</label><input type="checkbox" id="tech-ken">
+                            </div>
+                            <div class="tech-item-check">
+                                <label data-tooltip-content="Se você estender sua aura pra uma arma, o seu crítico com essa arma é diminuído em 2. Se você estender sua aura pra uma armadura, a cada ataque que o inimigo acertar em você ele toma 1d6 de dano
+Custo: 2 PA"
+                                    for="tech-shu">Shu</label><input type="checkbox" id="tech-shu">
+                            </div>
                             <div class="tech-item-check"><label for="tech-ko">Kô</label><input type="checkbox" id="tech-ko"></div>
                             <div class="tech-item-check"><label for="tech-ryu">Ryû</label><input type="checkbox" id="tech-ryu"></div>
                         </div>
