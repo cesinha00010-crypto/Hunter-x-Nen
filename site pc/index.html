@@ -6,7 +6,7 @@
     <title>Hunter x Nen System - Gerenciador de Fichas (Multi-Personagens)</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⚡%3C/text%3E%3C/svg%3E">
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght=500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
         /* ====================================================================== 
@@ -249,28 +249,6 @@
             transform: translateY(2px);
         }
         .btn-delete-table:active {
-            box-shadow: none;
-            transform: translateY(4px);
-        }
-        
-        /* NOVO ESTILO: Botão de Rolagem dentro da Tabela (Verde para Dano) */
-        .btn-roll-damage {
-            padding: 6px 10px; 
-            font-size: 0.8em;
-            background-color: var(--color-primary);
-            background-image: linear-gradient(180deg, var(--color-primary) 0%, #006600 100%);
-            border: 1px solid #005000;
-            box-shadow: 0 3px 0 #005000;
-            min-width: 40px; 
-            margin: auto;
-            display: block;
-        }
-        .btn-roll-damage:hover {
-            background-image: linear-gradient(180deg, #009900 0%, var(--color-primary) 100%);
-            box-shadow: 0 1px 0 #005000;
-            transform: translateY(2px);
-        }
-        .btn-roll-damage:active {
             box-shadow: none;
             transform: translateY(4px);
         }
@@ -675,12 +653,12 @@
                 <div class="resource-item">
                     <label for="defesa">Defesa Base</label>
                     <input type="number" id="defesa" value="10">
-                    <label for="deslocamento">Deslocamento</label>
-                    <input type="number" id="deslocamento" value="10">
+                    <label for="velocidade">Velocidade</label>
+                    <input type="number" id="velocidade" value="10">
                 </div>
             </div>
 
-            <h3>Resistênciass</h3>
+            <h3>Resistências</h3>
             <div class="field-group three-cols">
                 <div><label for="res-perfurante">Perfurante</label><input type="number" id="res-perfurante" value="0"></div>
                 <div><label for="res-impacto">Impacto</label><input type="number" id="res-impacto" value="0"></div>
@@ -824,7 +802,7 @@ Efeitos por nível:
 3-Avançado: +5 em Furtividade; +3 PA/turno; -5 de defesa; detecta Nen em 20m e identifica o tipo de Nen.
 4-Mestre: +7 em Furtividade; +4 PA/turno; -7 de defesa; detecta Nen em 50m, identifica tipo e potência, e o primeiro ataque após cancelar Zetsu recebe +5 no teste e +4d6 de dano."
                                 for="zetsu-level">Zetsu</label>
-                            <select class="nen-level-select" id="zetsu-level"><option value="amador">Amador</option><option value="intermediario">Intermediario</option><option value="avancado">Avançado</option><option value="mestre">Mestre</option></select>
+                            <select class="nen-level-select" id="zetsu-level"><option value="amador">Amador</option><option value="intermediario">Intermediário</option><option value="avancado">Avançado</option><option value="mestre">Mestre</option></select>
                         </div>
                     </div>
                     
@@ -880,12 +858,14 @@ Custo: 2 PA"
             <table id="weapons-table">
                 <thead>
                     <tr>
-                        <th style="width: 20%;">Nome</th>
-                        <th style="width: 10%;">Tipo</th>
+                        <th style="width: 25%;">Nome</th>
+                        <th style="width: 15%;">Tipo</th>
                         <th style="width: 15%;">Ataque (Mod)</th>
-                        <th style="width: 15%;">Fórmula Dano</th> <th style="width: 10%;">Crítico</th>
+                        <th style="width: 15%;">Dano</th>
+                        <th style="width: 10%;">Crítico</th>
                         <th style="width: 10%;">Peso</th>
-                        <th style="width: 5%;">Rolar</th> <th style="width: 5%;">Excluir</th> </tr>
+                        <th style="width: 10%;">Ação</th> 
+                    </tr>
                 </thead>
                 <tbody>
                     </tbody>
@@ -927,14 +907,6 @@ Custo: 2 PA"
             const ATTR_NEN_MAP = {
                 'intensificacao': 'vigor', 'emissao': 'forca', 'transmutacao': 'destreza',
                 'manipulacao': 'carisma', 'materializacao': 'intelecto', 'especializacao': 'livre'
-            };
-            // Adicionado mapa de atributos para conversão de texto para ID
-            const ATTR_MAP = {
-                'FOR': 'forca',
-                'VIG': 'vigor',
-                'DEX': 'destreza',
-                'INT': 'intelecto',
-                'CAR': 'carisma'
             };
             
             let characters = []; 
@@ -999,21 +971,17 @@ Custo: 2 PA"
                     descricao: item.querySelector('textarea').value
                 }));
                 
-                // Captura Armas 
+                // Captura Armas (Pega apenas os inputs, o botão "X" é ignorado)
                 data.weapons = Array.from(document.querySelectorAll('#weapons-table tbody tr')).map(row => {
-                    // Os inputs agora são: nome, tipo, ataque, dano, critico, peso, formulaDano (7 inputs)
-                    // Posições no array de inputs: 0:nome, 1:tipo, 2:ataque, 3:dano(formula), 4:critico, 5:peso, 6:formula-dano
-                    // IMPORTANTE: O campo de Dano original (posição 3) é o que vai armazenar a fórmula XdY+MOD, e o nome do campo é 'dano'.
                     const inputs = row.querySelectorAll('input');
+                    // Espera-se 6 inputs: nome, tipo, ataque, dano, critico, peso
                     return { 
                         nome: inputs[0].value, 
                         tipo: inputs[1].value, 
                         ataque: inputs[2].value, 
-                        dano: inputs[3].value, // Novo campo de Fórmula de Dano
+                        dano: inputs[3].value, 
                         critico: inputs[4].value, 
                         peso: inputs[5].value 
-                        // O campo inputs[3] é a Fórmula de Dano (dano), 
-                        // o campo inputs[2] é Ataque, inputs[4] é Crítico, inputs[5] é Peso
                     };
                 });
 
@@ -1056,15 +1024,7 @@ Custo: 2 PA"
                 
                 // 3. Recria Armas
                 document.querySelector('#weapons-table tbody').innerHTML = '';
-                // O campo 'dano' agora armazena a fórmula
-                (ficha.weapons || []).forEach(weapon => addWeaponRow({
-                    nome: weapon.nome,
-                    tipo: weapon.tipo,
-                    ataque: weapon.ataque,
-                    formulaDano: weapon.dano, // Usa 'dano' como a fórmula salva
-                    critico: weapon.critico,
-                    peso: weapon.peso
-                }));
+                (ficha.weapons || []).forEach(weapon => addWeaponRow(weapon));
                 if ((ficha.weapons || []).length === 0) addWeaponRow();
 
                 // 4. Recria Inventário
@@ -1220,90 +1180,25 @@ Custo: 2 PA"
                     return { rolls: diceRolls, total: finalResult, highest: highestRoll, bonus: bonus, isZeroAttr: false };
                 }
             }
-            
-            // NOVO: Função para rolar dano (interpretando XdY+MOD)
-            function rollDamage(formula) {
-                const formulaStr = formula.toUpperCase().replace(/\s/g, ''); // Garante maiúsculas e remove espaços
-                const match = formulaStr.match(/^(\d+)D(\d+)([\+\-]([A-Z]{3}|\d+))?$/); 
-                
-                if (!match) {
-                    return { formula: formulaStr, total: 0, rolls: [], error: 'Fórmula inválida. Use NDDM ou NDDM+MOD (e.g., 3D8+FOR).' };
-                }
 
-                const numDice = parseInt(match[1]);
-                const dieSize = parseInt(match[2]);
-                let modifier = 0;
-                let modifierType = '';
-                let rollResults = [];
-                let bonus = 0;
-                let finalResult = 0;
-
-                if (match[3]) {
-                    const modPart = match[4]; // MOD pode ser um número ou um atributo
-                    if (modPart.match(/^[A-Z]{3}$/)) { // É um atributo (FOR, DEX, VIG, etc.)
-                        modifierType = modPart;
-                        const attrId = ATTR_MAP[modifierType];
-                        if (attrId) {
-                            bonus = parseInt(document.getElementById(attrId).value) || 0;
-                        } else {
-                            return { formula: formulaStr, total: 0, rolls: [], error: `Atributo ${modifierType} não reconhecido.` };
-                        }
-                    } else if (modPart.match(/^[0-9]+$/)) { // É um número fixo
-                        bonus = parseInt(modPart) || 0;
-                        modifierType = match[3]; // Inclui o sinal (+/-)
-                    } else {
-                         // Pode ser um sinal seguido de número, mas o regex já deve ter capturado
-                         bonus = parseInt(match[3]) || 0;
-                         modifierType = match[3];
-                    }
-                }
-
-                if (numDice > 0 && dieSize > 0) {
-                    for (let i = 0; i < numDice; i++) {
-                        rollResults.push(Math.floor(Math.random() * dieSize) + 1);
-                    }
-                    finalResult = rollResults.reduce((sum, roll) => sum + roll, 0) + bonus;
-                } else {
-                    return { formula: formulaStr, total: 0, rolls: [], error: 'Número de dados ou tamanho do dado inválido.' };
-                }
-
-                return { formula: formulaStr, total: finalResult, rolls: rollResults, bonus: bonus, modifierType: modifierType };
-            }
-            
             function displayRollResult(result, attrKey, skillKey) {
                 const rollDisplay = document.getElementById('roll-display');
                 const rollHistory = document.getElementById('roll-history');
+                const rollDetails = result.rolls.join(', ');
                 
-                let rollText, historyText, resultFinal;
-
-                if (result.error) {
-                    rollText = `ERRO: ${result.error}`;
-                    historyText = rollText;
-                    resultFinal = '--';
-                } else if (skillKey === 'dano') {
-                    // Rolagem de Dano
-                    const rollsStr = result.rolls.join(' + ');
-                    const modText = result.modifierType ? ` ${result.modifierType}` : '';
-                    rollText = `${result.formula}: [${rollsStr}]${modText} = <span class="roll-result-final">${result.total}</span>`;
-                    historyText = `[${new Date().toLocaleTimeString()}] DANO (${attrKey}): [${rollsStr}]${modText} = ${result.total}`;
-                    resultFinal = result.total;
-                } else {
-                    // Rolagem de Perícia/Atributo (Existente)
-                    const skillLabel = skillKey === 'none' ? '' : ` (${skillKey.charAt(0).toUpperCase() + skillKey.slice(1)})`;
-                    const bonusText = result.isZeroAttr ? ` - 5` : result.bonus > 0 ? ` + ${result.bonus} (Treinado)` : '';
-                    const highestText = result.isZeroAttr ? `ROLAGEM: ${result.rolls.join(', ')}` : `ROLAGENS: ${result.rolls.join(', ')} | MAIOR: ${result.highest}`;
-                    
-                    rollText = `${attrKey.toUpperCase()}${skillLabel}: ${highestText}${bonusText} = <span class="roll-result-final">${result.total}</span>`;
-                    historyText = `[${new Date().toLocaleTimeString()}] ${rollText}`;
-                    resultFinal = result.total;
-                }
+                const skillLabel = skillKey === 'none' ? '' : ` (${skillKey.charAt(0).toUpperCase() + skillKey.slice(1)})`;
+                const bonusText = result.isZeroAttr ? ` - 5` : result.bonus > 0 ? ` + ${result.bonus} (Treinado)` : '';
+                const highestText = result.isZeroAttr ? `ROLAGEM: ${rollDetails}` : `ROLAGENS: ${rollDetails} | MAIOR: ${result.highest}`;
+                
+                const rollText = `${attrKey.toUpperCase()}${skillLabel}: ${highestText}${bonusText} = <span class="roll-result-final">${result.total}</span>`;
 
                 rollDisplay.innerHTML = rollText;
                 rollDisplay.classList.add('rolled');
                 setTimeout(() => rollDisplay.classList.remove('rolled'), 500); 
 
                 const historyItem = document.createElement('div');
-                historyItem.innerHTML = historyText;
+                const timestamp = new Date().toLocaleTimeString();
+                historyItem.innerHTML = `[${timestamp}] ${rollText}`;
                 
                 if (rollHistory.firstElementChild && rollHistory.firstElementChild.textContent.includes('Aguardando')) {
                     rollHistory.innerHTML = '';
@@ -1408,23 +1303,11 @@ Custo: 2 PA"
                     <td><input type="text" value="${data.nome || ''}" placeholder="Nome"></td>
                     <td><input type="text" value="${data.tipo || ''}" placeholder="Tipo"></td>
                     <td><input type="text" value="${data.ataque || ''}" placeholder="FOR/DEX +X"></td>
-                    <td><input type="text" value="${data.formulaDano || ''}" placeholder="3d8+FOR" class="weapon-damage-formula"></td> <td><input type="text" value="${data.critico || ''}" placeholder="19-20/x2"></td>
+                    <td><input type="text" value="${data.dano || ''}" placeholder="1d8+FOR"></td>
+                    <td><input type="text" value="${data.critico || ''}" placeholder="19-20/x2"></td>
                     <td><input type="number" value="${data.peso || ''}" class="inventory-weight-input weapon-weight" min="0"></td>
-                    <td><button class="btn-roll-damage">🎲</button></td> <td><button class="btn-delete-table btn-delete">X</button></td> `;
+                    <td><button class="btn-delete-table btn-delete">X</button></td> `;
                 
-                // NOVO: Adiciona o listener para o botão de rolagem de DANO
-                newRow.querySelector('.btn-roll-damage').addEventListener('click', (e) => {
-                    const formulaInput = e.target.closest('tr').querySelector('.weapon-damage-formula');
-                    if (formulaInput && formulaInput.value.trim()) {
-                        const formula = formulaInput.value.trim();
-                        const weaponName = e.target.closest('tr').querySelector('input').value || 'Dano de Arma';
-                        const result = rollDamage(formula);
-                        displayRollResult(result, weaponName, 'dano'); // 'dano' é a key para diferenciar no display
-                    } else {
-                        displayRollResult({ error: 'Insira uma fórmula de dano válida (ex: 1d6+FOR)' }, 'Arma', 'dano');
-                    }
-                });
-
                 // NOVO: Adiciona o listener para o botão de exclusão da arma
                 newRow.querySelector('.btn-delete-table').addEventListener('click', (e) => { 
                     e.target.closest('tr').remove(); 
