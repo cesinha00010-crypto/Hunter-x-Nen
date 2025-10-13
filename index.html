@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+ <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hunter x Nen System - Gerenciador de Fichas</title>
+    <title>Hunter x Nen System - Gerenciador de Fichas (Multi-Personagens)</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⚡%3C/text%3E%3C/svg%3E">
     
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
@@ -26,7 +26,7 @@
             --color-card-dark: #1f1f1f; 
             --color-text-light: #e0e0e0;
             --color-border-dark: #333333;
-            --color-shadow-nen: rgba(0, 128, 0, 0.4); 
+            --color-shadow-nen: rgba(0, 128, 0, 0.4); /* Sombra Aura Nen no Dark Mode */
             --color-tab-inactive: #555;
             --color-tab-active: var(--color-primary);
         }
@@ -42,7 +42,7 @@
             padding-bottom: 50px;
         }
 
-        /* DARK MODE STYLES */
+        /* DARK MODE STYLES (Aprimorado) */
         body.dark-mode {
             background-color: var(--color-bg-dark);
             color: var(--color-text-light);
@@ -57,6 +57,7 @@
             background-color: var(--color-card-dark);
             color: var(--color-text-light);
             border-color: var(--color-border-dark);
+            /* Sombra Aura Nen */
             box-shadow: 0 0 15px var(--color-shadow-nen), 0 4px 8px rgba(0, 0, 0, 0.5); 
         }
         body.dark-mode .roll-display {
@@ -70,6 +71,7 @@
         }
         body.dark-mode .attr-grid-item {
             border-bottom-color: var(--color-border-dark);
+            background-color: rgba(0, 128, 0, 0.1);
         }
         body.dark-mode .tab-bar button {
             background-color: var(--color-card-dark);
@@ -115,7 +117,6 @@
             font-family: 'Montserrat', sans-serif;
             transition: background 0.2s, transform 0.1s;
         }
-        .btn-theme:hover { background-color: #e53900; transform: scale(1.05); }
 
         /* Layout Principal */
         .ficha-container {
@@ -149,16 +150,17 @@
             .inventory-section { grid-area: inventario; }
         }
 
-        /* Cards */
+        /* Cards (Estilo Placa de Metal Suave) */
         .card {
             padding: 25px;
             border-radius: 12px;
             box-shadow: 0 8px 15px var(--color-shadow-light); 
             border: 2px solid var(--color-border-light);
             transition: box-shadow 0.3s, border-color 0.3s;
+            background-color: var(--color-card-light);
         }
 
-        /* Títulos H2 */
+        /* Títulos H2 (Aprimorado) */
         h2 {
             font-family: 'Oswald', sans-serif;
             color: var(--color-primary);
@@ -172,8 +174,8 @@
             border-bottom: 4px double var(--color-secondary);
         }
 
-        /* Botões de Rolagem - Tátil */
-        .roll-button, .btn-add, .btn-action {
+        /* Botões de Rolagem - Tátil (Aprimorado) */
+        .roll-button, .btn-add, .btn-action, .btn-delete, .btn-delete-table {
             background-color: var(--color-secondary);
             background-image: linear-gradient(180deg, var(--color-secondary) 0%, #cc3700 100%);
             color: white;
@@ -184,21 +186,21 @@
             font-weight: bold;
             font-family: 'Montserrat', sans-serif;
             transition: all 0.15s;
-            box-shadow: 0 4px 0 #a82e00;
+            box-shadow: 0 4px 0 #a82e00; /* Efeito 3D */
             white-space: nowrap;
         }
-        .roll-button:hover, .btn-add:hover, .btn-action:hover {
+        .roll-button:hover, .btn-add:hover, .btn-action:hover, .btn-delete:hover, .btn-delete-table:hover {
             background-image: linear-gradient(180deg, #e53900 0%, var(--color-secondary) 100%);
             box-shadow: 0 2px 0 #a82e00;
             transform: translateY(2px);
         }
-        .roll-button:active, .btn-add:active, .btn-action:active {
+        .roll-button:active, .btn-add:active, .btn-action:active, .btn-delete:active, .btn-delete-table:active {
             box-shadow: none;
             transform: translateY(4px);
         }
         
         /* Botão Verde */
-        .btn-add, .btn-save-name {
+        .btn-add, .btn-save-name { 
             background-color: var(--color-primary);
             background-image: linear-gradient(180deg, var(--color-primary) 0%, #006600 100%);
             border: 1px solid #005000;
@@ -213,16 +215,42 @@
             transform: translateY(4px);
         }
 
-        /* Botão de Excluir (Vermelho Escuro) */
-        .btn-delete {
+        /* Botão de Excluir (Vermelho Principal e Hatsu) */
+        .btn-delete, .btn-delete-hatsu { 
             background-color: #a00000;
             background-image: linear-gradient(180deg, #a00000 0%, #700000 100%);
             border: 1px solid #500000;
             box-shadow: 0 4px 0 #500000;
         }
-        .btn-delete:hover {
+        .btn-delete:hover, .btn-delete-hatsu:hover {
             background-image: linear-gradient(180deg, #cc0000 0%, #a00000 100%);
             box-shadow: 0 2px 0 #500000;
+        }
+        .btn-delete:active, .btn-delete-hatsu:active {
+            box-shadow: none;
+            transform: translateY(4px);
+        }
+
+        /* NOVO ESTILO: Botão de Excluir dentro das Tabelas (Compacto, mas com 3D) */
+        .btn-delete-table {
+            padding: 6px 10px; /* Um pouco menor que o padrão */
+            font-size: 0.8em;
+            background-color: #a00000;
+            background-image: linear-gradient(180deg, #a00000 0%, #700000 100%);
+            border: 1px solid #500000;
+            box-shadow: 0 3px 0 #500000; /* 3D menor */
+            min-width: 40px; 
+            margin: auto;
+            display: block;
+        }
+        .btn-delete-table:hover {
+            background-image: linear-gradient(180deg, #cc0000 0%, #a00000 100%);
+            box-shadow: 0 1px 0 #500000;
+            transform: translateY(2px);
+        }
+        .btn-delete-table:active {
+            box-shadow: none;
+            transform: translateY(4px);
         }
 
         /* ====================================================================== 
@@ -259,25 +287,22 @@
             font-weight: 700;
             transform: translateY(-2px);
         }
-        .tab-bar button:not(.active):hover {
-            color: var(--color-secondary);
-        }
         
         .tab-actions {
             margin-top: 10px;
             padding: 10px;
-            background-color: var(--color-card-light);
             border-radius: 0 0 12px 12px;
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
         }
-        body.dark-mode .tab-actions {
-            background-color: var(--color-card-dark);
+        .btn-action {
+             font-size: 0.9em;
+             padding: 8px 12px;
         }
 
         /* ====================================================================== 
-           4. ROLAGEM (RESPONSIVIDADE FIX/STATIC)
+           4. ROLAGEM (ALTERADO PARA FICAR FIXO)
            ====================================================================== */
         .roll-area {
             position: static; 
@@ -286,6 +311,7 @@
         }
         @media (min-width: 1024px) {
             .roll-area {
+                /* ALTERADO: DEIXA FIXO NA TELA */
                 position: fixed; 
                 top: 110px;      
                 right: 20px;
@@ -313,19 +339,25 @@
             text-shadow: 1px 1px 3px rgba(0, 128, 0, 0.8);
         }
 
+        .history-log {
+            max-height: 250px;
+            overflow-y: auto;
+        }
         .history-log > div {
             padding: 8px;
-            border-left: 5px solid var(--color-primary);
+            border-left: 5px solid var(--color-primary); /* Registro de Missão/Log */
             background-color: rgba(0, 128, 0, 0.05);
             border-radius: 4px;
             font-family: monospace;
+            font-size: 0.8em;
+            margin-bottom: 5px;
         }
 
         /* ====================================================================== 
            5. OUTROS COMPONENTES
            ====================================================================== */
         
-        /* Inputs */
+        /* Inputs (Aprimorado para toque) */
         input:not(.trained-checkbox):not(.btn-theme), textarea, select {
             width: 100%;
             padding: 12px;
@@ -333,9 +365,35 @@
             border-radius: 8px; 
             background-color: var(--color-bg-light);
             transition: border-color 0.2s, box-shadow 0.2s;
+            color: var(--color-text-dark);
         }
 
-        /* Atributos */
+        /* Estrutura de Seções */
+        .field-group { margin-bottom: 20px; }
+        .three-cols {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            align-items: center;
+        }
+        /* Para os campos de resistência com label */
+        .field-group.three-cols > div {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .field-group.three-cols label {
+            font-weight: 600;
+            color: var(--color-text-dark);
+        }
+        body.dark-mode .field-group.three-cols label {
+             color: var(--color-text-light);
+        }
+        
+        .rep-item { display: flex; align-items: center; gap: 5px; }
+        .rep-item input { width: 50px; text-align: center; padding: 5px !important; }
+
+        /* Atributos (Aprimorado) */
         .attr-grid-item {
             display: grid;
             grid-template-columns: 1fr 70px 90px;
@@ -357,12 +415,77 @@
             padding: 8px !important;
         }
         
+        /* Perícias */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .skill-group h4 {
+            color: var(--color-secondary);
+            border-bottom: 2px solid var(--color-secondary);
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.1em;
+        }
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+            padding: 5px;
+            border-radius: 4px;
+        }
+        .trained-checkbox { transform: scale(1.4); margin-right: 15px; }
+
+        /* Nen e Hatsus */
+        .hatsu-item {
+            border: 2px solid var(--color-primary);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background-color: rgba(0, 128, 0, 0.05);
+        }
+        .hatsu-details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .basic-nen-container { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--color-border-light); }
+        .nen-tech-group { padding: 10px; border: 1px dashed var(--color-primary); border-radius: 8px; }
+        .tech-item-check { display: flex; align-items: center; gap: 5px; }
+        /* Botão de excluir Hatsu - Usa o estilo padrão .btn-delete */
+        .btn-delete-hatsu { margin-top: 10px; font-size: 0.9em; padding: 8px 12px; }
+
+
+        /* Tabelas (Armas/Inventário) */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            border-radius: 8px;
+            overflow: hidden; 
+        }
+        th, td { padding: 12px; text-align: left; border: 1px solid var(--color-border-light); }
+        thead { background-color: var(--color-primary); color: white; font-family: 'Oswald', sans-serif; text-transform: uppercase; }
+        tbody tr:nth-child(odd) { background-color: rgba(0, 128, 0, 0.03); }
+        tbody tr:hover { background-color: rgba(255, 69, 0, 0.1); }
+        table input { background-color: transparent; border: none; padding: 0; margin: 0; width: 100%; }
+        table td:last-child { text-align: center; } /* Alinha o botão de Excluir ao centro */
+
+        .inventory-controls { display: flex; align-items: center; gap: 20px; font-weight: 600; }
+        .small-input { width: 60px !important; text-align: center; padding: 8px !important; }
+        #inventory-current-weight { font-weight: 700; color: white; transition: color 0.3s; }
+        .weight-exceeded { color: #cc0000; animation: pulse 1s infinite alternate; }
+        @keyframes pulse { from { opacity: 1; } to { opacity: 0.7; } }
     </style>
     </head>
 <body>
     <header>
         <div class="logo">HUNTER x NEN SYSTEM</div>
-        <p>"Gerencie suas missões e seus personagens Hunter de forma eficiente."</p>
+        <p>"Domine o Nen. Supere seus limites. Crie fichas, canalize sua aura e veja o destino se revelar nos dados."</p>
         <button id="toggle-theme" class="btn-theme">Modo Escuro/Claro</button>
     </header>
 
@@ -462,18 +585,18 @@
                 <div class="resource-item">
                     <label for="defesa">Defesa Base</label>
                     <input type="number" id="defesa" value="10">
-                    <label for="velocidade">Velocidade</label>
-                    <input type="number" id="velocidade" value="10">
+                    <label for="Deslocamento">Deslocamento</label>
+                    <input type="number" id="deslocamento" value="10">
                 </div>
             </div>
 
             <h3>Resistências</h3>
             <div class="field-group three-cols">
-                <input type="number" id="res-perfurante" placeholder="Perfurante" value="0">
-                <input type="number" id="res-impacto" placeholder="Impacto" value="0">
-                <input type="number" id="res-cortante" placeholder="Cortante" value="0">
-                <input type="number" id="res-elemental" placeholder="Elemental" value="0">
-                <input type="number" id="res-psiquica" placeholder="Psíquica" value="0">
+                <div><label for="res-perfurante">Perfurante</label><input type="number" id="res-perfurante" value="0"></div>
+                <div><label for="res-impacto">Impacto</label><input type="number" id="res-impacto" value="0"></div>
+                <div><label for="res-cortante">Cortante</label><input type="number" id="res-cortante" value="0"></div>
+                <div><label for="res-elemental">Elemental</label><input type="number" id="res-elemental" value="0"></div>
+                <div><label for="res-nen">Nen</label><input type="number" id="res-nen" value="0"></div>
             </div>
         </section>
 
@@ -603,8 +726,9 @@
                         <th style="width: 15%;">Tipo</th>
                         <th style="width: 15%;">Ataque (Mod)</th>
                         <th style="width: 15%;">Dano</th>
-                        <th style="width: 15%;">Crítico</th>
-                        <th style="width: 15%;">Peso</th>
+                        <th style="width: 10%;">Crítico</th>
+                        <th style="width: 10%;">Peso</th>
+                        <th style="width: 10%;">Ação</th> 
                     </tr>
                 </thead>
                 <tbody>
@@ -624,9 +748,10 @@
                 <thead>
                     <tr>
                         <th style="width: 20%;">Item</th>
-                        <th style="width: 50%;">Detalhes</th>
-                        <th style="width: 15%;">Peso</th>
-                        <th style="width: 15%;">Qtd.</th>
+                        <th style="width: 40%;">Detalhes</th>
+                        <th style="width: 10%;">Peso</th>
+                        <th style="width: 10%;">Qtd.</th>
+                        <th style="width: 10%;">Ação</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -642,7 +767,7 @@
             const ROLL_BONUS_TRAINED = 5;
             const AUTOSAVE_INTERVAL = 3000; 
             const MAX_HISTORY_ITEMS = 3; 
-            const STORAGE_KEY = 'hunterXNenFichas';
+            const STORAGE_KEY = 'hunterXNenFichas'; // Chave para armazenar o array de fichas
             const ATTR_NEN_MAP = {
                 'intensificacao': 'vigor', 'emissao': 'forca', 'transmutacao': 'destreza',
                 'manipulacao': 'carisma', 'materializacao': 'intelecto', 'especializacao': 'livre'
@@ -667,12 +792,10 @@
                     characters = JSON.parse(savedData);
                 }
 
-                // Se não houver dados ou o array estiver vazio, cria uma ficha padrão.
                 if (!characters || characters.length === 0) {
                     characters = [createDefaultFicha('Personagem 1')];
                 }
                 
-                // Garante que o índice ativo seja válido
                 activeCharacterIndex = Math.min(activeCharacterIndex, characters.length - 1);
                 activeCharacterIndex = Math.max(0, activeCharacterIndex); 
 
@@ -712,16 +835,30 @@
                     descricao: item.querySelector('textarea').value
                 }));
                 
-                // Captura Armas
+                // Captura Armas (Pega apenas os inputs, o botão "X" é ignorado)
                 data.weapons = Array.from(document.querySelectorAll('#weapons-table tbody tr')).map(row => {
                     const inputs = row.querySelectorAll('input');
-                    return { nome: inputs[0].value, tipo: inputs[1].value, ataque: inputs[2].value, dano: inputs[3].value, critico: inputs[4].value, peso: inputs[5].value };
+                    // Espera-se 6 inputs: nome, tipo, ataque, dano, critico, peso
+                    return { 
+                        nome: inputs[0].value, 
+                        tipo: inputs[1].value, 
+                        ataque: inputs[2].value, 
+                        dano: inputs[3].value, 
+                        critico: inputs[4].value, 
+                        peso: inputs[5].value 
+                    };
                 });
 
-                // Captura Inventário
+                // Captura Inventário (Pega apenas os inputs, o botão "X" é ignorado)
                 data.inventory = Array.from(document.querySelectorAll('#inventory-table tbody tr')).map(row => {
                     const inputs = row.querySelectorAll('input');
-                    return { item: inputs[0].value, detalhes: inputs[1].value, peso: inputs[2].value, quantidade: inputs[3].value };
+                    // Espera-se 4 inputs: item, detalhes, peso, quantidade
+                    return { 
+                        item: inputs[0].value, 
+                        detalhes: inputs[1].value, 
+                        peso: inputs[2].value, 
+                        quantidade: inputs[3].value 
+                    };
                 });
 
                 // Captura Histórico de Rolagem
@@ -766,8 +903,13 @@
                     ficha.rollHistory.forEach(html => {
                         const tempDiv = document.createElement('div');
                         tempDiv.innerHTML = html;
-                        historyLog.appendChild(tempDiv.firstChild);
+                        // O prepend está falhando aqui, preciso garantir que o item é adicionado corretamente.
+                        if (tempDiv.firstChild) {
+                             historyLog.appendChild(tempDiv.firstChild); 
+                        }
                     });
+                     // Inverter a ordem, pois o save guardou em ordem de display (prepend) mas o load appendou.
+                    Array.from(historyLog.children).reverse().forEach(child => historyLog.prepend(child));
                 } else {
                      historyLog.innerHTML = '<div>Aguardando a primeira rolagem...</div>';
                 }
@@ -775,7 +917,7 @@
                 // 6. Atualiza exibições
                 updateNenBaseAttr();
                 updateAuraBonus();
-                updateInventoryWeight();
+                updateInventoryWeight(false);
             }
 
             function createDefaultFicha(name) {
@@ -787,10 +929,10 @@
                         'rep-zoldyck': '0', 'rep-mafia': '0', 'rep-chimera': '0', 'rep-governo': '0',
                         'forca': '1', 'vigor': '1', 'destreza': '1', 'intelecto': '1', 'carisma': '1',
                         'pv-max': '10', 'pv-atual': '10', 'pa-max': '10', 'pa-atual': '10', 'defesa': '10', 'velocidade': '10',
-                        'res-perfurante': '0', 'res-impacto': '0', 'res-cortante': '0', 'res-elemental': '0', 'res-psiquica': '0',
+                        'res-perfurante': '0', 'res-impacto': '0', 'res-cortante': '0', 'res-elemental': '0', 'res-nen': '0',
                         'nen-type': 'none', 'nen-base-attr': 'Nenhum', 'nen-aura-bonus': '0',
                         'ten-level': 'amador', 'ren-level': 'amador', 'zetsu-level': 'amador',
-                        'inventory-limit': '10'
+                        'inventory-limit': '10', 'tech-gyo': false, 'tech-in': false, 'tech-en': false, 'tech-ken': false, 'tech-shu': false, 'tech-ko': false, 'tech-ryu': false
                     },
                     hatsus: [],
                     weapons: [],
@@ -851,15 +993,24 @@
             });
 
             document.getElementById('delete-character-btn').addEventListener('click', () => {
+                // GARANTIDO: Exclui o personagem ativo (activeCharacterIndex)
                 if (characters.length > 1) {
-                    if (confirm(`Tem certeza que deseja EXCLUIR a ficha de "${characters[activeCharacterIndex].name}"? Esta ação não pode ser desfeita.`)) {
+                    const characterToDeleteName = characters[activeCharacterIndex].name;
+
+                    if (confirm(`Tem certeza que deseja EXCLUIR a ficha de "${characterToDeleteName}"? Esta ação não pode ser desfeita.`)) {
+                        
+                        // Salva o personagem atual (para garantir que a última versão está no array antes de remover)
+                        saveAllCharacters();
+
                         characters.splice(activeCharacterIndex, 1); // Remove o personagem
                         
-                        // Define o novo índice ativo (o anterior ou o primeiro)
+                        // Define o novo índice ativo (o anterior, garantindo que não seja negativo)
                         activeCharacterIndex = Math.max(0, activeCharacterIndex - 1);
                         
-                        // Salva e carrega o novo personagem ativo
-                        saveAllCharacters();
+                        // Salva o array atualizado no localStorage
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify(characters));
+
+                        // Carrega e exibe o novo personagem ativo
                         loadFichaData(characters[activeCharacterIndex]);
                         renderTabs();
                     }
@@ -869,10 +1020,9 @@
             });
 
 
-            // --- LÓGICA DE ROLAGEM (INTEGRAÇÃO COM MÚLTIPLAS FICHAS) ---
+            // --- LÓGICA DE ROLAGEM ---
 
             function rollDice(attrValue, isTrained) {
-                // (Mantido inalterado)
                 let diceRolls = [];
                 let numRolls = Math.max(1, attrValue);
 
@@ -923,7 +1073,7 @@
                     rollHistory.removeChild(rollHistory.lastElementChild);
                 }
                 
-                saveAllCharacters(); // Salva após rolagem
+                saveAllCharacters();
             }
 
             document.querySelectorAll('.roll-button').forEach(button => {
@@ -952,8 +1102,8 @@
                 });
             });
 
-            // --- LÓGICA DE NEN/HATSUS ---
-
+            // --- LÓGICA DE NEN/HATSUS/INVENTÁRIO ---
+            
             function updateNenBaseAttr() {
                 const nenType = document.getElementById('nen-type').value;
                 const attrKey = ATTR_NEN_MAP[nenType];
@@ -966,7 +1116,6 @@
                     document.getElementById('nen-base-attr').value = 'Nenhum';
                 }
             }
-
             function updateAuraBonus() {
                 const nenType = document.getElementById('nen-type').value;
                 const attrKey = ATTR_NEN_MAP[nenType];
@@ -976,23 +1125,16 @@
                     const attrValue = parseInt(document.getElementById(attrKey).value) || 0;
                     bonus = attrValue * 5; 
                 }
-                
                 document.getElementById('nen-aura-bonus').value = bonus;
             }
-            
+
             document.getElementById('nen-type').addEventListener('change', () => { updateNenBaseAttr(); updateAuraBonus(); saveAllCharacters(); });
             document.querySelectorAll('.attr-value').forEach(input => {
                 input.addEventListener('change', () => { updateAuraBonus(); saveAllCharacters(); });
                 input.addEventListener('keyup', () => { updateAuraBonus(); saveAllCharacters(); });
             });
-
-
-            // HATSUS
-            document.getElementById('add-hatsu-btn').addEventListener('click', () => {
-                addHatsuItem();
-                saveAllCharacters();
-            });
             
+            document.getElementById('add-hatsu-btn').addEventListener('click', () => { addHatsuItem(); saveAllCharacters(); });
             function addHatsuItem(data = {}) {
                 const hatsuList = document.getElementById('hatsu-list');
                 const newItem = document.createElement('div');
@@ -1009,27 +1151,14 @@
                         <input type="text" placeholder="Alcance" class="hatsu-range" value="${data.alcance || ''}">
                     </div>
                     <textarea placeholder="Descrição e Efeitos do Hatsu">${data.descricao || ''}</textarea>
-                    <button class="btn-delete-hatsu roll-button" style="background-color: #cc0000; border-color: #990000; box-shadow: 0 4px 0 #990000;">Excluir Hatsu</button>
+                    <button class="btn-delete-hatsu btn-delete">Excluir Hatsu</button>
                 `;
                 hatsuList.appendChild(newItem);
-                
-                newItem.querySelector('.btn-delete-hatsu').addEventListener('click', (e) => {
-                    e.target.closest('.hatsu-item').remove();
-                    saveAllCharacters();
-                });
-                newItem.querySelectorAll('input, textarea, select').forEach(el => {
-                    el.addEventListener('change', saveAllCharacters);
-                    el.addEventListener('keyup', saveAllCharacters);
-                });
+                newItem.querySelector('.btn-delete-hatsu').addEventListener('click', (e) => { e.target.closest('.hatsu-item').remove(); saveAllCharacters(); });
+                newItem.querySelectorAll('input, textarea, select').forEach(el => { el.addEventListener('change', saveAllCharacters); el.addEventListener('keyup', saveAllCharacters); });
             }
-            
-            // --- LÓGICA DE ARMAS E INVENTÁRIO ---
 
-            document.getElementById('add-weapon-btn').addEventListener('click', () => {
-                addWeaponRow();
-                saveAllCharacters();
-            });
-
+            document.getElementById('add-weapon-btn').addEventListener('click', () => { addWeaponRow(); saveAllCharacters(); });
             function addWeaponRow(data = {}) {
                 const tableBody = document.querySelector('#weapons-table tbody');
                 const newRow = tableBody.insertRow();
@@ -1040,22 +1169,23 @@
                     <td><input type="text" value="${data.dano || ''}" placeholder="1d8+FOR"></td>
                     <td><input type="text" value="${data.critico || ''}" placeholder="19-20/x2"></td>
                     <td><input type="number" value="${data.peso || ''}" class="inventory-weight-input weapon-weight" min="0"></td>
-                `;
+                    <td><button class="btn-delete-table btn-delete">X</button></td> `;
                 
+                // NOVO: Adiciona o listener para o botão de exclusão da arma
+                newRow.querySelector('.btn-delete-table').addEventListener('click', (e) => { 
+                    e.target.closest('tr').remove(); 
+                    updateInventoryWeight(); // Atualiza peso após remoção
+                    saveAllCharacters(); 
+                });
+
                 newRow.querySelectorAll('input').forEach(el => {
                     el.addEventListener('change', saveAllCharacters);
                     el.addEventListener('keyup', saveAllCharacters);
-                    if (el.classList.contains('inventory-weight-input')) {
-                        el.addEventListener('input', updateInventoryWeight);
-                    }
+                    if (el.classList.contains('inventory-weight-input')) { el.addEventListener('input', updateInventoryWeight); }
                 });
             }
             
-            document.getElementById('add-inventory-btn').addEventListener('click', () => {
-                addInventoryRow();
-                saveAllCharacters();
-            });
-
+            document.getElementById('add-inventory-btn').addEventListener('click', () => { addInventoryRow(); saveAllCharacters(); });
             function addInventoryRow(data = {}) {
                 const tableBody = document.querySelector('#inventory-table tbody');
                 const newRow = tableBody.insertRow();
@@ -1064,24 +1194,31 @@
                     <td><input type="text" value="${data.detalhes || ''}" placeholder="Detalhes do item"></td>
                     <td><input type="number" value="${data.peso || ''}" class="inventory-weight-input item-weight" min="0"></td>
                     <td><input type="number" value="${data.quantidade || '1'}" class="inventory-quantity" min="1"></td>
-                `;
+                    <td><button class="btn-delete-table btn-delete">X</button></td> `;
+                
+                // NOVO: Adiciona o listener para o botão de exclusão do item
+                newRow.querySelector('.btn-delete-table').addEventListener('click', (e) => { 
+                    e.target.closest('tr').remove(); 
+                    updateInventoryWeight(); // Atualiza peso após remoção
+                    saveAllCharacters(); 
+                });
 
                 newRow.querySelectorAll('input').forEach(el => {
                     el.addEventListener('change', saveAllCharacters);
                     el.addEventListener('keyup', saveAllCharacters);
-                    if (el.classList.contains('inventory-weight-input') || el.classList.contains('inventory-quantity')) {
-                        el.addEventListener('input', updateInventoryWeight);
-                    }
+                    if (el.classList.contains('inventory-weight-input') || el.classList.contains('inventory-quantity')) { el.addEventListener('input', updateInventoryWeight); }
                 });
             }
 
-            function updateInventoryWeight() {
+            function updateInventoryWeight(shouldSave = true) {
                 let totalWeight = 0;
                 
+                // Armas
                 document.querySelectorAll('#weapons-table .inventory-weight-input').forEach(input => {
                     totalWeight += parseFloat(input.value) || 0;
                 });
                 
+                // Inventário
                 document.querySelectorAll('#inventory-table tbody tr').forEach(row => {
                     const weightInput = row.querySelector('.item-weight');
                     const quantityInput = row.querySelector('.inventory-quantity');
@@ -1102,10 +1239,11 @@
                      weightDisplay.classList.remove('weight-exceeded');
                 }
                 
-                saveAllCharacters(); // Salva a atualização de peso
+                if (shouldSave) saveAllCharacters();
             }
             document.getElementById('inventory-limit').addEventListener('input', updateInventoryWeight);
             
+
             // --- TEMA DARK/LIGHT ---
 
             document.getElementById('toggle-theme').addEventListener('click', () => {
@@ -1124,11 +1262,18 @@
                 }
             }
 
-            // Ativar auto-save (Aplica o evento de saveAllCharacters a todos os campos)
-            document.querySelectorAll('input, textarea, select, .trained-checkbox').forEach(element => {
+            // Ativar auto-save
+            // Remove a seleção mais ampla para evitar duplicidade com os listeners específicos de Inventário/Armas
+            document.querySelectorAll('input:not(.inventory-weight-input):not(.inventory-quantity), textarea, select, .trained-checkbox').forEach(element => {
                 element.addEventListener('change', saveAllCharacters);
                 element.addEventListener('keyup', saveAllCharacters);
             });
+            // Adiciona listeners para os campos que precisam de save mas não atualizam peso
+            document.querySelectorAll('.attr-value, #pv-max, #pv-atual, #pa-max, #pa-atual, #defesa, #velocidade, [id^="res-"]').forEach(element => {
+                 element.addEventListener('input', saveAllCharacters);
+            });
+
+
             setInterval(saveAllCharacters, AUTOSAVE_INTERVAL);
 
 
