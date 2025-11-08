@@ -6,7 +6,7 @@
     <title>Hunter x Nen System - Gerenciador de Fichas (Multi-Personagens)</title>
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E⚡%3C/text%3E%3C/svg%3E">
     
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght=500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
     
     <style>
         /* ====================================================================== 
@@ -238,8 +238,8 @@
             background-color: #a00000;
             background-image: linear-gradient(180deg, #a00000 0%, #700000 100%);
             border: 1px solid #500000;
-            box-shadow: 0 3px 0 #500000; /* 3D menor */
-            min-width: 40px; 
+            box-shadow: 0 3px 0 #500000; 
+            min-width: 40px;
             margin: auto;
             display: block;
         }
@@ -257,332 +257,416 @@
         .btn-roll-damage {
             padding: 6px 10px; 
             font-size: 0.8em;
-            background-color: var(--color-primary);
+            background-color: var(--color-primary); /* Verde */
             background-image: linear-gradient(180deg, var(--color-primary) 0%, #006600 100%);
             border: 1px solid #005000;
             box-shadow: 0 3px 0 #005000;
-            min-width: 40px; 
-            margin: auto;
-            display: block;
         }
         .btn-roll-damage:hover {
             background-image: linear-gradient(180deg, #009900 0%, var(--color-primary) 100%);
             box-shadow: 0 1px 0 #005000;
             transform: translateY(2px);
         }
-        .btn-roll-damage:active {
-            box-shadow: none;
-            transform: translateY(4px);
-        }
-
-        /* ====================================================================== 
-           3. MENU DE ABAS (TAB MANAGER)
-           ====================================================================== */
-        .tab-manager {
-            padding: 0;
-            border: none;
-            box-shadow: none;
-            background: transparent;
-        }
-        .tab-bar {
-            display: flex;
-            flex-wrap: wrap;
-            border-bottom: 2px solid var(--color-border-light);
-            gap: 5px;
-        }
-        .tab-bar button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 8px 8px 0 0;
-            cursor: pointer;
-            font-weight: 600;
-            background-color: var(--color-card-light);
-            color: var(--color-tab-inactive);
-            border-bottom: 2px solid transparent;
-            margin-bottom: -2px; 
-            transition: all 0.3s;
-        }
-        .tab-bar button.active {
-            background-color: var(--color-card-light);
-            color: var(--color-tab-active);
-            border-bottom: 3px solid var(--color-tab-active);
-            font-weight: 700;
-            transform: translateY(-2px);
-        }
         
-        .tab-actions {
-            margin-top: 10px;
-            padding: 10px;
-            border-radius: 0 0 12px 12px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        .btn-action {
-             font-size: 0.9em;
-             padding: 8px 12px;
-        }
-
-        /* ====================================================================== 
-           4. ROLAGEM (ALTERADO PARA FICAR FIXO)
-           ====================================================================== */
-        .roll-area {
-            position: static; 
-            width: 100%;
-            z-index: 1000;
-        }
-        @media (min-width: 1024px) {
-            .roll-area {
-                /* ALTERADO: DEIXA FIXO NA TELA */
-                position: fixed; 
-                top: 110px;      
-                right: 20px;
-                width: 300px;
-                max-height: calc(100vh - 130px);
-                overflow-y: auto;
-            }
-        }
-        
-        .roll-display {
-            text-align: center;
-            padding: 20px;
-            margin-bottom: 15px;
-            border: 4px solid var(--color-secondary);
-            border-radius: 12px;
-            font-weight: 700;
-            background-color: rgba(255, 69, 0, 0.1);
-            font-family: 'Oswald', sans-serif;
-        }
-        .roll-result-final {
-            color: var(--color-primary);
-            font-size: 2.5em;
-            display: inline-block;
-            margin-left: 10px;
-            text-shadow: 1px 1px 3px rgba(0, 128, 0, 0.8);
-        }
-
-        .history-log {
-            max-height: 250px;
-            overflow-y: auto;
-        }
-        .history-log > div {
-            padding: 8px;
-            border-left: 5px solid var(--color-primary); /* Registro de Missão/Log */
-            background-color: rgba(0, 128, 0, 0.05);
-            border-radius: 4px;
-            font-family: monospace;
+        /* NOVO ESTILO: Botão de Rolagem de ATAQUE (Vermelho Escarlate) */
+        .btn-roll-attack {
+            padding: 6px 10px; 
             font-size: 0.8em;
-            margin-bottom: 5px;
+            background-color: var(--color-secondary); /* Vermelho */
+            background-image: linear-gradient(180deg, var(--color-secondary) 0%, #cc3700 100%);
+            border: 1px solid #a82e00;
+            box-shadow: 0 3px 0 #a82e00; 
+        }
+        .btn-roll-attack:hover {
+            background-image: linear-gradient(180deg, #e53900 0%, var(--color-secondary) 100%);
+            box-shadow: 0 1px 0 #a82e00;
+            transform: translateY(2px);
         }
 
         /* ====================================================================== 
-           5. OUTROS COMPONENTES
+           3. ESTILOS DE FORMULÁRIO
            ====================================================================== */
-        
-        /* Inputs (Aprimorado para toque) */
-        input:not(.trained-checkbox):not(.btn-theme), textarea, select {
+        input:not([type="checkbox"]):not([type="radio"]), textarea, select {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             border: 1px solid var(--color-border-light);
-            border-radius: 8px; 
+            border-radius: 4px;
             background-color: var(--color-bg-light);
             transition: border-color 0.2s, box-shadow 0.2s;
             color: var(--color-text-dark);
         }
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 5px rgba(0, 128, 0, 0.5);
+            outline: none;
+        }
+        /* Corrigir o fundo para o modo escuro */
+        body.dark-mode input:not([type="checkbox"]):not([type="radio"]), 
+        body.dark-mode textarea, 
+        body.dark-mode select {
+            background-color: var(--color-card-dark);
+            color: var(--color-text-light);
+            border-color: var(--color-border-dark);
+        }
 
         /* Estrutura de Seções */
         .field-group { margin-bottom: 20px; }
-        .three-cols {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
+        .three-cols { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+            gap: 15px; 
             align-items: center;
         }
         /* Para os campos de resistência com label */
-        .field-group.three-cols > div {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-        .field-group.three-cols label {
-            font-weight: 600;
-            color: var(--color-text-dark);
-        }
-        body.dark-mode .field-group.three-cols label {
-             color: var(--color-text-light);
-        }
-        
-        .rep-item { display: flex; align-items: center; gap: 5px; }
-        .rep-item input { width: 50px; text-align: center; padding: 5px !important; }
+        .field-group.three-cols > div { display: flex; flex-direction: column; gap: 5px; }
+        .field-group.three-cols label { font-weight: 600; font-size: 0.9em; }
 
-        /* Atributos (Aprimorado) */
-        .attr-grid-item {
-            display: grid;
-            grid-template-columns: 1fr 70px 90px;
-            gap: 15px;
-            align-items: center;
-            margin-bottom: 10px;
+        /* Estilos de Tabela */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid var(--color-border-light);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
             padding: 10px;
-            border-radius: 6px;
-            background-color: rgba(0, 128, 0, 0.05); 
+            text-align: left;
             border-bottom: 1px solid var(--color-border-light);
         }
-        .attr-grid-item label {
-            font-weight: 700;
-            color: var(--color-primary);
+        th {
+            background-color: var(--color-primary);
+            color: white;
             font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            font-size: 0.9em;
         }
-        .attr-value {
+        td {
+            background-color: var(--color-card-light);
+            border-right: 1px solid var(--color-border-light);
+        }
+        td:last-child { border-right: none; }
+        tr:last-child td { border-bottom: none; }
+
+        /* Estilos de Input dentro de Tabela */
+        table input[type="text"], 
+        table textarea {
+            border: none;
+            padding: 0;
+            background: transparent;
+            width: 100%;
+            color: inherit;
+        }
+        /* Ajuste para campos de peso e quantidade no inventário */
+        .inventory-weight-input, .inventory-quantity {
             text-align: center;
-            padding: 8px !important;
         }
-        
+        /* Modo Escuro para Tabela */
+        body.dark-mode table { border-color: var(--color-border-dark); }
+        body.dark-mode th { border-color: var(--color-border-dark); }
+        body.dark-mode td { border-color: var(--color-border-dark); background-color: var(--color-card-dark); }
+        body.dark-mode tr:nth-child(even) td { background-color: #2a2a2a; } /* Listra Alternada no Dark Mode */
+        body.dark-mode table input, body.dark-mode table textarea { color: var(--color-text-light); }
+
+        /* ====================================================================== 
+           4. ESTILOS ESPECÍFICOS DE SEÇÃO
+           ====================================================================== */
+        /* Identificação */
+        .identification-section .field-group { 
+            display: grid; 
+            grid-template-columns: 2fr 1fr; 
+            gap: 15px; 
+        }
+
+        /* Atributos */
+        .attr-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            text-align: center;
+        }
+        .attr-grid-item {
+            border-bottom: 2px solid var(--color-border-light);
+            padding-bottom: 10px;
+            background-color: #f7f7f7;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .attr-grid-item h3 {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.2em;
+            color: var(--color-secondary);
+            margin-bottom: 5px;
+        }
+        .attr-value, .attr-mod {
+            width: 60px !important;
+            margin: 5px auto;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1em;
+            display: block;
+        }
+        .attr-mod {
+            color: var(--color-primary);
+            font-size: 1.2em;
+        }
+
+        /* Rolagem */
+        .roll-area {
+            grid-area: roll;
+        }
+        .roll-display {
+            text-align: center;
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding: 20px;
+            border: 3px dashed var(--color-secondary);
+            border-radius: 8px;
+            background-color: #fff8f8;
+            transition: all 0.3s ease-out;
+            color: var(--color-text-dark);
+        }
+        .roll-display.rolled {
+            border-color: var(--color-primary);
+            background-color: #e6ffe6;
+            transform: scale(1.03);
+        }
+        .roll-d20 { color: var(--color-secondary); }
+        .roll-result-final { color: var(--color-primary); }
+        .history-log {
+            max-height: 250px;
+            overflow-y: auto;
+            border-top: 1px solid var(--color-border-light);
+            padding-top: 10px;
+        }
+        .history-log > div {
+            font-size: 0.9em;
+            padding: 8px;
+            margin-bottom: 5px;
+            border-left: 5px solid var(--color-primary);
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+
         /* Perícias */
         .skills-grid {
-            display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
         }
         .skill-group h4 {
-            color: var(--color-secondary);
-            border-bottom: 2px solid var(--color-secondary);
-            padding-bottom: 5px;
-            margin-bottom: 10px;
             font-family: 'Oswald', sans-serif;
-            font-size: 1.1em;
+            color: var(--color-secondary);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed var(--color-border-light);
         }
         .skill-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 5px;
-            padding: 5px;
-            border-radius: 4px;
+            margin-bottom: 8px;
         }
-        .trained-checkbox { transform: scale(1.4); margin-right: 15px; }
+        .skill-item label {
+            flex-grow: 1;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+        .skill-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+        .skill-item .roll-button {
+            padding: 5px 8px;
+            font-size: 0.8em;
+            width: 70px;
+        }
+        
+        /* NOVO ESTILO: Controle de Bônus de Perícia Editável */
+        .trained-control {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .trained-bonus-input {
+            width: 45px !important; 
+            padding: 2px 4px !important;
+            text-align: center;
+            -moz-appearance: textfield; /* Para Firefox */
+        }
+        .trained-bonus-input::-webkit-outer-spin-button,
+        .trained-bonus-input::-webkit-inner-spin-button {
+            -webkit-appearance: none; /* Para Chrome/Safari */
+            margin: 0;
+        }
+        body.dark-mode .trained-bonus-input {
+             background-color: var(--color-card-dark);
+             border-color: var(--color-border-dark);
+        }
 
-        /* Nen e Hatsus */
-        .hatsu-item {
-            border: 2px solid var(--color-primary);
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            background-color: rgba(0, 128, 0, 0.05);
-        }
-        .hatsu-details-grid {
+        /* Nen */
+        .nen-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 10px;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .nen-tech-group h4 {
+            font-family: 'Oswald', sans-serif;
+            color: var(--color-secondary);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed var(--color-border-light);
+        }
+        .nen-grid .tech-item-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .nen-grid .tech-item-check label {
+            flex-grow: 1;
+            font-weight: 600;
+            margin-right: 10px;
+            cursor: help; /* Indica que tem tooltip */
+        }
+        .nen-grid textarea {
+            min-height: 80px;
+        }
+        .nen-hatsu-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+        .hatsu-item {
+            border: 1px solid var(--color-border-light);
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #f7f7f7;
+        }
+        body.dark-mode .hatsu-item {
+            background-color: #2a2a2a;
+            border-color: #444;
+        }
+        .hatsu-item h5 {
+            font-family: 'Oswald', sans-serif;
+            color: var(--color-primary);
+            font-size: 1.1em;
             margin-bottom: 10px;
         }
-        .basic-nen-container { margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--color-border-light); }
-        .nen-tech-group { padding: 10px; border: 1px dashed var(--color-primary); border-radius: 8px; }
-        .tech-item-check { display: flex; align-items: center; gap: 5px; }
-        /* Botão de excluir Hatsu - Usa o estilo padrão .btn-delete */
-        .btn-delete-hatsu { margin-top: 10px; font-size: 0.9em; padding: 8px 12px; }
+        .hatsu-item .field-group:last-child { margin-bottom: 0; }
+        .hatsu-item .btn-delete-hatsu { margin-top: 10px; display: block; width: 100%;}
 
 
-        /* Tabelas (Armas/Inventário) */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            border-radius: 8px;
-            overflow: hidden; 
+        /* Inventário */
+        .inventory-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            font-weight: 600;
         }
-        th, td { padding: 12px; text-align: left; border: 1px solid var(--color-border-light); }
-        thead { background-color: var(--color-primary); color: white; font-family: 'Oswald', sans-serif; text-transform: uppercase; }
-        tbody tr:nth-child(odd) { background-color: rgba(0, 128, 0, 0.03); }
-        tbody tr:hover { background-color: rgba(255, 69, 0, 0.1); }
-        table input { background-color: transparent; border: none; padding: 0; margin: 0; width: 100%; }
-        table td:last-child { text-align: center; } /* Alinha o botão de Excluir ao centro */
-
-        .inventory-controls { display: flex; align-items: center; gap: 20px; font-weight: 600; }
-        .small-input { width: 60px !important; text-align: center; padding: 8px !important; }
-        #inventory-current-weight { font-weight: 700; color: white; transition: color 0.3s; }
-        .weight-exceeded { color: #cc0000; animation: pulse 1s infinite alternate; }
+        .small-input {
+            width: 60px !important;
+            text-align: center;
+            padding: 8px !important;
+        }
+        #inventory-current-weight {
+            font-weight: 700;
+            color: var(--color-text-dark);
+            transition: color 0.3s;
+        }
+        body.dark-mode #inventory-current-weight {
+            color: var(--color-text-light);
+        }
+        .weight-exceeded {
+            color: var(--color-secondary) !important;
+            animation: pulse 1s infinite alternate;
+        }
         @keyframes pulse { from { opacity: 1; } to { opacity: 0.7; } }
-
+        
         /* ====================================================================== 
-           NOVO: ESTILOS DE TOOLTIP (DESCRIÇÃO AO PASSAR O MOUSE) - CORRIGIDO
+           5. OUTROS COMPONENTES
            ====================================================================== */
-        
-        /* 1. Fix para garantir que o tooltip não seja cortado pelo layout de grid/colunas */
-        /* Força a exibição do tooltip fora do container, corrigindo o problema de clipping */
-        .nen-tech-group, .tech-item-check {
-            overflow: visible !important; 
-        }
-        
-        /* 2. Estilos base para o label se comportar como ponto de ancoragem */
-        .nen-tech-group label, 
-        .tech-item-check label {
+        /* Tooltip (Descrição ao passar o mouse) */
+        [data-tooltip-content] {
             position: relative;
             cursor: help;
         }
-
-        /* 3. O Tooltip/Descrição em si (o pseudo-elemento ::after) */
         [data-tooltip-content]:hover::after {
             content: attr(data-tooltip-content);
             position: absolute;
-            bottom: 100%; /* Posiciona acima do elemento */
+            top: 100%; 
             left: 50%;
-            transform: translateX(-50%) translateY(-10px);
-            white-space: pre-wrap; 
-            background-color: var(--color-card-dark); 
-            color: var(--color-text-light);
-            border: 2px solid var(--color-secondary); /* Borda mais forte */
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
-            z-index: 9000; /* Z-index MUITO ALTO para garantir que fique por cima de tudo */
-            max-width: 380px;
+            transform: translateX(-50%);
+            z-index: 10;
+            padding: 10px;
+            background: #333;
+            color: white;
+            border-radius: 4px;
+            white-space: pre-wrap; /* Permite quebra de linha no tooltip */
             width: max-content;
-            text-align: left;
-            font-size: 0.9em;
-            font-weight: 400;
-            opacity: 1;
-            visibility: visible;
+            max-width: 300px;
+            font-size: 0.85em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
             pointer-events: none;
-            transition: opacity 0.3s, transform 0.3s;
+            text-align: left;
         }
 
-        /* 4. Estilo de Fundo do Tooltip no Light Mode */
-        body:not(.dark-mode) [data-tooltip-content]:hover::after {
-            background-color: #333;
-            color: white;
-            border-color: var(--color-secondary);
+        /* Gerenciamento de Tabs */
+        .tab-bar {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            padding-bottom: 5px; /* Para sombra do scrollbar */
         }
-        
-        /* 5. Ajuste de Posição para Ten, Ren, Zetsu (que estão em colunas estreitas) */
-        .nen-tech-group .attr-grid-item label[data-tooltip-content]:hover::after {
-            left: auto; /* Desativa o left: 50% */
-            right: 0;  /* Ancorar à direita do label */
-            transform: translateX(0) translateY(-10px); /* Remove a translação X */
-        }
-        
-        /* 6. Estilo específico dos labels de Ten, Ren, Zetsu (Mantido do código anterior para consistência) */
-        .nen-tech-group .attr-grid-item label {
-            font-family: 'Montserrat', sans-serif; 
-            color: var(--color-text-dark); 
+        .tab-bar button {
+            flex-shrink: 0;
+            padding: 10px 15px;
+            border: none;
+            background-color: var(--color-card-light);
+            border-bottom: 3px solid var(--color-border-light);
+            cursor: pointer;
             font-weight: 600;
+            transition: all 0.2s;
+            color: var(--color-text-dark);
         }
-        body.dark-mode .nen-tech-group .attr-grid-item label {
-            color: var(--color-text-light);
+        .tab-bar button.active {
+            border-bottom: 3px solid var(--color-primary);
+            color: var(--color-primary);
+            background-color: var(--color-card-light);
+        }
+        .tab-bar button:hover:not(.active) {
+            border-bottom-color: var(--color-secondary);
+        }
+        .tab-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            background-color: transparent !important;
+        }
+        .tab-actions button {
+            padding: 10px 15px;
         }
 
     </style>
-    </head>
+</head>
 <body>
     <header>
-        <div class="logo">HUNTER x NEN SYSTEM</div>
-        <p>"Domine o Nen. Supere seus limites. Crie fichas, canalize sua aura e veja o destino se revelar nos dados."</p>
+        <div class="logo">HUNTER x NEN</div>
+        <p style="font-size: 1.1em; font-weight: 600;">Sinta a sua aura e veja o destino se revelar nos dados.</p>
         <button id="toggle-theme" class="btn-theme">Modo Escuro/Claro</button>
     </header>
 
     <main class="ficha-container">
         <section class="tab-manager">
             <div id="tab-bar" class="tab-bar">
-                </div>
+            </div>
             <div class="tab-actions card">
                 <button id="add-new-character" class="btn-add btn-action">+ Novo Personagem</button>
                 <button id="save-name-btn" class="btn-save-name btn-action">Salvar Nome</button>
@@ -606,429 +690,432 @@
 
         <section class="card identification-section">
             <h2>1. <span style="font-size: 1.2em;">👤</span> Identificação</h2>
-            <div class="field-group">
-                <input type="text" id="nome" placeholder="Nome do Personagem" style="width: 100%;">
+            <div class="field-group identification-grid">
+                <div><label for="name">Nome:</label><input type="text" id="name" value="Novo Hunter"></div>
+                <div><label for="player">Jogador:</label><input type="text" id="player"></div>
+                <div><label for="origem">Origem:</label><input type="text" id="origem"></div>
+                <div><label for="tipo-nen">Tipo de Nen:</label><input type="text" id="tipo-nen" placeholder="Intensificação, Emissão, etc."></div>
             </div>
             <div class="field-group three-cols">
-                <input type="text" id="nivel" placeholder="Nível">
-                <input type="text" id="origem" placeholder="Origem">
-                <input type="text" id="classe" placeholder="Classe">
+                <div><label for="pv-max">PV Máximo:</label><input type="number" id="pv-max" value="10"></div>
+                <div><label for="pv-atual">PV Atual:</label><input type="number" id="pv-atual" value="10"></div>
+                <div><label for="pa-max">PA Máximo (Nen):</label><input type="number" id="pa-max" value="0"></div>
             </div>
-
-            <h3>Reputação com Facções (-5 a +5)</h3>
-            <div class="three-cols">
-                <div class="rep-item"><label for="rep-hunter">Assoc. Hunter:</label><input type="number" id="rep-hunter" min="-5" max="5" value="0"></div>
-                <div class="rep-item"><label for="rep-phantom">Trupe Fantasma:</label><input type="number" id="rep-phantom" min="-5" max="5" value="0"></div>
-                <div class="rep-item"><label for="rep-zoldyck">Família Zoldyck:</label><input type="number" id="rep-zoldyck" min="-5" max="5" value="0"></div>
-                <div class="rep-item"><label for="rep-mafia">Máfia:</label><input type="number" id="rep-mafia" min="-5" max="5" value="0"></div>
-                <div class="rep-item"><label for="rep-chimera">Formigas Quimera:</label><input type="number" id="rep-chimera" min="-5" max="5" value="0"></div>
-                <div class="rep-item"><label for="rep-governo">Governo Mundial:</label><input type="number" id="rep-governo" min="-5" max="5" value="0"></div>
+            <div class="field-group three-cols">
+                <div><label for="pa-atual">PA Atual:</label><input type="number" id="pa-atual" value="0"></div>
+                <div><label for="defesa">Defesa Base:</label><input type="number" id="defesa" value="10"></div>
+                <div><label for="deslocamento">Deslocamento:</label><input type="number" id="deslocamento" value="6"></div>
             </div>
         </section>
 
         <section class="card attributes-section">
-            <h2>2. <span style="font-size: 1.2em;">💪</span> Atributos Principais</h2>
-            <div class="attr-list">
+            <h2>2. <span style="font-size: 1.2em;">💪</span> Atributos</h2>
+            <div class="attr-grid">
                 <div class="attr-grid-item">
-                    <label for="forca">Força (FOR)</label>
-                    <input type="number" id="forca" class="attr-value" value="1" min="0">
-                    <button class="roll-button" data-attr="forca" data-pericia="none">Rolar</button>
+                    <h3>FOR</h3>
+                    <input type="number" id="forca" class="attr-value" value="10" data-attr-name="forca">
+                    <label for="attr-for-mod">Mod:</label>
+                    <input type="text" id="attr-for-mod" class="attr-mod" value="+0" readonly>
                 </div>
                 <div class="attr-grid-item">
-                    <label for="vigor">Vigor (VIG)</label>
-                    <input type="number" id="vigor" class="attr-value" value="1" min="0">
-                    <button class="roll-button" data-attr="vigor" data-pericia="none">Rolar</button>
+                    <h3>VIG</h3>
+                    <input type="number" id="vigor" class="attr-value" value="10" data-attr-name="vigor">
+                    <label for="attr-vig-mod">Mod:</label>
+                    <input type="text" id="attr-vig-mod" class="attr-mod" value="+0" readonly>
                 </div>
                 <div class="attr-grid-item">
-                    <label for="destreza">Destreza (DEX)</label>
-                    <input type="number" id="destreza" class="attr-value" value="1" min="0">
-                    <button class="roll-button" data-attr="destreza" data-pericia="none">Rolar</button>
+                    <h3>DEX</h3>
+                    <input type="number" id="destreza" class="attr-value" value="10" data-attr-name="destreza">
+                    <label for="attr-dex-mod">Mod:</label>
+                    <input type="text" id="attr-dex-mod" class="attr-mod" value="+0" readonly>
                 </div>
                 <div class="attr-grid-item">
-                    <label for="intelecto">Intelecto (INT)</label>
-                    <input type="number" id="intelecto" class="attr-value" value="1" min="0">
-                    <button class="roll-button" data-attr="intelecto" data-pericia="none">Rolar</button>
+                    <h3>INT</h3>
+                    <input type="number" id="intelecto" class="attr-value" value="10" data-attr-name="intelecto">
+                    <label for="attr-int-mod">Mod:</label>
+                    <input type="text" id="attr-int-mod" class="attr-mod" value="+0" readonly>
                 </div>
                 <div class="attr-grid-item">
-                    <label for="carisma">Carisma (CAR)</label>
-                    <input type="number" id="carisma" class="attr-value" value="1" min="0">
-                    <button class="roll-button" data-attr="carisma" data-pericia="none">Rolar</button>
+                    <h3>CAR</h3>
+                    <input type="number" id="carisma" class="attr-value" value="10" data-attr-name="carisma">
+                    <label for="attr-car-mod">Mod:</label>
+                    <input type="text" id="attr-car-mod" class="attr-mod" value="+0" readonly>
                 </div>
             </div>
         </section>
 
         <section class="card resources-section">
-            <h2>3. <span style="font-size: 1.2em;">❤️</span> Recursos & Defesas</h2>
+            <h2>3. <span style="font-size: 1.2em;">🛡️</span> Resistências & Vitalidade</h2>
             <div class="field-group three-cols">
-                <div class="resource-item">
-                    <label for="pv-max">PV Máx</label>
-                    <input type="number" id="pv-max" value="10">
-                    <label for="pv-atual">PV Atual</label>
-                    <input type="number" id="pv-atual" value="10">
-                </div>
-                <div class="resource-item">
-                    <label for="pa-max">PA Máx (Aura)</label>
-                    <input type="number" id="pa-max" value="10">
-                    <label for="pa-atual">PA Atual</label>
-                    <input type="number" id="pa-atual" value="10">
-                </div>
-                <div class="resource-item">
-                    <label for="defesa">Defesa Base</label>
-                    <input type="number" id="defesa" value="10">
-                    <label for="velocidade">Velocidade</label>
-                    <input type="number" id="velocidade" value="10">
-                </div>
+                <div><label for="res-impacto">Impacto (Físico):</label><input type="number" id="res-impacto" value="0"></div>
+                <div><label for="res-corte">Corte (Físico):</label><input type="number" id="res-corte" value="0"></div>
+                <div><label for="res-perfuracao">Perfuração (Físico):</label><input type="number" id="res-perfuracao" value="0"></div>
             </div>
-
-            <h3>Resistências</h3>
             <div class="field-group three-cols">
-                <div><label for="res-perfurante">Perfurante</label><input type="number" id="res-perfurante" value="0"></div>
-                <div><label for="res-impacto">Impacto</label><input type="number" id="res-impacto" value="0"></div>
-                <div><label for="res-cortante">Cortante</label><input type="number" id="res-cortante" value="0"></div>
-                <div><label for="res-elemental">Elemental</label><input type="number" id="res-elemental" value="0"></div>
-                <div><label for="res-nen">Nen</label><input type="number" id="res-nen" value="0"></div>
+                <div><label for="res-fogo">Fogo (Elementar):</label><input type="number" id="res-fogo" value="0"></div>
+                <div><label for="res-frio">Frio (Elementar):</label><input type="number" id="res-frio" value="0"></div>
+                <div><label for="res-eletrico">Elétrico (Elementar):</label><input type="number" id="res-eletrico" value="0"></div>
+            </div>
+            <div class="field-group three-cols">
+                <div><label for="res-energia">Energia (Nen):</label><input type="number" id="res-energia" value="0"></div>
+                <div><label for="res-psiquico">Psíquico (Mental):</label><input type="number" id="res-psiquico" value="0"></div>
+                <div><label for="res-quimico">Químico (Veneno):</label><input type="number" id="res-quimico" value="0"></div>
+            </div>
+            <div class="field-group">
+                <label for="vitalidade-extra">Notas de Vitalidade/Penalidades:</label>
+                <textarea id="vitalidade-extra" placeholder="Ex: Penalidades por ferimento."></textarea>
             </div>
         </section>
 
         <section class="card skills-section">
-            <h2>4. <span style="font-size: 1.2em;">🎯</span> Perícias (Treinado: +5 no Teste)</h2>
+            <h2>4. <span style="font-size: 1.2em;">🎯</span> Perícias</h2>
             <div class="skills-grid three-cols">
                 <div class="skill-group">
                     <h4>FOR</h4>
-                    <div class="skill-item"><label for="pericia-atletismo">Atletismo</label><input type="checkbox" id="pericia-atletismo" class="trained-checkbox"><button class="roll-button" data-attr="forca" data-pericia="atletismo">Rolar</button></div>
-                    <div class="skill-item"><label for="pericia-duelo">Duelo</label><input type="checkbox" id="pericia-duelo" class="trained-checkbox"><button class="roll-button" data-attr="forca" data-pericia="duelo">Rolar</button></div>
+                    <div class="skill-item">
+                        <label for="pericia-atletismo">Atletismo</label>
+                        <div class="trained-control">
+                            <input type="checkbox" id="pericia-atletismo" class="trained-checkbox">
+                            <label for="pericia-atletismo-bonus" style="font-weight: normal;">Bônus:</label>
+                            <input type="number" id="pericia-atletismo-bonus" class="trained-bonus-input" value="5" min="0">
+                        </div>
+                        <button class="roll-button" data-attr="forca" data-pericia="atletismo">Rolar</button>
+                    </div>
+                    <div class="skill-item">
+                        <label for="pericia-duelo">Duelo</label>
+                        <div class="trained-control">
+                            <input type="checkbox" id="pericia-duelo" class="trained-checkbox">
+                            <label for="pericia-duelo-bonus" style="font-weight: normal;">Bônus:</label>
+                            <input type="number" id="pericia-duelo-bonus" class="trained-bonus-input" value="5" min="0">
+                        </div>
+                        <button class="roll-button" data-attr="forca" data-pericia="duelo">Rolar</button>
+                    </div>
                 </div>
 
                 <div class="skill-group">
                     <h4>VIG</h4>
-                    <div class="skill-item"><label for="pericia-robustez">Robustez</label><input type="checkbox" id="pericia-robustez" class="trained-checkbox"><button class="roll-button" data-attr="vigor" data-pericia="robustez">Rolar</button></div>
-                    <div class="skill-item"><label for="pericia-resistencia">Resistência</label><input type="checkbox" id="pericia-resistencia" class="trained-checkbox"><button class="roll-button" data-attr="vigor" data-pericia="resistencia">Rolar</button></div>
+                    <div class="skill-item">
+                        <label for="pericia-robustez">Robustez</label>
+                        <div class="trained-control">
+                            <input type="checkbox" id="pericia-robustez" class="trained-checkbox">
+                            <label for="pericia-robustez-bonus" style="font-weight: normal;">Bônus:</label>
+                            <input type="number" id="pericia-robustez-bonus" class="trained-bonus-input" value="5" min="0">
+                        </div>
+                        <button class="roll-button" data-attr="vigor" data-pericia="robustez">Rolar</button>
+                    </div>
+                    <div class="skill-item">
+                        <label for="pericia-esquiva">Esquiva</label>
+                        <div class="trained-control">
+                            <input type="checkbox" id="pericia-esquiva" class="trained-checkbox">
+                            <label for="pericia-esquiva-bonus" style="font-weight: normal;">Bônus:</label>
+                            <input type="number" id="pericia-esquiva-bonus" class="trained-bonus-input" value="5" min="0">
+                        </div>
+                        <button class="roll-button" data-attr="vigor" data-pericia="esquiva">Rolar</button>
+                    </div>
                 </div>
 
                 <div class="skill-group">
                     <h4>DEX</h4>
-                    <div class="skill-item"><label for="pericia-furtividade">Furtividade</label><input type="checkbox" id="pericia-furtividade" class="trained-checkbox"><button class="roll-button" data-attr="destreza" data-pericia="furtividade">Rolar</button></div>
-                    <div class="skill-item"><label for="pericia-acrobacia">Acrobacia</label><input type="checkbox" id="pericia-acrobacia" class="trained-checkbox"><button class="roll-button" data-attr="destreza" data-pericia="acrobacia">Rolar</button></div>
-                    <div class="skill-item"><label for="pericia-reflexos">Reflexos</label><input type="checkbox" id="pericia-reflexos" class="trained-checkbox"><button class="roll-button" data-attr="destreza" data-pericia="reflexos">Rolar</button></div>
-                    <div class="skill-item"><label for="pericia-pontaria">Pontaria</label><input type="checkbox" id="pericia-pontaria" class="trained-checkbox"><button class="roll-button" data-attr="destreza" data-pericia="pontaria">Rolar</button></div>
-                    <div class="skill-item"><label for="pericia-roubo">Roubo</label><input type="checkbox" id="pericia-roubo" class="trained-checkbox"><button class="roll-button" data-attr="destreza" data-pericia="roubo">Rolar</button></div>
+                    <div class="skill-item">
+                        <label for="pericia-pontaria">Pontaria</label>
+                        <div class="trained-control">
+                            <input type="checkbox" id="pericia-pontaria" class="trained-checkbox">
+                            <label for="pericia-pontaria-bonus" style="font-weight: normal;">Bônus:</label>
+                            <input type="number" id="pericia-pontaria-bonus" class="trained-bonus-input" value="5" min="0">
+                        </div>
+                        <button class="roll-button" data-attr="destreza" data-pericia="pontaria">Rolar</button>
+                    </div>
+                    <div class="skill-item">
+                        <label for="pericia-furtividade">Furtividade</label>
+                        <div class="trained-control">
+                            <input type="checkbox" id="pericia-furtividade" class="trained-checkbox">
+                            <label for="pericia-furtividade-bonus" style="font-weight: normal;">Bônus:</label>
+                            <input type="number" id="pericia-furtividade-bonus" class="trained-bonus-input" value="5" min="0">
+                        </div>
+                        <button class="roll-button" data-attr="destreza" data-pericia="furtividade">Rolar</button>
+                    </div>
                 </div>
-                
+
                 <div class="skill-group">
                     <h4>INT</h4>
-                    <div class="skill-item"><label for="pericia-caca">Caça</label><input type="checkbox" id="pericia-caca" class="trained-checkbox"><button class="roll-button" data-attr="intelecto" data-pericia="caca">Rolar</button></div>
-                    <div class="skill-item"><label for="pericia-investigacao">Investigação</label><input type="checkbox" id="pericia-investigacao" class="trained-checkbox"><button class="roll-button" data-attr="intelecto" data-pericia="investigacao">Rolar</button></div>
-                    <div class="skill-item"><label for="pericia-medicina">Medicina</label><input type="checkbox" id="pericia-medicina" class="trained-checkbox"><button class="roll-button" data-attr="intelecto" data-pericia="medicina">Rolar</button></div>
-                    <div class="skill-item"><label for="pericia-profissao">Profissão</label><input type="checkbox" id="pericia-profissao" class="trained-checkbox"><button class="roll-button" data-attr="intelecto" data-pericia="profissao">Rolar</button></div>
-                    <div class="skill-item"><label for="pericia-astucia">Astúcia</label><input type="checkbox" id="pericia-astucia" class="trained-checkbox"><button class="roll-button" data-attr="intelecto" data-pericia="astucia">Rolar</button></div>
+                    <div class="skill-item">
+                        <label for="pericia-concentracao">Concentração</label>
+                        <div class="trained-control">
+                            <input type="checkbox" id="pericia-concentracao" class="trained-checkbox">
+                            <label for="pericia-concentracao-bonus" style="font-weight: normal;">Bônus:</label>
+                            <input type="number" id="pericia-concentracao-bonus" class="trained-bonus-input" value="5" min="0">
+                        </div>
+                        <button class="roll-button" data-attr="intelecto" data-pericia="concentracao">Rolar</button>
+                    </div>
+                    <div class="skill-item">
+                        <label for="pericia-investigacao">Investigação</label>
+                        <div class="trained-control">
+                            <input type="checkbox" id="pericia-investigacao" class="trained-checkbox">
+                            <label for="pericia-investigacao-bonus" style="font-weight: normal;">Bônus:</label>
+                            <input type="number" id="pericia-investigacao-bonus" class="trained-bonus-input" value="5" min="0">
+                        </div>
+                        <button class="roll-button" data-attr="intelecto" data-pericia="investigacao">Rolar</button>
+                    </div>
                 </div>
 
                 <div class="skill-group">
                     <h4>CAR</h4>
-                    <div class="skill-item"><label for="pericia-persuasao">Persuasão</label><input type="checkbox" id="pericia-persuasao" class="trained-checkbox"><button class="roll-button" data-attr="carisma" data-pericia="persuasao">Rolar</button></div>
-                    <div class="skill-item"><label for="pericia-intimidacao">Intimidação</label><input type="checkbox" id="pericia-intimidacao" class="trained-checkbox"><button class="roll-button" data-attr="carisma" data-pericia="intimidacao">Rolar</button></div>
-                    <div class="skill-item"><label for="pericia-vontade">Vontade</label><input type="checkbox" id="pericia-vontade" class="trained-checkbox"><button class="roll-button" data-attr="carisma" data-pericia="vontade">Rolar</button></div>
-                    <div class="skill-item"><label for="pericia-intuicao">Intuição</label><input type="checkbox" id="pericia-intuicao" class="trained-checkbox"><button class="roll-button" data-attr="carisma" data-pericia="intuicao">Rolar</button></div>
-                    <div class="skill-item"><label for="pericia-tenacidade">Tenacidade</label><input type="checkbox" id="pericia-tenacidade" class="trained-checkbox"><button class="roll-button" data-attr="carisma" data-pericia="tenacidade">Rolar</button></div>
-                </div>
-
-                <div class="skill-group nen-control-skill" style="grid-column: 1 / -1; padding-top: 10px; border-top: 2px solid var(--color-border-light);">
-                    <h4>Teste de Controle de Nen</h4>
                     <div class="skill-item">
-                        <label for="nen-control-attr">Atributo Base:</label>
-                        <select id="nen-control-attr" style="width: 80px;">
-                            <option value="forca">FOR</option>
-                            <option value="vigor">VIG</option>
-                            <option value="destreza">DEX</option>
-                            <option value="intelecto">INT</option>
-                            <option value="carisma">CAR</option>
-                        </select>
-                        <label for="pericia-controle-nen" style="margin-left: 15px;">Treinado?</label>
-                        <input type="checkbox" id="pericia-controle-nen" class="trained-checkbox" style="margin-right: 15px;">
-                        <button id="roll-control-nen" class="roll-button" data-attr-select="nen-control-attr" data-pericia-checkbox="pericia-controle-nen">Rolar Teste</button>
+                        <label for="pericia-convencer">Convencer</label>
+                        <div class="trained-control">
+                            <input type="checkbox" id="pericia-convencer" class="trained-checkbox">
+                            <label for="pericia-convencer-bonus" style="font-weight: normal;">Bônus:</label>
+                            <input type="number" id="pericia-convencer-bonus" class="trained-bonus-input" value="5" min="0">
+                        </div>
+                        <button class="roll-button" data-attr="carisma" data-pericia="convencer">Rolar</button>
+                    </div>
+                    <div class="skill-item">
+                        <label for="pericia-intimidar">Intimidar</label>
+                        <div class="trained-control">
+                            <input type="checkbox" id="pericia-intimidar" class="trained-checkbox">
+                            <label for="pericia-intimidar-bonus" style="font-weight: normal;">Bônus:</label>
+                            <input type="number" id="pericia-intimidar-bonus" class="trained-bonus-input" value="5" min="0">
+                        </div>
+                        <button class="roll-button" data-attr="carisma" data-pericia="intimidar">Rolar</button>
                     </div>
                 </div>
             </div>
         </section>
 
         <section class="card nen-section">
-            <h2>5. <span style="font-size: 1.2em;">⚡</span> Habilidades e Nen</h2>
-            <div class="field-group three-cols">
-                <div>
-                    <label for="nen-type">Tipo de Nen (Hatsu Principal)</label>
-                    <select id="nen-type">
-                        <option value="none">Selecione</option>
-                        <option value="intensificacao">Intensificação (VIG)</option>
-                        <option value="emissao">Emissão (FOR)</option>
-                        <option value="transmutacao">Transmutação (DEX)</option>
-                        <option value="manipulacao">Manipulação (CAR)</option>
-                        <option value="materializacao">Materialização (INT)</option>
-                        <option value="especializacao">Especialização</option>
-                    </select>
-                </div>
-                <div>
-                    <label>Atributo Base do Nen</label>
-                    <input type="text" id="nen-base-attr" value="Nenhum" readonly>
-                </div>
-                <div>
-                    <label>Bônus de Aura (%)</label>
-                    <input type="number" id="nen-aura-bonus" value="0" readonly>
-                </div>
-            </div>
-
-            <div class="basic-nen-container">
-                <h3>Técnicas Básicas (Controle de Aura)</h3>
-                <div class="three-cols">
-                    <div class="nen-tech-group">
-                        <h4>Níveis de Controle</h4>
-                        <div class="attr-grid-item" style="grid-template-columns: 1fr 1fr 10px; background-color: transparent; border-bottom: none;">
-                            <label data-tooltip-content=
-"Mecânica:
-Ativação: Reação
-Duração: Instantânea
-Custo: varia conforme o nível
-
-Efeitos por nível:
-1-Amador: 2 PA → +2 de resistência a todos os tipos de dano.
-2-Intermediário: 4 PA → +4 de resistência; pode manter Ten por 1h fora de combate; pode proteger 1 aliado (metade do efeito).
-3-Avançado: 6 PA → +6 de resistência; pode manter Ten por 4h; pode proteger até 2 aliados (efeito dividido por 3).
-4-Mestre: 8 PA/turno → +8 de resistência; pode manter Ten por 12h; pode proteger até 3 aliados (efeito dividido por 4); uma vez por cena, absorve completamente um ataque de até 30 de dano."
-                                for="ten-level">Ten</label>
-                            <select class="nen-level-select" id="ten-level"><option value="amador">Amador</option><option value="intermediario">Intermediário</option><option value="avancado">Avançado</option><option value="mestre">Mestre</option></select>
+            <h2>5. <span style="font-size: 1.2em;">⚡</span> Nen & Técnicas</h2>
+            <div class="nen-grid">
+                <div class="nen-tech-group">
+                    <h4>Técnicas Básicas</h4>
+                    <div class="three-cols">
+                        <div class="tech-item-check">
+                            <label data-tooltip-content="Permite gerar e moldar a Aura. Ação livre. Essencial para todas as outras técnicas." for="tech-ten">Ten (Base)</label>
+                            <input type="checkbox" id="tech-ten">
                         </div>
-                        <div class="attr-grid-item" style="grid-template-columns: 1fr 1fr 10px; background-color: transparent; border-bottom: none;">
-                            <label data-tooltip-content=
-"Mecânica:
-Ativação: Ação de movimento
-Duração: Instantânea
-Custo: varia conforme o nível
-
-Efeitos por nível (Ren):
-1-Amador: 3 PA por ataque → +3 de dano físico.
-2-Intermediário: 6 PA → +6 de dano físico; inimigos com INT inferior a 3 precisam passar em Vontade DT 13 para atacá-lo.
-3-Avançado: 9 PA → +9 de dano físico; Vontade DT 15 para atacá-lo; pode gastar +4 PA para +2 de dano extra.
-4-Mestre: 10 PA → +12 de dano físico; Vontade DT 18 para atacá-lo; pode gastar +5 PA para +3 de dano extra; uma vez por cena, pode ativar Explosão de Ren, dobrando o dano por 2 rodadas."
-                                for="ren-level">Ren</label>
-                            <select class="nen-level-select" id="ren-level"><option value="amador">Amador</option><option value="intermediario">Intermediário</option><option value="avancado">Avançado</option><option value="mestre">Mestre</option></select>
+                        <div class="tech-item-check">
+                            <label data-tooltip-content="Expande a Aura para fora do corpo para proteger-se. Ação de movimento/Reação. Aumenta a Defesa do usuário." for="tech-ren">Ren</label>
+                            <input type="checkbox" id="tech-ren">
                         </div>
-                        <div class="attr-grid-item" style="grid-template-columns: 1fr 1fr 10px; background-color: transparent; border-bottom: none;">
-                            <label data-tooltip-content=
-"Mecânica:
-Ativação: Ação de movimento
-Duração: Até ser cancelado (ação livre) ou até atacar
-Custo: Nenhum (economiza aura)
-
-Efeitos por nível:
-1-Amador: +2 em Furtividade; recupera +1 PA/turno; -2 de defesa enquanto ativo.
-2-Intermediário: +3 em Furtividade; +2 PA/turno; -4 de defesa; detecta usuários de Nen em 10m.
-3-Avançado: +5 em Furtividade; +3 PA/turno; -5 de defesa; detecta Nen em 20m e identifica o tipo de Nen.
-4-Mestre: +7 em Furtividade; +4 PA/turno; -7 de defesa; detecta Nen em 50m, identifica tipo e potência, e o primeiro ataque após cancelar Zetsu recebe +5 no teste e +4d6 de dano."
-                                for="zetsu-level">Zetsu</label>
-                            <select class="nen-level-select" id="zetsu-level"><option value="amador">Amador</option><option value="intermediario">Intermediario</option><option value="avancado">Avançado</option><option value="mestre">Mestre</option></select>
+                        <div class="tech-item-check">
+                            <label data-tooltip-content="Concentra a Aura para emitir golpes de forma controlada. Ação de movimento. Aumenta o Dano dos ataques corporais." for="tech-zetsu">Zetsu</label>
+                            <input type="checkbox" id="tech-zetsu">
+                        </div>
+                        <div class="tech-item-check">
+                            <label data-tooltip-content="Concentra a Aura em um local específico do corpo. Ação de movimento. Aumenta a Força de um ataque ou a resistência de uma área." for="tech-hatsu">Hatsu</label>
+                            <input type="checkbox" id="tech-hatsu">
                         </div>
                     </div>
-                    
-                    <div class="nen-tech-group" style="grid-column: span 2;">
-                        <h4>Técnicas Avançadas</h4>
-                        <div class="three-cols">
-                            <div class="tech-item-check">
-                                <label data-tooltip-content=
-"Gyo
-Ativação: Ação de movimento/Reação
-
-Tipos e efeitos:
--Gyo de Percepção: +2 em Caça; vê ataques com In, Custo: 3 PA/10 min ou rodada. Ação de movimento
--Gyo de Ataque: +2 no acerto corporal, Custo: 2 PA por ataque. Ação de movimento
--Gyo de Defesa: +3 de resistência a dano, Custo: 2 PA por ataque recebido; no turno seguinte sofre -2 de defesa. Ação: Reação"
-                                    for="tech-gyo">Gyô</label><input type="checkbox" id="tech-gyo">
-                            </div>
-                            <div class="tech-item-check">
-                                <label data-tooltip-content="Todos seus ataques e habilidades, vão acertar seu oponente desprevenido
-Custo: 5 PA"
-                                    for="tech-in">In</label><input type="checkbox" id="tech-in">
-                            </div>
-                            <div class="tech-item-check">
-                                <label data-tooltip-content="Assim que você estender o seu En, você não é mais pego desprevenido e tem +3 de defesa 
-Custo: 6 PA"
-                                    for="tech-en">En</label><input type="checkbox" id="tech-en">
-                            </div>
-                            <div class="tech-item-check">
-                                <label data-tooltip-content="Você envolve todo seu corpo com o Ren, você ganha +2 de defesa 
-Custo: 2 PA"
-                                    for="tech-ken">Ken</label><input type="checkbox" id="tech-ken">
-                            </div>
-                            <div class="tech-item-check">
-                                <label data-tooltip-content="Se você estender sua aura pra uma arma, o seu crítico com essa arma é diminuído em 2. Se você estender sua aura pra uma armadura, a cada ataque que o inimigo acertar em você ele toma 1d6 de dano
-Custo: 2 PA"
-                                    for="tech-shu">Shu</label><input type="checkbox" id="tech-shu">
-                            </div>
-                            <div class="tech-item-check"><label for="tech-ko">Kô</label><input type="checkbox" id="tech-ko"></div>
-                            <div class="tech-item-check"><label for="tech-ryu">Ryû</label><input type="checkbox" id="tech-ryu"></div>
-                        </div>
+                    <div class="field-group">
+                        <label for="nen-notas">Notas de Aura/Nen:</label>
+                        <textarea id="nen-notas" placeholder="Detalhes sobre a afinidade, limitações de Nen, etc."></textarea>
                     </div>
                 </div>
-            </div>
-
-            <h3 class="mt-20">Hatsus (Técnicas Personalizadas)</h3>
-            <div id="hatsu-list">
+                
+                <div class="nen-tech-group" style="grid-column: span 1;">
+                    <h4>Hatsus</h4>
+                    <div id="hatsu-list" class="nen-hatsu-list">
+                        </div>
+                    <button id="add-hatsu-btn" class="btn-add" style="margin-top: 10px;">+ Adicionar Hatsu</button>
                 </div>
-            <button id="add-hatsu-btn" class="btn-add mt-10">+ Adicionar Hatsu</button>
+            </div>
         </section>
-
-        <section class="card weapons-section">
-            <h2>6. <span style="font-size: 1.2em;">⚔️</span> Armas</h2>
+        
+        <section id="armas-tab" class="card weapons-section">
+            <h2>6. <span style="font-size: 1.2em;">⚔️</span> Armamento</h2>
             <table id="weapons-table">
                 <thead>
                     <tr>
-                        <th style="width: 20%;">Nome</th>
-                        <th style="width: 10%;">Tipo</th>
-                        <th style="width: 15%;">Ataque (Mod)</th>
-                        <th style="width: 15%;">Fórmula Dano</th> <th style="width: 10%;">Crítico</th>
-                        <th style="width: 10%;">Peso</th>
-                        <th style="width: 5%;">Rolar</th> <th style="width: 5%;">Excluir</th> </tr>
-                </thead>
-                <tbody>
-                    </tbody>
-            </table>
-            <button id="add-weapon-btn" class="btn-add mt-10">+ Adicionar Arma</button>
-        </section>
-
-        <section class="card inventory-section">
-            <h2>7. <span style="font-size: 1.2em;">🎒</span> Inventário e Carga</h2>
-            <div class="inventory-controls">
-                <label for="inventory-limit">Limite de Carga:</label><input type="number" id="inventory-limit" value="10" class="small-input" min="0">
-                <span id="inventory-current-weight">Carga Atual: 0</span>
-            </div>
-            
-            <table id="inventory-table">
-                <thead>
-                    <tr>
-                        <th style="width: 20%;">Item</th>
-                        <th style="width: 40%;">Detalhes</th>
-                        <th style="width: 10%;">Peso</th>
-                        <th style="width: 10%;">Qtd.</th>
-                        <th style="width: 10%;">Ação</th>
+                        <th style="width: 18%;">Nome</th>
+                        <th style="width: 8%;">Tipo</th>
+                        <th style="width: 18%;">Dano</th>
+                        <th style="width: 18%;">Ataque (Mod)</th>
+                        <th style="width: 15%;">Rolar Dano</th>
+                        <th style="width: 15%;">Rolar Ataque</th>
+                        <th style="width: 8%;">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     </tbody>
             </table>
-            <button id="add-inventory-btn" class="btn-add mt-10">+ Adicionar Item</button>
+            <button id="add-weapon-btn" class="btn-add" style="margin-top: 15px;">+ Adicionar Arma</button>
+        </section>
+        
+        <section class="card inventory-section">
+            <h2>7. <span style="font-size: 1.2em;">🎒</span> Inventário</h2>
+            <div class="inventory-controls">
+                <div id="inventory-current-weight">Carga Atual: 0</div>
+                <span>/</span>
+                <label for="inventory-limit">Limite de Carga:</label>
+                <input type="number" id="inventory-limit" class="small-input" value="50">
+                <button id="update-weight-btn" class="btn-action">Atualizar Carga</button>
+            </div>
+            <table id="inventory-table">
+                <thead>
+                    <tr>
+                        <th style="width: 30%;">Item</th>
+                        <th style="width: 35%;">Detalhes</th>
+                        <th style="width: 10%;">Peso (uni)</th>
+                        <th style="width: 10%;">Qtd</th>
+                        <th style="width: 15%;">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+            <button id="add-inventory-btn" class="btn-add" style="margin-top: 15px;">+ Adicionar Item</button>
         </section>
 
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const ROLL_BONUS_TRAINED = 5;
-            const AUTOSAVE_INTERVAL = 3000; 
-            const MAX_HISTORY_ITEMS = 3; 
-            const STORAGE_KEY = 'hunterXNenFichas'; // Chave para armazenar o array de fichas
+            
+            // ====================================================================== 
+            // 1. CONSTANTES E VARIÁVEIS
+            // ====================================================================== 
+            const LOCAL_STORAGE_KEY = 'hunterXNenFichas_V3'; // Chave para o localStorage
+            const MAX_HISTORY_ITEMS = 10;
+            const AUTOSAVE_INTERVAL = 5000; // 5 segundos
+
+            // Mapa de atributos Nen
             const ATTR_NEN_MAP = {
-                'intensificacao': 'vigor', 'emissao': 'forca', 'transmutacao': 'destreza',
-                'manipulacao': 'carisma', 'materializacao': 'intelecto', 'especializacao': 'livre'
-            };
-            // Adicionado mapa de atributos para conversão de texto para ID
-            const ATTR_MAP = {
-                'FOR': 'forca',
-                'VIG': 'vigor',
-                'DEX': 'destreza',
-                'INT': 'intelecto',
-                'CAR': 'carisma'
+                'intensificacao': 'vigor',
+                'emissao': 'forca',
+                'transmutacao': 'destreza',
+                'manipulacao': 'carisma',
+                'materializacao': 'intelecto',
+                'especializacao': 'livre'
             };
             
-            let characters = []; 
-            let activeCharacterIndex = 0; 
+            // Mapa de atributos para conversão de texto (FOR) para ID de INPUT MOD
+            const MOD_ATTR_MAP = {
+                'FOR': 'attr-for-mod',
+                'VIG': 'attr-vig-mod',
+                'DEX': 'attr-dex-mod',
+                'INT': 'attr-int-mod',
+                'CAR': 'attr-car-mod'
+            };
 
-            // --- FUNÇÕES GERAIS DE ARMAZENAMENTO E GERENCIAMENTO ---
+            // Mapa de atributos para conversão de texto (forca) para ID de INPUT BASE
+            const BASE_ATTR_MAP = {
+                'forca': 'forca',
+                'vigor': 'vigor',
+                'destreza': 'destreza',
+                'intelecto': 'intelecto',
+                'carisma': 'carisma'
+            };
+
+            let allCharacters = [];
+            let activeCharacterIndex = 0;
+
+            // ====================================================================== 
+            // 2. FUNÇÕES GERAIS DE ARMAZENAMENTO E GERENCIAMENTO
+            // ====================================================================== 
+            
+            function escapeHtml(unsafe) {
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            }
 
             function saveAllCharacters() {
-                // 1. Captura os dados da ficha ativa antes de salvar
-                characters[activeCharacterIndex] = captureFichaData();
-                
+                // 1. Captura dados do personagem ativo
+                if (allCharacters[activeCharacterIndex]) {
+                    allCharacters[activeCharacterIndex] = captureFichaData();
+                }
+
                 // 2. Salva o array completo no localStorage
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(characters));
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(allCharacters));
             }
 
             function loadAllCharacters() {
-                const savedData = localStorage.getItem(STORAGE_KEY);
+                const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
                 if (savedData) {
-                    characters = JSON.parse(savedData);
+                    allCharacters = JSON.parse(savedData);
+                    // Garante que o índice ativo não está fora dos limites
+                    if (activeCharacterIndex >= allCharacters.length) {
+                        activeCharacterIndex = allCharacters.length > 0 ? 0 : -1;
+                    }
                 }
 
-                if (!characters || characters.length === 0) {
-                    characters = [createDefaultFicha('Personagem 1')];
+                if (allCharacters.length === 0) {
+                    // Cria um personagem padrão se não houver dados
+                    addCharacter('Novo Hunter');
+                    activeCharacterIndex = 0;
                 }
                 
-                activeCharacterIndex = Math.min(activeCharacterIndex, characters.length - 1);
-                activeCharacterIndex = Math.max(0, activeCharacterIndex); 
-
+                // Carrega e exibe o personagem ativo
+                if (allCharacters.length > 0) {
+                    loadFichaData(allCharacters[activeCharacterIndex]);
+                }
+                
                 renderTabs();
-                loadFichaData(characters[activeCharacterIndex]);
             }
 
             function captureFichaData() {
                 const data = {
-                    id: characters[activeCharacterIndex].id,
-                    name: document.getElementById('nome').value || `Personagem ${activeCharacterIndex + 1}`,
+                    name: document.getElementById('name').value,
                     data: {},
                     hatsus: [],
                     weapons: [],
                     inventory: [],
-                    rollHistory: []
+                    rollHistory: [],
+                    // NOVO: Campo para o bônus de perícia
+                    periciaBonus: {} 
                 };
 
-                // Captura campos simples
-                document.querySelectorAll('input, textarea, select, .trained-checkbox').forEach(element => {
-                    const id = element.id || element.name;
-                    if (id) {
-                        data.data[id] = element.type === 'checkbox' ? element.checked : element.value;
+                // Captura campos simples (input, select, textarea) e checkboxes
+                document.querySelectorAll('.ficha-container input, .ficha-container textarea, .ficha-container select').forEach(element => {
+                    if (element.type === 'checkbox') {
+                        data.data[element.id] = element.checked;
+                    } else if (element.id !== 'name') {
+                        data.data[element.id] = element.value;
                     }
                 });
 
                 // Captura Hatsus
-                data.hatsus = Array.from(document.querySelectorAll('.hatsu-item')).map(item => ({
-                    nome: item.querySelector('.hatsu-name').value,
-                    tipo: item.querySelector('.hatsu-type').value,
-                    categoria: item.querySelector('.hatsu-category').value,
-                    custo: item.querySelector('.hatsu-cost').value,
-                    duracao: item.querySelector('.hatsu-duration').value,
-                    execucao: item.querySelector('.hatsu-execution').value,
-                    alvo: item.querySelector('.hatsu-target').value,
-                    alcance: item.querySelector('.hatsu-range').value,
-                    descricao: item.querySelector('textarea').value
-                }));
+                document.querySelectorAll('.hatsu-item').forEach(item => {
+                    const inputs = item.querySelectorAll('input, textarea');
+                    data.hatsus.push({
+                        name: inputs[0].value,
+                        type: inputs[1].value,
+                        custo: inputs[2].value,
+                        efeitos: inputs[3].value
+                    });
+                });
+
+                // Captura Armas
+                const weaponsTableBody = document.querySelector('#weapons-table tbody');
+                data.weapons = Array.from(weaponsTableBody.rows).map(row => {
+                    const inputs = row.querySelectorAll('input[type="text"]');
+                    return {
+                        name: inputs[0].value,
+                        type: inputs[1].value,
+                        damage: inputs[2].value,
+                        attack_mod: inputs[3].value, // NOVO CAMPO: attack_mod
+                    };
+                });
+
+                // Captura Inventário
+                const inventoryTableBody = document.querySelector('#inventory-table tbody');
+                data.inventory = Array.from(inventoryTableBody.rows).map(row => {
+                    const inputs = row.querySelectorAll('input, textarea');
+                    return {
+                        item: inputs[0].value,
+                        detalhes: inputs[1].value,
+                        peso: inputs[2].value,
+                        quantidade: inputs[3].value
+                    };
+                });
+
+                // NOVO: Captura Bônus Editável de Perícias
+                document.querySelectorAll('.trained-bonus-input').forEach(input => {
+                    data.periciaBonus[input.id] = parseInt(input.value) || 0;
+                });
                 
-                // Captura Armas 
-                data.weapons = Array.from(document.querySelectorAll('#weapons-table tbody tr')).map(row => {
-                    // Os inputs agora são: nome, tipo, ataque, dano, critico, peso, formulaDano (7 inputs)
-                    // Posições no array de inputs: 0:nome, 1:tipo, 2:ataque, 3:dano(formula), 4:critico, 5:peso, 6:formula-dano
-                    // IMPORTANTE: O campo de Dano original (posição 3) é o que vai armazenar a fórmula XdY+MOD, e o nome do campo é 'dano'.
-                    const inputs = row.querySelectorAll('input');
-                    return { 
-                        nome: inputs[0].value, 
-                        tipo: inputs[1].value, 
-                        ataque: inputs[2].value, 
-                        dano: inputs[3].value, // Novo campo de Fórmula de Dano
-                        critico: inputs[4].value, 
-                        peso: inputs[5].value 
-                        // O campo inputs[3] é a Fórmula de Dano (dano), 
-                        // o campo inputs[2] é Ataque, inputs[4] é Crítico, inputs[5] é Peso
-                    };
-                });
-
-                // Captura Inventário (Pega apenas os inputs, o botão "X" é ignorado)
-                data.inventory = Array.from(document.querySelectorAll('#inventory-table tbody tr')).map(row => {
-                    const inputs = row.querySelectorAll('input');
-                    // Espera-se 4 inputs: item, detalhes, peso, quantidade
-                    return { 
-                        item: inputs[0].value, 
-                        detalhes: inputs[1].value, 
-                        peso: inputs[2].value, 
-                        quantidade: inputs[3].value 
-                    };
-                });
-
                 // Captura Histórico de Rolagem
                 const historyLog = document.getElementById('roll-history');
                 data.rollHistory = Array.from(historyLog.children).map(div => div.outerHTML);
@@ -1037,7 +1124,8 @@ Custo: 2 PA"
             }
 
             function loadFichaData(ficha) {
-                // 1. Carrega dados simples
+                // 1. Carrega dados simples (inputs, textareas, etc.)
+                document.getElementById('name').value = ficha.name;
                 for (const id in ficha.data) {
                     const element = document.getElementById(id);
                     if (element) {
@@ -1049,89 +1137,60 @@ Custo: 2 PA"
                     }
                 }
                 
-                // 2. Recria Hatsus
-                document.getElementById('hatsu-list').innerHTML = ''; 
-                (ficha.hatsus || []).forEach(hatsu => addHatsuItem(hatsu));
-                if ((ficha.hatsus || []).length === 0) addHatsuItem();
+                // NOVO: 1.5 Carrega bônus de perícias
+                if (ficha.periciaBonus) {
+                    for (const id in ficha.periciaBonus) {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            element.value = ficha.periciaBonus[id];
+                        }
+                    }
+                }
                 
+                // 2. Recria Hatsus
+                document.getElementById('hatsu-list').innerHTML = '';
+                (ficha.hatsus || []).forEach(hatsu => addHatsuRow(hatsu));
+
                 // 3. Recria Armas
-                document.querySelector('#weapons-table tbody').innerHTML = '';
-                // O campo 'dano' agora armazena a fórmula
-                (ficha.weapons || []).forEach(weapon => addWeaponRow({
-                    nome: weapon.nome,
-                    tipo: weapon.tipo,
-                    ataque: weapon.ataque,
-                    formulaDano: weapon.dano, // Usa 'dano' como a fórmula salva
-                    critico: weapon.critico,
-                    peso: weapon.peso
-                }));
-                if ((ficha.weapons || []).length === 0) addWeaponRow();
+                populateWeaponsTable(activeCharacterIndex);
 
                 // 4. Recria Inventário
-                document.querySelector('#inventory-table tbody').innerHTML = '';
-                (ficha.inventory || []).forEach(item => addInventoryRow(item));
-                if ((ficha.inventory || []).length === 0) addInventoryRow();
+                populateInventoryTable(activeCharacterIndex);
+                updateInventoryWeight(); // Recalcula o peso após carregar
 
-                // 5. Carrega Histórico
-                const historyLog = document.getElementById('roll-history');
-                historyLog.innerHTML = '';
+                // 5. Carrega Histórico de Rolagem
+                const rollHistory = document.getElementById('roll-history');
+                rollHistory.innerHTML = '';
                 if (ficha.rollHistory && ficha.rollHistory.length > 0) {
                     ficha.rollHistory.forEach(html => {
                         const tempDiv = document.createElement('div');
                         tempDiv.innerHTML = html;
-                        // O prepend está falhando aqui, preciso garantir que o item é adicionado corretamente.
-                        if (tempDiv.firstChild) {
-                             historyLog.appendChild(tempDiv.firstChild); 
-                        }
+                        rollHistory.appendChild(tempDiv.firstChild);
                     });
-                     // Inverter a ordem, pois o save guardou em ordem de display (prepend) mas o load appendou.
-                    Array.from(historyLog.children).reverse().forEach(child => historyLog.prepend(child));
                 } else {
-                     historyLog.innerHTML = '<div>Aguardando a primeira rolagem...</div>';
+                    rollHistory.innerHTML = '<div>Aguardando a primeira rolagem...</div>';
                 }
 
-                // 6. Atualiza exibições
-                updateNenBaseAttr();
-                updateAuraBonus();
-                updateInventoryWeight(false);
-            }
-
-            function createDefaultFicha(name) {
-                return {
-                    id: Date.now(),
-                    name: name,
-                    data: {
-                        'nome': name, 'nivel': '1', 'origem': '', 'classe': '', 'rep-hunter': '0', 'rep-phantom': '0',
-                        'rep-zoldyck': '0', 'rep-mafia': '0', 'rep-chimera': '0', 'rep-governo': '0',
-                        'forca': '1', 'vigor': '1', 'destreza': '1', 'intelecto': '1', 'carisma': '1',
-                        'pv-max': '10', 'pv-atual': '10', 'pa-max': '10', 'pa-atual': '10', 'defesa': '10', 'velocidade': '10',
-                        'res-perfurante': '0', 'res-impacto': '0', 'res-cortante': '0', 'res-elemental': '0', 'res-nen': '0',
-                        'nen-type': 'none', 'nen-base-attr': 'Nenhum', 'nen-aura-bonus': '0',
-                        'ten-level': 'amador', 'ren-level': 'amador', 'zetsu-level': 'amador',
-                        'inventory-limit': '10', 'tech-gyo': false, 'tech-in': false, 'tech-en': false, 'tech-ken': false, 'tech-shu': false, 'tech-ko': false, 'tech-ryu': false
-                        // Adicionar valores padrão para as novas perícias, se necessário, mas o sistema de captura cobre automaticamente
-                    },
-                    hatsus: [],
-                    weapons: [],
-                    inventory: [],
-                    rollHistory: []
-                };
+                // 6. Atualiza Modificadores de Atributo e Nen
+                updateAttributes();
             }
             
-            // --- GERENCIAMENTO DE ABAS (TABS) ---
+            // ====================================================================== 
+            // 3. GERENCIAMENTO DE ABAS (TABS)
+            // ====================================================================== 
 
             function switchCharacter(index) {
                 if (index === activeCharacterIndex) return;
 
-                // 1. Salva o personagem atual
-                saveAllCharacters(); 
-                
+                // 1. Salva o personagem atual antes de trocar
+                saveAllCharacters();
+
                 // 2. Troca o índice ativo
                 activeCharacterIndex = index;
-                
+
                 // 3. Carrega e exibe o novo personagem
-                loadFichaData(characters[activeCharacterIndex]);
-                
+                loadFichaData(allCharacters[activeCharacterIndex]);
+
                 // 4. Renderiza as abas novamente para atualizar o destaque
                 renderTabs();
             }
@@ -1139,367 +1198,586 @@ Custo: 2 PA"
             function renderTabs() {
                 const tabBar = document.getElementById('tab-bar');
                 tabBar.innerHTML = ''; // Limpa botões existentes
-                
-                characters.forEach((char, index) => {
+
+                allCharacters.forEach((char, index) => {
                     const button = document.createElement('button');
                     button.textContent = char.name;
                     button.setAttribute('data-index', index);
-                    
+                    button.onclick = () => switchCharacter(index);
+
                     if (index === activeCharacterIndex) {
                         button.classList.add('active');
                     }
-                    
-                    button.addEventListener('click', () => switchCharacter(index));
                     tabBar.appendChild(button);
                 });
             }
 
+            function addCharacter(name) {
+                const newCharacter = {
+                    name: name,
+                    data: {
+                        'pv-max': '10', 'pv-atual': '10', 'pa-max': '0', 'pa-atual': '0', 'defesa': '10', 'deslocamento': '6',
+                        'forca': '10', 'vigor': '10', 'destreza': '10', 'intelecto': '10', 'carisma': '10',
+                        'attr-for-mod': '+0', 'attr-vig-mod': '+0', 'attr-dex-mod': '+0', 'attr-int-mod': '+0', 'attr-car-mod': '+0',
+                        'inventory-limit': '50'
+                    },
+                    hatsus: [],
+                    weapons: [],
+                    inventory: [],
+                    rollHistory: [],
+                    // NOVO: Bônus Padrão
+                    periciaBonus: {
+                         'pericia-atletismo-bonus': 5, 'pericia-duelo-bonus': 5, 
+                         'pericia-robustez-bonus': 5, 'pericia-esquiva-bonus': 5,
+                         'pericia-pontaria-bonus': 5, 'pericia-furtividade-bonus': 5,
+                         'pericia-concentracao-bonus': 5, 'pericia-investigacao-bonus': 5,
+                         'pericia-convencer-bonus': 5, 'pericia-intimidar-bonus': 5
+                    }
+                };
+                allCharacters.push(newCharacter);
+            }
+
             document.getElementById('add-new-character').addEventListener('click', () => {
-                const newChar = createDefaultFicha(`Personagem ${characters.length + 1}`);
-                characters.push(newChar);
-                switchCharacter(characters.length - 1);
+                const newName = prompt("Digite o nome do novo personagem:", "Novo Hunter");
+                if (newName) {
+                    addCharacter(newName);
+                    activeCharacterIndex = allCharacters.length - 1;
+                    saveAllCharacters();
+                    loadFichaData(allCharacters[activeCharacterIndex]);
+                    renderTabs();
+                }
             });
 
             document.getElementById('save-name-btn').addEventListener('click', () => {
-                const newName = document.getElementById('nome').value.trim();
-                if (newName) {
-                    characters[activeCharacterIndex].name = newName;
-                    saveAllCharacters(); 
-                    renderTabs(); // Atualiza o nome na aba
+                const newName = document.getElementById('name').value;
+                if (allCharacters[activeCharacterIndex]) {
+                    allCharacters[activeCharacterIndex].name = newName;
+                    saveAllCharacters();
+                    renderTabs();
+                    alert("Nome salvo com sucesso!");
                 }
             });
 
             document.getElementById('delete-character-btn').addEventListener('click', () => {
-                // GARANTIDO: Exclui o personagem ativo (activeCharacterIndex)
-                if (characters.length > 1) {
-                    const characterToDeleteName = characters[activeCharacterIndex].name;
-
-                    if (confirm(`Tem certeza que deseja EXCLUIR a ficha de "${characterToDeleteName}"? Esta ação não pode ser desfeita.`)) {
-                        
-                        // Salva o personagem atual (para garantir que a última versão está no array antes de remover)
-                        saveAllCharacters();
-
-                        characters.splice(activeCharacterIndex, 1); // Remove o personagem
-                        
-                        // Define o novo índice ativo (o anterior, garantindo que não seja negativo)
-                        activeCharacterIndex = Math.max(0, activeCharacterIndex - 1);
-                        
-                        // Salva o array atualizado no localStorage
-                        localStorage.setItem(STORAGE_KEY, JSON.stringify(characters));
-
-                        // Carrega e exibe o novo personagem ativo
-                        loadFichaData(characters[activeCharacterIndex]);
-                        renderTabs();
-                    }
-                } else {
-                    alert('Você deve ter pelo menos uma ficha. Renomeie a ficha existente, se desejar.');
+                if (allCharacters.length === 1) {
+                    alert("Você não pode excluir o último personagem!");
+                    return;
+                }
+                if (confirm(`Tem certeza que deseja excluir a ficha de ${allCharacters[activeCharacterIndex].name}?`)) {
+                    allCharacters.splice(activeCharacterIndex, 1);
+                    activeCharacterIndex = Math.max(0, activeCharacterIndex - 1); // Volta para o anterior ou 0
+                    saveAllCharacters();
+                    loadFichaData(allCharacters[activeCharacterIndex]);
+                    renderTabs();
                 }
             });
+            
+            // ====================================================================== 
+            // 4. LÓGICA DE ATRIBUTOS E ROLAGEM
+            // ====================================================================== 
 
+            function updateAttributes() {
+                // Mapeia o valor base para o modificador
+                const attributeNames = ['forca', 'vigor', 'destreza', 'intelecto', 'carisma'];
+                attributeNames.forEach(name => {
+                    const baseInput = document.getElementById(name);
+                    const modInput = document.getElementById(`attr-${name.substring(0, 3)}-mod`); // attr-for-mod
+
+                    if (baseInput && modInput) {
+                        const baseValue = parseInt(baseInput.value) || 0;
+                        let modifier = Math.floor((baseValue - 10) / 2);
+                        const sign = modifier >= 0 ? '+' : '';
+                        
+                        modInput.value = sign + modifier;
+                        
+                        // Garante que o valor do modificador seja salvo no JSON
+                        if (allCharacters[activeCharacterIndex]) {
+                             allCharacters[activeCharacterIndex].data[modInput.id] = modInput.value;
+                        }
+                    }
+                });
+            }
 
             // --- LÓGICA DE ROLAGEM ---
 
-            function rollDice(attrValue, isTrained) {
-                let diceRolls = [];
-                let numRolls = Math.max(1, attrValue);
-
-                if (attrValue === 0) {
-                    numRolls = 1;
-                    const roll = Math.floor(Math.random() * 20) + 1;
-                    const finalResult = roll - 5;
-                    diceRolls.push(roll);
-                    return { rolls: diceRolls, total: finalResult, bonus: -5, isZeroAttr: true };
-                } else {
-                    for (let i = 0; i < numRolls; i++) {
-                        diceRolls.push(Math.floor(Math.random() * 20) + 1);
-                    }
-                    const highestRoll = Math.max(...diceRolls);
-                    const bonus = isTrained ? ROLL_BONUS_TRAINED : 0;
-                    const finalResult = highestRoll + bonus;
-
-                    return { rolls: diceRolls, total: finalResult, highest: highestRoll, bonus: bonus, isZeroAttr: false };
-                }
-            }
-            
-            // NOVO: Função para rolar dano (interpretando XdY+MOD)
-            function rollDamage(formula) {
-                const formulaStr = formula.toUpperCase().replace(/\s/g, ''); // Garante maiúsculas e remove espaços
-                const match = formulaStr.match(/^(\d+)D(\d+)([\+\-]([A-Z]{3}|\d+))?$/); 
-                
-                if (!match) {
-                    return { formula: formulaStr, total: 0, rolls: [], error: 'Fórmula inválida. Use NDDM ou NDDM+MOD (e.g., 3D8+FOR).' };
-                }
-
-                const numDice = parseInt(match[1]);
-                const dieSize = parseInt(match[2]);
-                let modifier = 0;
-                let modifierType = '';
-                let rollResults = [];
-                let bonus = 0;
-                let finalResult = 0;
-
-                if (match[3]) {
-                    const modPart = match[4]; // MOD pode ser um número ou um atributo
-                    if (modPart.match(/^[A-Z]{3}$/)) { // É um atributo (FOR, DEX, VIG, etc.)
-                        modifierType = modPart;
-                        const attrId = ATTR_MAP[modifierType];
-                        if (attrId) {
-                            bonus = parseInt(document.getElementById(attrId).value) || 0;
-                        } else {
-                            return { formula: formulaStr, total: 0, rolls: [], error: `Atributo ${modifierType} não reconhecido.` };
-                        }
-                    } else if (modPart.match(/^[0-9]+$/)) { // É um número fixo
-                        bonus = parseInt(modPart) || 0;
-                        modifierType = match[3]; // Inclui o sinal (+/-)
-                    } else {
-                         // Pode ser um sinal seguido de número, mas o regex já deve ter capturado
-                         bonus = parseInt(match[3]) || 0;
-                         modifierType = match[3];
-                    }
-                }
-
-                if (numDice > 0 && dieSize > 0) {
-                    for (let i = 0; i < numDice; i++) {
-                        rollResults.push(Math.floor(Math.random() * dieSize) + 1);
-                    }
-                    finalResult = rollResults.reduce((sum, roll) => sum + roll, 0) + bonus;
-                } else {
-                    return { formula: formulaStr, total: 0, rolls: [], error: 'Número de dados ou tamanho do dado inválido.' };
-                }
-
-                return { formula: formulaStr, total: finalResult, rolls: rollResults, bonus: bonus, modifierType: modifierType };
-            }
-            
-            function displayRollResult(result, attrKey, skillKey) {
-                const rollDisplay = document.getElementById('roll-display');
+            function addToHistory(htmlContent) {
                 const rollHistory = document.getElementById('roll-history');
+                const rollDisplay = document.getElementById('roll-display');
                 
-                let rollText, historyText, resultFinal;
-
-                if (result.error) {
-                    rollText = `ERRO: ${result.error}`;
-                    historyText = rollText;
-                    resultFinal = '--';
-                } else if (skillKey === 'dano') {
-                    // Rolagem de Dano
-                    const rollsStr = result.rolls.join(' + ');
-                    const modText = result.modifierType ? ` ${result.modifierType}` : '';
-                    rollText = `${result.formula}: [${rollsStr}]${modText} = <span class="roll-result-final">${result.total}</span>`;
-                    historyText = `[${new Date().toLocaleTimeString()}] DANO (${attrKey}): [${rollsStr}]${modText} = ${result.total}`;
-                    resultFinal = result.total;
-                } else {
-                    // Rolagem de Perícia/Atributo (Existente)
-                    const skillLabel = skillKey === 'none' ? '' : ` (${skillKey.charAt(0).toUpperCase() + skillKey.slice(1)})`;
-                    const bonusText = result.isZeroAttr ? ` - 5` : result.bonus > 0 ? ` + ${result.bonus} (Treinado)` : '';
-                    const highestText = result.isZeroAttr ? `ROLAGEM: ${result.rolls.join(', ')}` : `ROLAGENS: ${result.rolls.join(', ')} | MAIOR: ${result.highest}`;
-                    
-                    rollText = `${attrKey.toUpperCase()}${skillLabel}: ${highestText}${bonusText} = <span class="roll-result-final">${result.total}</span>`;
-                    historyText = `[${new Date().toLocaleTimeString()}] ${rollText}`;
-                    resultFinal = result.total;
-                }
-
-                rollDisplay.innerHTML = rollText;
-                rollDisplay.classList.add('rolled');
-                setTimeout(() => rollDisplay.classList.remove('rolled'), 500); 
-
-                const historyItem = document.createElement('div');
-                historyItem.innerHTML = historyText;
-                
+                // Remove o placeholder inicial
                 if (rollHistory.firstElementChild && rollHistory.firstElementChild.textContent.includes('Aguardando')) {
                     rollHistory.innerHTML = '';
                 }
 
+                const historyItem = document.createElement('div');
+                historyItem.innerHTML = htmlContent;
                 rollHistory.prepend(historyItem);
 
+                // Limita o histórico
                 while (rollHistory.children.length > MAX_HISTORY_ITEMS) {
-                    rollHistory.removeChild(rollHistory.lastElementChild);
+                    rollHistory.removeChild(rollHistory.lastChild);
                 }
-                
+
+                // Efeito visual (animação)
+                rollDisplay.classList.add('rolled');
+                setTimeout(() => rollDisplay.classList.remove('rolled'), 500);
+
                 saveAllCharacters();
             }
 
-            document.querySelectorAll('.roll-button').forEach(button => {
-                button.addEventListener('click', (e) => {
-                    const attrKey = e.target.getAttribute('data-attr');
-                    const skillKey = e.target.getAttribute('data-pericia');
-                    const attrSelectId = e.target.getAttribute('data-attr-select');
-                    const periciaCheckboxId = e.target.getAttribute('data-pericia-checkbox');
-                    
-                    let finalAttrKey = attrKey;
-                    let finalSkillKey = skillKey;
-                    let attrValue, isTrained;
+            function rollDiceFormula(formula, description) {
+                const formulaStr = formula.toUpperCase().replace(/\s/g, ''); 
+                const regex = /(\d+D\d+)|([\+\-]\d+)/g;
+                let finalResult = 0;
+                let rollDetails = [];
+                let componentDescriptions = [];
+                let match;
 
-                    if (attrSelectId && periciaCheckboxId) {
-                        finalAttrKey = document.getElementById(attrSelectId).value;
-                        attrValue = parseInt(document.getElementById(finalAttrKey).value) || 0;
-                        isTrained = document.getElementById(periciaCheckboxId).checked;
-                        finalSkillKey = 'Controle Nen'; 
+                let effectiveFormula = formulaStr;
+                
+                // 1. Substitui atributos por seus modificadores antes da rolagem (apenas se a fórmula não for '1D20 + MOD')
+                // Como as funções rollWeaponAttack e rollWeaponDamage já fazem a substituição antes de chamar, 
+                // esta etapa aqui serve para rolagens customizadas diretas. 
+
+                // 2. Processa a fórmula (ex: 2D6+3-1D4)
+                while ((match = regex.exec(formulaStr)) !== null) {
+                    const part = match[0];
+                    if (part.includes('D')) {
+                        // Rolagem de Dado (e.g., 2D6)
+                        const [num, size] = part.split('D').map(Number);
+                        let subTotal = 0;
+                        let rolls = [];
+                        for (let i = 0; i < num; i++) {
+                            const roll = Math.floor(Math.random() * size) + 1;
+                            rolls.push(roll);
+                            subTotal += roll;
+                        }
+                        finalResult += subTotal;
+                        rollDetails.push(`${part}: (${rolls.join('+')}) = ${subTotal}`);
+                        componentDescriptions.push(`[${part}: ${rolls.join(',')}]`);
                     } else {
-                        attrValue = parseInt(document.getElementById(attrKey).value) || 0;
-                        isTrained = finalSkillKey !== 'none' ? document.getElementById(`pericia-${finalSkillKey}`).checked : false;
+                        // Modificador Fixo (+3, -1)
+                        const mod = parseInt(part);
+                        finalResult += mod;
+                        rollDetails.push(`Mod: ${mod}`);
+                        componentDescriptions.push(mod >= 0 ? `+${mod}` : `${mod}`);
                     }
-
-                    const result = rollDice(attrValue, isTrained);
-                    displayRollResult(result, finalAttrKey, finalSkillKey);
-                });
-            });
-
-            // --- LÓGICA DE NEN/HATSUS/INVENTÁRIO ---
-            
-            function updateNenBaseAttr() {
-                const nenType = document.getElementById('nen-type').value;
-                const attrKey = ATTR_NEN_MAP[nenType];
-
-                if (attrKey && attrKey !== 'livre') {
-                    document.getElementById('nen-base-attr').value = attrKey.toUpperCase();
-                } else if (attrKey === 'livre') {
-                    document.getElementById('nen-base-attr').value = 'Livre (Especialização)';
-                } else {
-                    document.getElementById('nen-base-attr').value = 'Nenhum';
                 }
+                
+                const rollDisplay = document.getElementById('roll-display');
+                const rollText = `${description}: ${componentDescriptions.join(' ')} = <span class="roll-result-final">${finalResult}</span>`;
+                const historyText = `[${new Date().toLocaleTimeString()}] ${rollText}`;
+
+                rollDisplay.innerHTML = rollText;
+                addToHistory(historyText);
             }
-            function updateAuraBonus() {
-                const nenType = document.getElementById('nen-type').value;
-                const attrKey = ATTR_NEN_MAP[nenType];
+
+            // FUNÇÃO PRINCIPAL DE ROLAGEM DE PERÍCIA
+            function rollSkill(attrKey, skillKey, periciaCheckboxId) {
+                const attrInput = document.getElementById(attrKey);
+                // Assume que os modificadores de atributo já estão atualizados no HTML
+                const modInputId = MOD_ATTR_MAP[attrKey.substring(0, 3).toUpperCase()];
+                const modInput = document.getElementById(modInputId);
+                
+                let attrMod = parseInt((modInput ? modInput.value : '0').replace('+', '')) || 0;
+                let isTrained = document.getElementById(periciaCheckboxId).checked;
+                let baseValue = parseInt(attrInput.value) || 10; // Valor base do atributo
+                
+                // Rola 1d20
+                const d20Roll = Math.floor(Math.random() * 20) + 1;
+                
                 let bonus = 0;
-
-                if (attrKey && attrKey !== 'livre') {
-                    const attrValue = parseInt(document.getElementById(attrKey).value) || 0;
-                    bonus = attrValue * 5; 
+                if (isTrained) {
+                    // NOVO CÓDIGO: PEGA O VALOR DO INPUT EDITÁVEL
+                    const bonusId = `${periciaCheckboxId}-bonus`; 
+                    const bonusInput = document.getElementById(bonusId);
+                    
+                    // Pega o valor do input, senão 0.
+                    bonus = parseInt(bonusInput.value) || 0; 
                 }
-                document.getElementById('nen-aura-bonus').value = bonus;
+
+                // Cálculo Final
+                const totalRoll = d20Roll + attrMod + bonus;
+
+                // Montagem do Display
+                const skillLabel = periciaCheckboxId.split('-')[1].charAt(0).toUpperCase() + periciaCheckboxId.split('-')[1].slice(1);
+                const attrAbbr = attrKey.substring(0, 3).toUpperCase();
+                
+                const rollDisplay = document.getElementById('roll-display');
+                const bonusText = bonus !== 0 ? ` + ${bonus} (Treinado)` : '';
+                
+                const rollText = `${skillLabel} (${attrAbbr}): ${d20Roll} (1D20) + ${attrMod} (Mod)${bonusText} = <span class="roll-result-final">${totalRoll}</span>`;
+                const historyText = `[${new Date().toLocaleTimeString()}] ${rollText}`;
+
+                rollDisplay.innerHTML = rollText;
+                addToHistory(historyText);
             }
 
-            document.getElementById('nen-type').addEventListener('change', () => { updateNenBaseAttr(); updateAuraBonus(); saveAllCharacters(); });
-            document.querySelectorAll('.attr-value').forEach(input => {
-                input.addEventListener('change', () => { updateAuraBonus(); saveAllCharacters(); });
-                input.addEventListener('keyup', () => { updateAuraBonus(); saveAllCharacters(); });
-            });
+            // FUNÇÃO PARA ROLAR DANO (EXISTENTE)
+            function rollWeaponDamage(charIndex, weaponIndex) {
+                const character = allCharacters[charIndex];
+                if (!character || !character.weapons[weaponIndex]) return;
+
+                const weapon = character.weapons[weaponIndex];
+                let formula = weapon.damage ? weapon.damage.toUpperCase().trim() : '1D4'; // Padrão se vazio.
+                const weaponName = weapon.name || 'Arma Desconhecida';
+                
+                let effectiveFormula = formula;
+                
+                // Substituir abreviações de atributo por seus valores numéricos (MODIFICADORES)
+                for (const attr in MOD_ATTR_MAP) {
+                    const inputId = MOD_ATTR_MAP[attr];
+                    const modInput = document.getElementById(inputId);
+                    let modValue = 0;
+                    if (modInput) {
+                        modValue = parseInt(modInput.value.replace('+', '')) || 0; 
+                    }
+                    
+                    const sign = modValue >= 0 ? '+' : '';
+                    const modWithSign = `${sign}${modValue}`;
+                    
+                    effectiveFormula = effectiveFormula.replace(new RegExp(`([\\+\\-]?)?${attr}`, 'g'), (match, p1) => {
+                         if (p1 === '-') {
+                             const negValue = modValue * -1;
+                             return negValue >= 0 ? `+${negValue}` : `${negValue}`;
+                        }
+                        return modWithSign;
+                    });
+                }
+                
+                effectiveFormula = effectiveFormula.replace(/\s+/g, '').replace(/\+\+/g, '+').replace(/\+\-/g, '-').replace(/\-\-/g, '+');
+                
+                rollDiceFormula(effectiveFormula, `Dano: ${weaponName} (${formula})`);
+            }
             
-            document.getElementById('add-hatsu-btn').addEventListener('click', () => { addHatsuItem(); saveAllCharacters(); });
-            function addHatsuItem(data = {}) {
+            // NOVO: FUNÇÃO PARA ROLAR ATAQUE
+            function rollWeaponAttack(charIndex, weaponIndex) {
+                const character = allCharacters[charIndex];
+                if (!character || !character.weapons[weaponIndex]) return;
+
+                const weapon = character.weapons[weaponIndex];
+                // Pega a fórmula de ataque (ex: '+3' ou '+DEX+2') do campo 'attack_mod'
+                let formula = weapon.attack_mod ? weapon.attack_mod.toUpperCase().trim() : '0'; 
+
+                const weaponName = weapon.name || 'Arma Desconhecida';
+                
+                // A fórmula final é 1D20 + o modificador
+                const rollFormula = `1D20 + ${formula}`; 
+                const description = `Ataque: ${weaponName}`;
+
+                let effectiveFormula = rollFormula;
+                
+                // 1. Substituir abreviações de atributo por seus valores numéricos (MODIFICADORES)
+                for (const attr in MOD_ATTR_MAP) { 
+                    const inputId = MOD_ATTR_MAP[attr];
+                    const modInput = document.getElementById(inputId);
+                    let modValue = 0;
+                    if (modInput) {
+                        modValue = parseInt(modInput.value.replace('+', '')) || 0; 
+                    }
+                    
+                    const sign = modValue >= 0 ? '+' : '';
+                    const modWithSign = `${sign}${modValue}`;
+                    
+                    effectiveFormula = effectiveFormula.replace(new RegExp(`([\\+\\-]?)?${attr}`, 'g'), (match, p1) => {
+                         if (p1 === '-') {
+                             const negValue = modValue * -1;
+                             return negValue >= 0 ? `+${negValue}` : `${negValue}`;
+                        }
+                        return modWithSign;
+                    });
+                }
+                
+                // Limpar múltiplos sinais e garantir a formatação
+                effectiveFormula = effectiveFormula.replace(/\s+/g, '').replace(/\+\+/g, '+').replace(/\+\-/g, '-').replace(/\-\-/g, '+');
+                
+                // 2. Executar a rolagem (baseado na rolagem de perícia/dano)
+                rollDiceFormula(effectiveFormula, description);
+            }
+            
+            // ====================================================================== 
+            // 5. GERENCIAMENTO DE TABELAS (HATSU, ARMAS, INVENTÁRIO)
+            // ====================================================================== 
+
+            // --- HATSU ---
+
+            function addHatsuRow(data = {}) {
                 const hatsuList = document.getElementById('hatsu-list');
                 const newItem = document.createElement('div');
                 newItem.classList.add('hatsu-item');
                 newItem.innerHTML = `
-                    <input type="text" placeholder="Nome do Hatsu" class="hatsu-name" value="${data.nome || ''}">
-                    <div class="hatsu-details-grid">
-                        <input type="text" placeholder="Tipo de Nen" class="hatsu-type" value="${data.tipo || ''}">
-                        <input type="text" placeholder="Categoria" class="hatsu-category" value="${data.categoria || ''}">
-                        <input type="text" placeholder="Custo (PA)" class="hatsu-cost" value="${data.custo || ''}">
-                        <input type="text" placeholder="Duração" class="hatsu-duration" value="${data.duracao || ''}">
-                        <input type="text" placeholder="Execução" class="hatsu-execution" value="${data.execucao || ''}">
-                        <input type="text" placeholder="Alvo" class="hatsu-target" value="${data.alvo || ''}">
-                        <input type="text" placeholder="Alcance" class="hatsu-range" value="${data.alcance || ''}">
+                    <div class="field-group">
+                        <h5>Nome do Hatsu:</h5>
+                        <input type="text" value="${escapeHtml(data.name || 'Novo Hatsu')}">
                     </div>
-                    <textarea placeholder="Descrição e Efeitos do Hatsu">${data.descricao || ''}</textarea>
+                    <div class="field-group">
+                        <label>Tipo (Ex: Emissão, Intensificação):</label>
+                        <input type="text" value="${escapeHtml(data.type || '')}">
+                    </div>
+                    <div class="field-group">
+                        <label>Custo/Restrição:</label>
+                        <input type="text" value="${escapeHtml(data.custo || '')}">
+                    </div>
+                    <div class="field-group">
+                        <label>Efeitos/Descrição:</label>
+                        <textarea>${escapeHtml(data.efeitos || '')}</textarea>
+                    </div>
                     <button class="btn-delete-hatsu btn-delete">Excluir Hatsu</button>
                 `;
                 hatsuList.appendChild(newItem);
-                newItem.querySelector('.btn-delete-hatsu').addEventListener('click', (e) => { e.target.closest('.hatsu-item').remove(); saveAllCharacters(); });
-                newItem.querySelectorAll('input, textarea, select').forEach(el => { el.addEventListener('change', saveAllCharacters); el.addEventListener('keyup', saveAllCharacters); });
+
+                newItem.querySelector('.btn-delete-hatsu').addEventListener('click', (e) => {
+                    e.target.closest('.hatsu-item').remove();
+                    saveAllCharacters();
+                });
+                
+                // Adicionar listener para auto-save nos campos do Hatsu
+                newItem.querySelectorAll('input, textarea').forEach(el => {
+                     el.addEventListener('change', saveAllCharacters);
+                     el.addEventListener('keyup', saveAllCharacters);
+                });
             }
 
-            document.getElementById('add-weapon-btn').addEventListener('click', () => { addWeaponRow(); saveAllCharacters(); });
+            document.getElementById('add-hatsu-btn').addEventListener('click', () => {
+                addHatsuRow();
+                saveAllCharacters();
+            });
+
+            // --- ARMAS ---
+
+            function updateWeaponData(e) {
+                const input = e.target;
+                const charIndex = parseInt(input.getAttribute('data-char-index'));
+                const weaponIndex = parseInt(input.getAttribute('data-weapon-index'));
+                const field = input.getAttribute('data-field');
+
+                if (allCharacters[charIndex] && allCharacters[charIndex].weapons[weaponIndex]) {
+                    allCharacters[charIndex].weapons[weaponIndex][field] = input.value;
+                    saveAllCharacters();
+                }
+            }
+
+            function deleteWeapon(charIndex, weaponIndex) {
+                if (confirm("Tem certeza que deseja excluir esta arma?")) {
+                    allCharacters[charIndex].weapons.splice(weaponIndex, 1);
+                    saveAllCharacters();
+                    populateWeaponsTable(charIndex); // Recarrega a tabela
+                }
+            }
+
             function addWeaponRow(data = {}) {
                 const tableBody = document.querySelector('#weapons-table tbody');
-                const newRow = tableBody.insertRow();
-                newRow.innerHTML = `
-                    <td><input type="text" value="${data.nome || ''}" placeholder="Nome"></td>
-                    <td><input type="text" value="${data.tipo || ''}" placeholder="Tipo"></td>
-                    <td><input type="text" value="${data.ataque || ''}" placeholder="FOR/DEX +X"></td>
-                    <td><input type="text" value="${data.formulaDano || ''}" placeholder="3d8+FOR" class="weapon-damage-formula"></td> <td><input type="text" value="${data.critico || ''}" placeholder="19-20/x2"></td>
-                    <td><input type="number" value="${data.peso || ''}" class="inventory-weight-input weapon-weight" min="0"></td>
-                    <td><button class="btn-roll-damage">🎲</button></td> <td><button class="btn-delete-table btn-delete">X</button></td> `;
+                const charIndex = activeCharacterIndex;
+                const index = allCharacters[charIndex].weapons.length; 
+
+                const weaponData = {
+                    name: data.name || '',
+                    type: data.type || '',
+                    damage: data.damage || '',
+                    attack_mod: data.attack_mod || '' // NOVO CAMPO
+                };
+                allCharacters[charIndex].weapons.push(weaponData);
+
+                const row = tableBody.insertRow();
                 
-                // NOVO: Adiciona o listener para o botão de rolagem de DANO
-                newRow.querySelector('.btn-roll-damage').addEventListener('click', (e) => {
-                    const formulaInput = e.target.closest('tr').querySelector('.weapon-damage-formula');
-                    if (formulaInput && formulaInput.value.trim()) {
-                        const formula = formulaInput.value.trim();
-                        const weaponName = e.target.closest('tr').querySelector('input').value || 'Dano de Arma';
-                        const result = rollDamage(formula);
-                        displayRollResult(result, weaponName, 'dano'); // 'dano' é a key para diferenciar no display
-                    } else {
-                        displayRollResult({ error: 'Insira uma fórmula de dano válida (ex: 1d6+FOR)' }, 'Arma', 'dano');
-                    }
+                // HTML DA LINHA (Ajustado com 7 colunas)
+                row.innerHTML = `
+                    <td style="width: 18%;"><input type="text" value="${escapeHtml(weaponData.name)}" data-char-index="${charIndex}" data-weapon-index="${index}" data-field="name" class="weapon-field"></td>
+                    <td style="width: 8%;"><input type="text" value="${escapeHtml(weaponData.type)}" data-char-index="${charIndex}" data-weapon-index="${index}" data-field="type" class="weapon-field"></td>
+                    <td style="width: 18%;"><input type="text" value="${escapeHtml(weaponData.damage)}" data-char-index="${charIndex}" data-weapon-index="${index}" data-field="damage" class="weapon-field weapon-damage-formula"></td>
+                    
+                    <td style="width: 18%;"><input type="text" value="${escapeHtml(weaponData.attack_mod)}" data-char-index="${charIndex}" data-weapon-index="${index}" data-field="attack_mod" class="weapon-field"></td>
+                    
+                    <td style="width: 15%;" class="damage-roll-cell">
+                        <button class="roll-button btn-roll-damage" 
+                            style="padding: 6px 10px; font-size: 0.8em;" 
+                            onclick="rollWeaponDamage(${charIndex}, ${index})">
+                            🎲
+                        </button>
+                    </td>
+                    
+                    <td style="width: 15%;" class="attack-roll-cell">
+                        <button class="roll-button btn-roll-attack" 
+                            style="padding: 6px 10px; font-size: 0.8em;" 
+                            onclick="rollWeaponAttack(${charIndex}, ${index})">
+                            ⚔️
+                        </button>
+                    </td>
+                    
+                    <td style="width: 8%;"><button class="btn-delete-table" onclick="deleteWeapon(${charIndex}, ${index})">X</button></td>
+                `;
+                
+                // Adicionar listeners
+                row.querySelectorAll('.weapon-field').forEach(el => {
+                     el.addEventListener('change', updateWeaponData);
+                     el.addEventListener('keyup', updateWeaponData);
                 });
+                // Como esta é uma função interna de adição, o save geral é feito externamente na chamada.
+            }
 
-                // NOVO: Adiciona o listener para o botão de exclusão da arma
-                newRow.querySelector('.btn-delete-table').addEventListener('click', (e) => { 
-                    e.target.closest('tr').remove(); 
-                    updateInventoryWeight(); // Atualiza peso após remoção
-                    saveAllCharacters(); 
-                });
+            function populateWeaponsTable(charIndex) {
+                const tableBody = document.querySelector('#weapons-table tbody');
+                tableBody.innerHTML = '';
+                const weapons = allCharacters[charIndex].weapons || [];
 
-                newRow.querySelectorAll('input').forEach(el => {
-                    el.addEventListener('change', saveAllCharacters);
-                    el.addEventListener('keyup', saveAllCharacters);
-                    if (el.classList.contains('inventory-weight-input')) { el.addEventListener('input', updateInventoryWeight); }
+                weapons.forEach((weapon, index) => {
+                    const row = tableBody.insertRow();
+                    // HTML DA LINHA (Ajustado com 7 colunas)
+                    row.innerHTML = `
+                        <td style="width: 18%;"><input type="text" value="${escapeHtml(weapon.name || '')}" data-char-index="${charIndex}" data-weapon-index="${index}" data-field="name" class="weapon-field"></td>
+                        <td style="width: 8%;"><input type="text" value="${escapeHtml(weapon.type || '')}" data-char-index="${charIndex}" data-weapon-index="${index}" data-field="type" class="weapon-field"></td>
+                        <td style="width: 18%;"><input type="text" value="${escapeHtml(weapon.damage || '')}" data-char-index="${charIndex}" data-weapon-index="${index}" data-field="damage" class="weapon-field weapon-damage-formula"></td>
+                        
+                        <td style="width: 18%;"><input type="text" value="${escapeHtml(weapon.attack_mod || '')}" data-char-index="${charIndex}" data-weapon-index="${index}" data-field="attack_mod" class="weapon-field"></td>
+                        
+                        <td style="width: 15%;" class="damage-roll-cell">
+                            <button class="roll-button btn-roll-damage" 
+                                style="padding: 6px 10px; font-size: 0.8em;" 
+                                onclick="rollWeaponDamage(${charIndex}, ${index})">
+                                🎲
+                            </button>
+                        </td>
+                        
+                        <td style="width: 15%;" class="attack-roll-cell">
+                            <button class="roll-button btn-roll-attack" 
+                                style="padding: 6px 10px; font-size: 0.8em;" 
+                                onclick="rollWeaponAttack(${charIndex}, ${index})">
+                                ⚔️
+                            </button>
+                        </td>
+                        
+                        <td style="width: 8%;"><button class="btn-delete-table" onclick="deleteWeapon(${charIndex}, ${index})">X</button></td>
+                    `;
+                    // Adicionar listeners
+                    row.querySelectorAll('.weapon-field').forEach(el => {
+                         el.addEventListener('change', updateWeaponData);
+                         el.addEventListener('keyup', updateWeaponData);
+                    });
                 });
             }
-            
-            document.getElementById('add-inventory-btn').addEventListener('click', () => { addInventoryRow(); saveAllCharacters(); });
+
+            document.getElementById('add-weapon-btn').addEventListener('click', () => {
+                addWeaponRow();
+                saveAllCharacters();
+            });
+
+
+            // --- INVENTÁRIO ---
+
+            function updateInventoryData(e) {
+                const input = e.target;
+                const charIndex = activeCharacterIndex;
+                const rowIndex = parseInt(input.getAttribute('data-row-index'));
+                const field = input.getAttribute('data-field');
+
+                if (allCharacters[charIndex] && allCharacters[charIndex].inventory[rowIndex]) {
+                    allCharacters[charIndex].inventory[rowIndex][field] = input.value;
+                    // O peso/quantidade exige update no peso total, mas o save é feito após o update do peso
+                    if (field === 'peso' || field === 'quantidade') {
+                        updateInventoryWeight();
+                    } else {
+                        saveAllCharacters(); 
+                    }
+                }
+            }
+
+            function deleteInventoryItem(rowIndex) {
+                if (confirm("Tem certeza que deseja excluir este item?")) {
+                    allCharacters[activeCharacterIndex].inventory.splice(rowIndex, 1);
+                    saveAllCharacters();
+                    populateInventoryTable(activeCharacterIndex); 
+                    updateInventoryWeight(); // Atualiza após exclusão
+                }
+            }
+
             function addInventoryRow(data = {}) {
                 const tableBody = document.querySelector('#inventory-table tbody');
-                const newRow = tableBody.insertRow();
-                newRow.innerHTML = `
-                    <td><input type="text" value="${data.item || ''}" placeholder="Item"></td>
-                    <td><input type="text" value="${data.detalhes || ''}" placeholder="Detalhes do item"></td>
-                    <td><input type="number" value="${data.peso || ''}" class="inventory-weight-input item-weight" min="0"></td>
-                    <td><input type="number" value="${data.quantidade || '1'}" class="inventory-quantity" min="1"></td>
-                    <td><button class="btn-delete-table btn-delete">X</button></td> `;
+                const charIndex = activeCharacterIndex;
                 
-                // NOVO: Adiciona o listener para o botão de exclusão do item
-                newRow.querySelector('.btn-delete-table').addEventListener('click', (e) => { 
-                    e.target.closest('tr').remove(); 
-                    updateInventoryWeight(); // Atualiza peso após remoção
-                    saveAllCharacters(); 
-                });
+                const itemData = {
+                    item: data.item || '',
+                    detalhes: data.detalhes || '',
+                    peso: data.peso || '0',
+                    quantidade: data.quantidade || '1'
+                };
+                allCharacters[charIndex].inventory.push(itemData);
 
-                newRow.querySelectorAll('input').forEach(el => {
-                    el.addEventListener('change', saveAllCharacters);
-                    el.addEventListener('keyup', saveAllCharacters);
-                    if (el.classList.contains('inventory-weight-input') || el.classList.contains('inventory-quantity')) { el.addEventListener('input', updateInventoryWeight); }
+                // O save e o reload da tabela é feito após a chamada de addInventoryRow
+            }
+            
+            function populateInventoryTable(charIndex) {
+                const tableBody = document.querySelector('#inventory-table tbody');
+                tableBody.innerHTML = '';
+                const inventory = allCharacters[charIndex].inventory || [];
+
+                inventory.forEach((item, index) => {
+                    const row = tableBody.insertRow();
+                    row.innerHTML = `
+                        <td style="width: 30%;"><input type="text" value="${escapeHtml(item.item || '')}" data-row-index="${index}" data-field="item" class="inventory-field"></td>
+                        <td style="width: 35%;"><input type="text" value="${escapeHtml(item.detalhes || '')}" data-row-index="${index}" data-field="detalhes" class="inventory-field"></td>
+                        <td style="width: 10%;"><input type="number" value="${parseFloat(item.peso || '0').toFixed(1)}" data-row-index="${index}" data-field="peso" class="inventory-field inventory-weight-input" step="0.1"></td>
+                        <td style="width: 10%;"><input type="number" value="${parseInt(item.quantidade || '1')}" data-row-index="${index}" data-field="quantidade" class="inventory-field inventory-quantity" min="1"></td>
+                        <td style="width: 15%;"><button class="btn-delete-table" onclick="deleteInventoryItem(${index})">X</button></td>
+                    `;
+                    // Adicionar listeners específicos para os campos da linha
+                    row.querySelectorAll('.inventory-field').forEach(el => {
+                         el.addEventListener('change', updateInventoryData);
+                         el.addEventListener('keyup', updateInventoryData);
+                    });
                 });
             }
 
-            function updateInventoryWeight(shouldSave = true) {
+            function updateInventoryWeight() {
                 let totalWeight = 0;
-                
-                // Armas
-                document.querySelectorAll('#weapons-table .inventory-weight-input').forEach(input => {
-                    totalWeight += parseFloat(input.value) || 0;
-                });
-                
-                // Inventário
-                document.querySelectorAll('#inventory-table tbody tr').forEach(row => {
-                    const weightInput = row.querySelector('.item-weight');
-                    const quantityInput = row.querySelector('.inventory-quantity');
-                    
-                    const weight = parseFloat(weightInput.value) || 0;
-                    const quantity = parseInt(quantityInput.value) || 0;
-                    
-                    totalWeight += (weight * quantity);
+                const inventory = allCharacters[activeCharacterIndex].inventory || [];
+
+                inventory.forEach(item => {
+                    const peso = parseFloat(item.peso) || 0;
+                    const quantidade = parseInt(item.quantidade) || 0;
+                    totalWeight += peso * quantidade;
                 });
 
+                const limit = parseInt(document.getElementById('inventory-limit').value) || 0;
                 const weightDisplay = document.getElementById('inventory-current-weight');
+
                 weightDisplay.textContent = `Carga Atual: ${totalWeight.toFixed(1)}`;
                 
-                const limit = parseInt(document.getElementById('inventory-limit').value) || 0;
-                if (totalWeight > limit && limit > 0) {
-                     weightDisplay.classList.add('weight-exceeded');
+                if (totalWeight > limit) {
+                    weightDisplay.classList.add('weight-exceeded');
                 } else {
-                     weightDisplay.classList.remove('weight-exceeded');
+                    weightDisplay.classList.remove('weight-exceeded');
                 }
-                
-                if (shouldSave) saveAllCharacters();
+
+                saveAllCharacters(); // Salva a atualização de peso
             }
+            
+            document.getElementById('add-inventory-btn').addEventListener('click', () => {
+                addInventoryRow();
+                populateInventoryTable(activeCharacterIndex);
+                updateInventoryWeight();
+            });
+            
+            document.getElementById('update-weight-btn').addEventListener('click', updateInventoryWeight);
             document.getElementById('inventory-limit').addEventListener('input', updateInventoryWeight);
             
+            // --- LISTENERS DE ROLAGEM DE PERÍCIA ---
+            
+            document.querySelectorAll('.skill-item .roll-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const attr = button.getAttribute('data-attr'); // ex: 'forca'
+                    const pericia = button.getAttribute('data-pericia'); // ex: 'atletismo'
+                    const periciaCheckboxId = `pericia-${pericia}`; // ex: 'pericia-atletismo'
+                    rollSkill(attr, pericia, periciaCheckboxId);
+                });
+            });
 
-            // --- TEMA DARK/LIGHT ---
-
+            // --- LISTENERS DE ATRIBUTO ---
+            document.querySelectorAll('.attr-value').forEach(input => {
+                input.addEventListener('change', updateAttributes);
+                input.addEventListener('keyup', updateAttributes);
+            });
+            
+            // --- TEMA DARK/LIGHT ---\
             document.getElementById('toggle-theme').addEventListener('click', () => {
                 document.body.classList.toggle('dark-mode');
                 if (document.body.classList.contains('dark-mode')) {
@@ -1522,16 +1800,22 @@ Custo: 2 PA"
                 element.addEventListener('change', saveAllCharacters);
                 element.addEventListener('keyup', saveAllCharacters);
             });
-            // Adiciona listeners para os campos que precisam de save mas não atualizam peso
-            document.querySelectorAll('.attr-value, #pv-max, #pv-atual, #pa-max, #pa-atual, #defesa, #velocidade, [id^="res-"]').forEach(element => {
+            // Adiciona listeners para os campos que precisam de save mas não atualizam peso (como PV, PA, Defesa)
+            document.querySelectorAll('.attr-value, #pv-max, #pv-atual, #pa-max, #pa-atual, #defesa, #deslocamento, [id^="res-"]').forEach(element => {
                  element.addEventListener('input', saveAllCharacters);
+            });
+
+            // NOVO: Listener para os campos de Bônus de Perícia Editáveis
+            document.querySelectorAll('.trained-bonus-input').forEach(element => {
+                element.addEventListener('change', saveAllCharacters);
+                element.addEventListener('keyup', saveAllCharacters);
             });
 
 
             setInterval(saveAllCharacters, AUTOSAVE_INTERVAL);
 
 
-            // --- INICIALIZAÇÃO ---
+            // --- INICIALIZAÇÃO ---\
             loadTheme();
             loadAllCharacters();
         });
